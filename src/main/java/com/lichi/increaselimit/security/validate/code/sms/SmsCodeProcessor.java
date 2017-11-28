@@ -1,10 +1,14 @@
 package com.lichi.increaselimit.security.validate.code.sms;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
+import com.lichi.increaselimit.common.enums.ResultEnum;
+import com.lichi.increaselimit.common.exception.BusinessException;
+import com.lichi.increaselimit.common.utils.StringUtil;
 import com.lichi.increaselimit.security.properties.SecurityConstants;
 import com.lichi.increaselimit.security.validate.code.ValidateCode;
 import com.lichi.increaselimit.security.validate.code.impl.AbstractValidateCodeProcessor;
@@ -29,7 +33,12 @@ public class SmsCodeProcessor extends AbstractValidateCodeProcessor<ValidateCode
 		String paramName = SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE;
 		String mobile = ServletRequestUtils.getRequiredStringParameter(request.getRequest(), paramName);
 		
-		//TODO:对手机号码进行正则匹配
+		if(StringUtils.isBlank(mobile)) {
+			throw new BusinessException(ResultEnum.MOBILE_NUM_EMPTY);
+		}
+		if(StringUtil.ValidateMobile(mobile)) {
+			throw new BusinessException(ResultEnum.MOBILE_ERROR);
+		}
 		smsCodeSender.send(mobile, validateCode.getCode());
 	}
 
