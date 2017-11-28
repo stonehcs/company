@@ -3,13 +3,19 @@ package com.lichi.increaselimit.security.validate.code.repository.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
+
 import com.alibaba.fastjson.JSONObject;
 import com.lichi.increaselimit.common.utils.RedisUtils;
+import com.lichi.increaselimit.security.properties.SecurityConstants;
 import com.lichi.increaselimit.security.validate.code.ValidateCode;
 import com.lichi.increaselimit.security.validate.code.ValidateCodeException;
 import com.lichi.increaselimit.security.validate.code.ValidateCodeType;
 import com.lichi.increaselimit.security.validate.code.repository.ValidateCodeRepository;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 验证码的存放使用redis
@@ -19,6 +25,7 @@ import com.lichi.increaselimit.security.validate.code.repository.ValidateCodeRep
  *
  */
 @Component
+@Slf4j
 public class RedisValidateCodeRepository<T> implements ValidateCodeRepository {
 	
 	@Autowired
@@ -43,11 +50,28 @@ public class RedisValidateCodeRepository<T> implements ValidateCodeRepository {
 		redisUtils.del(buildKey(request, type));
 	}
 
+	/**
+	 * 短信登陆就保存手机号
+	 * 
+	 * @param request
+	 * @param type
+	 * @return
+	 */
 	private String buildKey(ServletWebRequest request, ValidateCodeType type) {
-		String deviceId = request.getHeader("deviceId");
-		if (StringUtils.isBlank(deviceId)) {
-			throw new ValidateCodeException("请在请求头中携带deviceId参数");
+		String code = "";
+		if("sms".equals(type.toString().toLowerCase())) {
+			String paramName = SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE;
+			try {
+				code = ServletRequestUtils.getRequiredStringParameter(request.getRequest(), paramName);
+			} catch (ServletRequestBindingException e) {
+				log.error("获取手机号码{}的验证码失败",code);
+			}
+		}else {
+			code = request.getHeader("deviceId");
+			if (StringUtils.isBlank(code)) {
+				throw new ValidateCodeException("请在请求头中携带deviceId参数");
+			}
 		}
-		return "code:" + type.toString().toLowerCase() + ":" + deviceId;
+		return "code:" + type.toString().toLowerCase() + ":" + code;
 	}
 }

@@ -124,7 +124,10 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
 		if (!StringUtils.equals(codeInRedis.getCode(), codeInRequest)) {
 			throw new ValidateCodeException(codeType + "验证码不匹配");
 		}
-
+		
+		/**
+		 * 登陆成功移除验证码
+		 */
 		validateCodeRepository.remove(request, codeType);
 	}
 

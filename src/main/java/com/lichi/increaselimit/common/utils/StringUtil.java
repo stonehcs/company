@@ -17,7 +17,7 @@ public class StringUtil {
 	}
 	
 	public static void main(String[] args) {
-		boolean validateMobile = ValidateMobile(null);
+		boolean validateMobile = ValidateMobile("13411111111");
 		System.out.println(validateMobile);
 	}
 }

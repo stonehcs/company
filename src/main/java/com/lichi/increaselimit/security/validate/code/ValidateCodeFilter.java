@@ -24,6 +24,7 @@ import com.lichi.increaselimit.security.properties.SecurityProperties;
 
 /**
  * 验证码过滤器
+ * 
  * @author majie
  *
  */
