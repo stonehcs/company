@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.lichi</groupId>
-	<artifactId>increase-limit-crm</artifactId>
+	<artifactId>increase-limit-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>increase-limit-crm</name>
+	<name>increase-limit-app</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
@@ -24,14 +24,21 @@
 	</properties>
 
 	<dependencies>
-
+		
+		<!-- jpush -->
+		<dependency>
+			<groupId>cn.jpush.api</groupId>
+			<artifactId>jpush-client</artifactId>
+			<version>3.3.3</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-parent</artifactId>
 			<version>42</version>
 			<type>pom</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>

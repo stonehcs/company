@@ -20,21 +20,17 @@ security:
   basic:
     enabled: false
         
-#  jpa:
-#    hibernate:
-#      ddl-auto: create
-    
-  redis:
-    database: 0
-    host: 192.168.0.109
-    port: 6379
-    password: 
-    pool:
-      max-active: 8
-      max-wait: -1
-      max-idle: 8
-      min-idle: 0
-    timeout: 3000
+#  redis:
+#    database: 0
+#    host: 192.168.0.109
+#    port: 6379
+#    password: 123456
+#    pool:
+#      max-active: 8
+#      max-wait: -1
+#      max-idle: 8
+#      min-idle: 0
+#    timeout: 3000
     
 server:
   port: 8080

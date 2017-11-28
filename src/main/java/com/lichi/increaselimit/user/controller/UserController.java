@@ -22,6 +22,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 
 /**
  * 测试controller
@@ -44,10 +46,12 @@ public class UserController {
 	 * 解析jwt的token
 	 */
 	@GetMapping("/me")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "认证token", required = true, dataType = "string", paramType = "header",defaultValue="bearer ")})
 	public Object getCurrentUser(Authentication authentication, HttpServletRequest request)
 			throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException,
 			IllegalArgumentException, UnsupportedEncodingException {
 		String header = request.getHeader("Authorization");
+		
 		String token = StringUtils.substringAfter(header, "bearer ");
 
 		Claims claims = Jwts.parser()

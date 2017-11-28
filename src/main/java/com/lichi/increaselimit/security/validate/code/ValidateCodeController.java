@@ -11,6 +11,10 @@ import org.springframework.web.context.request.ServletWebRequest;
 
 import com.lichi.increaselimit.security.properties.SecurityConstants;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * 验证码生成器
  * @author majie
@@ -31,6 +35,8 @@ public class ValidateCodeController {
 	 * @throws Exception
 	 */
 	@GetMapping(SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/{type}")
+	@ApiOperation(value = "短信验证码路径  sms?mobile=xxxxx,图片验证码image")
+	@ApiImplicitParams({@ApiImplicitParam(name = "deviceId", value = "设备id", required = true, dataType = "string", paramType = "header",defaultValue="007")})
 	public void createCode(HttpServletRequest request, HttpServletResponse response, @PathVariable String type)
 			throws Exception {
 		validateCodeProcessorHolder.findValidateCodeProcessor(type).create(new ServletWebRequest(request, response));

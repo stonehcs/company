@@ -8,18 +8,18 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Chongqing
       
-
-#  redis:
-#    database: 0
-#    host: localhost
-#    port: 6379
-#    password: 
-#    pool:
-#      max-active: 8
-#      max-wait: -1
-#      max-idle: 8
-#      min-idle: 0
-#    timeout: 3000
+#redis
+  redis:
+    database: 0
+    host: 192.168.0.109
+    port: 6379
+    password: 
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+    timeout: 3000
 
 #mybatis
 mybatis:
@@ -30,6 +30,7 @@ mybatis:
     mapUnderscoreToCamelCase: true   #自动驼峰转换
     useColumnLabel: true
 
+#通用mapper
 mapper:
     mappers:
         - com.lichi.increaselimit.common.mapper.BaseMapper
@@ -41,7 +42,10 @@ pagehelper:
     reasonable: true
     supportMethodsArguments: true
     params: count=countSql
-      
+    
+    
+    
+    
 lichi:
 #验证码配置
   code:
