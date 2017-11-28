@@ -36,7 +36,7 @@ public class SmsCodeProcessor extends AbstractValidateCodeProcessor<ValidateCode
 		if(StringUtils.isBlank(mobile)) {
 			throw new BusinessException(ResultEnum.MOBILE_NUM_EMPTY);
 		}
-		if(StringUtil.ValidateMobile(mobile)) {
+		if(!StringUtil.ValidateMobile(mobile)) {
 			throw new BusinessException(ResultEnum.MOBILE_ERROR);
 		}
 		smsCodeSender.send(mobile, validateCode.getCode());
