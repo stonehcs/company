@@ -8,6 +8,7 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lichi.increaselimit.common.Constants;
 import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.security.properties.SecurityConstants;
 import com.lichi.increaselimit.security.validate.code.ValidateCode;
@@ -33,7 +34,7 @@ public class RedisValidateCodeRepository<T> implements ValidateCodeRepository {
 
 	@Override
 	public void save(ServletWebRequest request, ValidateCode code, ValidateCodeType type) {
-		redisUtils.set(buildKey(request, type), JSONObject.toJSONString(code), 60);
+		redisUtils.set(buildKey(request, type), JSONObject.toJSONString(code), Constants.CODE_IN_REDIS_TIME);
 	}
 
 	@Override
