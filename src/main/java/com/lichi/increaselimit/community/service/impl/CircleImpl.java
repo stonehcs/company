@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -23,7 +22,6 @@ import tk.mybatis.mapper.entity.Example;
  * @author by majie on 2017/11/15.
  */
 @Service
-@Transactional(rollbackFor = Exception.class)
 public class CircleImpl implements CircleService {
 
     @Autowired

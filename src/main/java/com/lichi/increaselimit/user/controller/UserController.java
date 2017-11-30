@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lichi.increaselimit.common.utils.ResultVoUtil;
+import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.security.properties.SecurityProperties;
 import com.lichi.increaselimit.user.entity.User;
-import com.lichi.increaselimit.user.service.UserService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -37,17 +38,15 @@ import io.swagger.annotations.ApiImplicitParams;
 public class UserController {
 
 	@Autowired
-	private UserService userService;
-
-	@Autowired
 	private SecurityProperties systemProperties;
 
 	/**
+	 * 获取当前用户信息
 	 * 解析jwt的token
 	 */
 	@GetMapping("/me")
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "认证token", required = true, dataType = "string", paramType = "header",defaultValue="bearer ")})
-	public Object getCurrentUser(Authentication authentication, HttpServletRequest request)
+	public ResultVo<User> getCurrentUser(Authentication authentication, HttpServletRequest request)
 			throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException,
 			IllegalArgumentException, UnsupportedEncodingException {
 		String header = request.getHeader("Authorization");
@@ -58,15 +57,7 @@ public class UserController {
 				.setSigningKey(systemProperties.getOauth2Properties().getJwtSigningKey().getBytes("UTF-8"))
 				.parseClaimsJws(token).getBody();
 		
-		//获取附加信息
-//		String company = (String) claims.get("company");
-
-		return claims;
+		return ResultVoUtil.success((User)claims.get("user"));
 	}
 
-
-	@GetMapping("/getUser")
-	public User loadUser(String username) {
-		return userService.loadUserInfo(username);
-	}
 }

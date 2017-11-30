@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class RedisValidateCodeRepository<T> implements ValidateCodeRepository {
-	
+
 	@Autowired
 	private RedisUtils redisUtils;
 
@@ -59,14 +59,14 @@ public class RedisValidateCodeRepository<T> implements ValidateCodeRepository {
 	 */
 	private String buildKey(ServletWebRequest request, ValidateCodeType type) {
 		String code = "";
-		if("sms".equals(type.toString().toLowerCase())) {
+		if ("sms".equals(type.toString().toLowerCase())) {
 			String paramName = SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE;
 			try {
 				code = ServletRequestUtils.getRequiredStringParameter(request.getRequest(), paramName);
 			} catch (ServletRequestBindingException e) {
-				log.error("获取手机号码{}的验证码失败",code);
+				log.error("获取手机号码{}的验证码失败", code);
 			}
-		}else {
+		} else {
 			code = request.getHeader("deviceId");
 			if (StringUtils.isBlank(code)) {
 				throw new ValidateCodeException("请在请求头中携带deviceId参数");

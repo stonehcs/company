@@ -1,4 +1,4 @@
-package com.lichi.increaselimit.security.social;
+package com.lichi.increaselimit.security.authentication.social;
 
 import javax.sql.DataSource;
 
@@ -13,11 +13,10 @@ import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
-import org.springframework.social.security.SpringSocialConfigurer;
-
-import com.lichi.increaselimit.security.properties.SecurityProperties;
 
 /**
+ * 社交登陆配置
+ * 持久化方式，以及登陆以后的跳转
  * @author majie
  *
  */
@@ -27,13 +26,10 @@ public class SocialConfig extends SocialConfigurerAdapter {
 
 	@Autowired
 	private DataSource dataSource;
-
-	@Autowired
-	private SecurityProperties securityProperties;
 	
 	@Autowired(required = false)
 	private ConnectionSignUp connectionSignUp;
-
+	
 	@Override
 	public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
 		JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource,
@@ -43,14 +39,6 @@ public class SocialConfig extends SocialConfigurerAdapter {
 			repository.setConnectionSignUp(connectionSignUp);
 		}
 		return repository;
-	}
-
-	@Bean
-	public SpringSocialConfigurer imoocSocialSecurityConfig() {
-		String filterProcessesUrl = securityProperties.getSocial().getFilterProcessesUrl();
-		MySpringSocialConfigurer configurer = new MySpringSocialConfigurer(filterProcessesUrl);
-//		configurer.signupUrl(securityProperties.getBrowser().getSignUpUrl());
-		return configurer;
 	}
 
 	@Bean

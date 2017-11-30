@@ -21,7 +21,7 @@ public class UserDetails implements Serializable{
 	@Id
 	private Integer id;
 	
-	private Integer userId;
+	private String userId;
 	
 	
 

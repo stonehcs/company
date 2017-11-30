@@ -1,5 +1,6 @@
 package com.lichi.increaselimit.user.service;
 
+import com.lichi.increaselimit.user.entity.SocialUserInfo;
 import com.lichi.increaselimit.user.entity.User;
 
 /**
@@ -10,9 +11,23 @@ import com.lichi.increaselimit.user.entity.User;
 public interface UserService {
 	
 	/**
-	 * 获取用户信息
+	 * 通过手机号获取用户信息
 	 * @param username
 	 * @return
 	 */
-	User loadUserInfo(String username);
+	User loadUserInfoByMobile(String mobile);
+
+	/**
+	 * 通过用户id获取用户信息
+	 * @param userId
+	 * @return
+	 */
+	User loadUserInfoByUserId(String userId);
+	
+	/**
+	 * 插入第三方用户信息
+	 * @param socialUserInfo
+	 * @return 
+	 */
+	User insertSocialUser(SocialUserInfo socialUserInfo);
 }

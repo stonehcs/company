@@ -12,14 +12,13 @@ import com.lichi.increaselimit.user.entity.User;
  *
  */
 @Mapper
-public interface UserDao extends BaseMapper<User>{
+public interface UserMapper extends BaseMapper<User>{
 	
 	/**
 	 * 获取用户信息
 	 * @param username
 	 * @return
 	 */
-	@Select("select * from t_user where username=#{username} or mobile=#{username}"
-			+ "or qq=#{username} or weixin=#{username}")
-	User loadUserInfo(String username);
+	@Select("select * from t_user where mobile=#{mobile}")
+	User loadUserInfoByMobile(String mobile);
 }

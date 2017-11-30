@@ -32,7 +32,7 @@ public class Article implements Serializable{
     private Date updateTime;
 
     @Column(updatable=false)
-    private Integer createUserId;
+    private String createUserId;
 
     @Column(updatable=false)
     private Integer circleId;
