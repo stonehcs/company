@@ -1,21 +1,25 @@
 package com.lichi.increaselimit.security.authentication.mobile;
 
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
+import com.lichi.increaselimit.user.entity.User;
+import com.lichi.increaselimit.user.service.UserService;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 短信认证provider
  * @author majie
  *
  */
+@Getter
+@Setter
 public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 
-	private UserDetailsService userDetailsService;
-
+	private UserService userService;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -27,10 +31,13 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 
 		SmsCodeAuthenticationToken authenticationToken = (SmsCodeAuthenticationToken) authentication;
 		
-		UserDetails user = userDetailsService.loadUserByUsername((String) authenticationToken.getPrincipal());
+		String mobile = (String) authenticationToken.getPrincipal();
+		
+		
+		User user = userService.loadUserInfoByUsername(mobile);
 
 		if (user == null) {
-			throw new InternalAuthenticationServiceException("无法获取用户信息");
+			user = userService.insertMobileUser(mobile);
 		}
 		
 		SmsCodeAuthenticationToken authenticationResult = new SmsCodeAuthenticationToken(user, user.getAuthorities());
@@ -49,14 +56,6 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public boolean supports(Class<?> authentication) {
 		return SmsCodeAuthenticationToken.class.isAssignableFrom(authentication);
-	}
-
-	public UserDetailsService getUserDetailsService() {
-		return userDetailsService;
-	}
-
-	public void setUserDetailsService(UserDetailsService userDetailsService) {
-		this.userDetailsService = userDetailsService;
 	}
 
 }

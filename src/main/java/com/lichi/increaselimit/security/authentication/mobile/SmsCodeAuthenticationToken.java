@@ -29,9 +29,9 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 	 * will return <code>false</code>.
 	 *
 	 */
-	public SmsCodeAuthenticationToken(String mobile) {
+	public SmsCodeAuthenticationToken(String principal) {
 		super(null);
-		this.principal = mobile;
+		this.principal = principal;
 		setAuthenticated(false);
 	}
 

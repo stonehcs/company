@@ -8,6 +8,9 @@ import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
+import com.lichi.increaselimit.common.enums.ResultEnum;
+import com.lichi.increaselimit.common.utils.StringUtil;
+import com.lichi.increaselimit.security.properties.SecurityConstants;
 import com.lichi.increaselimit.security.validate.code.ValidateCode;
 import com.lichi.increaselimit.security.validate.code.ValidateCodeException;
 import com.lichi.increaselimit.security.validate.code.ValidateCodeGenerator;
@@ -92,12 +95,21 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
 		return ValidateCodeType.valueOf(type.toUpperCase());
 	}
 
+	/**
+	 * 先验证手机号
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void validate(ServletWebRequest request) {
 
 		ValidateCodeType codeType = getValidateCodeType(request);
 		
+		if(codeType.equals(ValidateCodeType.SMS)) {
+			boolean isMobile = StringUtil.ValidateMobile(request.getParameter(SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE));
+			if(!isMobile) {
+				throw new ValidateCodeException(ResultEnum.MOBILE_ERROR.getMessage());
+			}
+		}
 		C codeInRedis = (C) validateCodeRepository.get(request, codeType);
 
 		String codeInRequest;

@@ -40,6 +40,8 @@ public class User implements UserDetails,SocialUserDetails{
 	private BigDecimal money;
 	
 	private String username;
+	
+	private String nickname;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,6 +68,7 @@ public class User implements UserDetails,SocialUserDetails{
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getUserId() {
 		// TODO Auto-generated method stub
