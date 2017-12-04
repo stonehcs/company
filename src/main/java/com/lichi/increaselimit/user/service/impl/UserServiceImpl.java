@@ -6,7 +6,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
+import com.lichi.increaselimit.common.utils.HuanXinUtils;
 import com.lichi.increaselimit.common.utils.UserIdUtils;
 import com.lichi.increaselimit.user.dao.SocialUserMapper;
 import com.lichi.increaselimit.user.dao.UserMapper;
@@ -23,7 +25,10 @@ public class UserServiceImpl implements UserService {
 	private UserMapper userMapper;
 	@Autowired
 	private SocialUserMapper socialUserMapper;
-
+	
+	@Autowired
+	private RestTemplate restTemplate;
+ 
 	@Override
 	public User loadUserInfoByMobile(String mobile) {
 		User user = userMapper.loadUserInfoByMobile(mobile);
@@ -36,6 +41,9 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	/**
+	 * 还要注册环信用户
+	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public User insertSocialUser(SocialUserInfo socialUserInfo) {
@@ -50,6 +58,8 @@ public class UserServiceImpl implements UserService {
 		user.setNickname(socialUserInfo.getDisplayName());
 		// 用户表
 		userMapper.insert(user);
+		//注册环信用户
+		HuanXinUtils.registerUser(userId, restTemplate);
 		return user;
 	}
 
@@ -80,6 +90,9 @@ public class UserServiceImpl implements UserService {
 		user.setUsername(mobile);
 		user.setMobile(mobile);
 		userMapper.insert(user);
+		
+		//注册环信用户
+		HuanXinUtils.registerUser(userId, restTemplate);
 		return user;
 	}
 }
