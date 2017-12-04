@@ -15,7 +15,8 @@ import org.springframework.util.MultiValueMap;
  */
 public class SHA1 {
 	
-	public static final String APISECRET = "MkjX91eZKfppdHTWadOpjhcMnXNLDO2G"; 
+	public static final String APISECRET = "NOTvtxnwu9RRTKMquTzjg5N2QnLE8auG"; 
+	
 	public static String createSign(MultiValueMap<String, String> map, boolean encode) throws UnsupportedEncodingException {
 		Set<String> keysSet = map.keySet();
 		Object[] keys = keysSet.toArray();

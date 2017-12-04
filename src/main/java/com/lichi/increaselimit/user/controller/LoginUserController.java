@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,9 +35,9 @@ public class LoginUserController {
 	 * 获取所有的后台登陆用户
 	 * @return
 	 */
-	@GetMapping
+	@GetMapping("/{id}")
 	@ApiOperation("获取所有的后台登陆客服")
-	public ResultVo<LoginUser> getAllLoginUser() {
+	public ResultVo<LoginUser> getAllLoginUser(@PathVariable String id) {
 		
 		List<LoginUser> list = loginUserService.getAll();
 		

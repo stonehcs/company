@@ -61,7 +61,7 @@ lichi:
   oauth2-properties:
     clients:
     - client-id: lichi
-      client-secret: 123456
+      client-secret: abcdef
       access-token-validity-seconds: 7200
       grant-types:
       - password, refresh_token,implicit

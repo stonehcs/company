@@ -40,8 +40,8 @@ public class StudySearchController {
 	@Autowired
 	private RedisUtils redisUtils;
 
-	private final static String APIKEY = "3028148480967238";
-	private final static String APISECRET = "MkjX91eZKfppdHTWadOpjhcMnXNLDO2G";
+	private final static String APIKEY = "0493706513949334";
+	private final static String APISECRET = "NOTvtxnwu9RRTKMquTzjg5N2QnLE8auG";
 
 	// 获取userId
 	private final static String GETTOKEN_URL = "https://api.limuzhengxin.com/api/gateway";
@@ -55,7 +55,7 @@ public class StudySearchController {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	@GetMapping("/token")
+	@GetMapping("/study")
 	public JSONObject getToken(@RequestParam String username, @RequestParam String password,
 			@RequestParam String method) throws UnsupportedEncodingException {
 		method = "api.education.get";
@@ -106,16 +106,7 @@ public class StudySearchController {
 		map.add("token", token);
 		String sign = SHA1.createSign(map, false);
 		map.add("sign", sign);
-
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-//		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-
 		JSONObject postForObject = restTemplate.postForObject(GETTOKEN_URL, map, JSONObject.class);
-
-		// String code = postForObject.getString("code");
-
 		return postForObject;
 	}
 }
