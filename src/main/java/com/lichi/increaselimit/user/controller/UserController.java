@@ -15,6 +15,8 @@ import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.course.entity.Course;
+import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
+import com.lichi.increaselimit.netloan.service.DiagnosisResultService;
 import com.lichi.increaselimit.security.UserUtils;
 import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.service.UserService;
@@ -41,6 +43,8 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private DiagnosisResultService diagnosisResultService;
 
 	/**
 	 * 获取当前用户信息
@@ -84,6 +88,19 @@ public class UserController {
 		
 		PageInfo<Course> userCourse = userService.selectCourse(page,size,id,status);
 		return ResultVoUtil.success(userCourse);
+	}
+	
+	@GetMapping("/card")
+	@ApiOperation("刷卡任务")
+//	@ApiImplicitParams({
+//		@ApiImplicitParam(name = "Authorization", value = "认证token", required = true, dataType = "string", paramType = "header", defaultValue = "bearer ") })
+	public ResultVo<PageInfo<DiagnosisResult>> getUserCourse(
+			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
+			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
+			@ApiParam(value = "用户id", required = true) @RequestParam String id){
+		
+		PageInfo<DiagnosisResult> result = diagnosisResultService.getCardTask(page,size,id);
+		return ResultVoUtil.success(result);
 	}
 
 }

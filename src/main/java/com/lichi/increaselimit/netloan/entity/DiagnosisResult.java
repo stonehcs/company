@@ -1,6 +1,7 @@
 package com.lichi.increaselimit.netloan.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -52,5 +53,9 @@ public class DiagnosisResult implements Serializable{
 	 */
 	private Double money;
 	
+	/**
+	 * 消费日期
+	 */
+	private Date time;
 	
 }

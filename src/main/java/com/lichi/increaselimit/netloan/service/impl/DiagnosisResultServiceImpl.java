@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.netloan.dao.DiagnosisResultMapper;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResultList;
@@ -49,6 +51,17 @@ public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 		record.setMoney(money);
 		diagnosisResultMapper.updateByPrimaryKeySelective(record);
 		return null;
+	}
+
+	@Override
+	public PageInfo<DiagnosisResult> getCardTask(Integer page, Integer size, String id) {
+		PageHelper.startPage(page, size);
+		PageHelper.orderBy("time desc");
+		Example example = new Example(DiagnosisResult.class);
+		example.createCriteria().andEqualTo("userId", id);
+		List<DiagnosisResult> list = diagnosisResultMapper.selectByExample(example);
+		PageInfo<DiagnosisResult> pageInfo = new PageInfo<>(list);
+		return pageInfo;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.lichi.increaselimit.netloan.service;
 
 import java.util.List;
 
+import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResultList;
 
@@ -33,4 +34,13 @@ public interface DiagnosisResultService {
 	 * @return
 	 */
 	DiagnosisResultList update(Integer id, Double money);
+
+	/**
+	 * 获取刷卡任务
+	 * @param page
+	 * @param size
+	 * @param id
+	 * @return
+	 */
+	PageInfo<DiagnosisResult> getCardTask(Integer page, Integer size, String id);
 }
