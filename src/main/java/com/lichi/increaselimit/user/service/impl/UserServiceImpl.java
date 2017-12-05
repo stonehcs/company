@@ -91,6 +91,7 @@ public class UserServiceImpl implements UserService {
 		User user = new User();
 		user.setId(userId);
 		user.setUsername(mobile);
+		user.setNickname(mobile);
 		user.setMobile(mobile);
 		userMapper.insert(user);
 		

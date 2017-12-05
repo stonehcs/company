@@ -41,6 +41,7 @@ public class User implements UserDetails,SocialUserDetails{
 	 */
 	private Double money;
 	
+	@JsonIgnore
 	private String username;
 	
 	private String nickname;
