@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.common.utils.HuanXinUtils;
 import com.lichi.increaselimit.common.utils.UserIdUtils;
+import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.user.dao.SocialUserMapper;
 import com.lichi.increaselimit.user.dao.UserMapper;
 import com.lichi.increaselimit.user.entity.SocialUserInfo;
@@ -95,4 +98,22 @@ public class UserServiceImpl implements UserService {
 		HuanXinUtils.registerUser(userId, restTemplate);
 		return user;
 	}
+
+	@Override
+	public PageInfo<User> selectBank(Integer page, Integer size) {
+		PageHelper.startPage(page,size);
+		PageHelper.orderBy("rank desc");
+		List<User> list = userMapper.selectAll();
+		PageInfo<User> pageInfo = new PageInfo<User>(list);
+		return pageInfo;
+	}
+
+	@Override
+	public PageInfo<Course> selectCourse(Integer page, Integer size, String id, Integer status) {
+		PageHelper.startPage(page,size);
+		List<Course> list = userMapper.selectUserCourse(id,status);
+		PageInfo<Course> pageInfo = new PageInfo<Course>(list);
+		return pageInfo;
+	}
+
 }

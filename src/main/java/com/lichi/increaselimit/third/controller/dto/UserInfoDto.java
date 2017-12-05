@@ -4,13 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 公积金查询参数
+ * 查询参数
  * @author majie
  *
  */
 @Getter
 @Setter
-public class HouseFundDto {
+public class UserInfoDto {
 	
 	private String username;
 	private String password;

@@ -1,6 +1,5 @@
 package com.lichi.increaselimit.user.entity;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 
 import javax.persistence.Id;
@@ -37,12 +36,25 @@ public class User implements UserDetails,SocialUserDetails{
 	
 	private Integer vipLevel;
 	
-	private BigDecimal money;
+	/**
+	 * 佣金
+	 */
+	private Double money;
 	
 	private String username;
 	
 	private String nickname;
 
+	/**
+	 * 邀请人数
+	 */
+	private Integer rank;
+	
+	/**
+	 * 积分
+	 */
+	private Integer points;
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return null;

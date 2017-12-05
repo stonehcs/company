@@ -25,22 +25,20 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * 公积金controller
- * @author majie
- *
+ * 社保
  */
 @RestController
-@RequestMapping("/housefund")
-@Api(description = "公积金")
-public class HouseFundController {
-
+@Api(description="社保查询")
+@RequestMapping("/socialsecurity")
+public class SocialsecurityController {
+	
 	@Autowired
 	private RestTemplate restTemplate;
 
 	@GetMapping("/area")
 	@ApiOperation("获取支持的地区")
 	public JSONObject getAreaList() throws UnsupportedEncodingException {
-		String method = "api.housefund.getareas";
+		String method = "api.socialsecurity.getareas";
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 		map.add("method", method);
 		map.add("apiKey", LiMuZhengXinUtils.APIKEY);
@@ -48,15 +46,21 @@ public class HouseFundController {
 		String sign = LiMuZhengXinUtils.createSign(map, false);
 		map.add("sign", sign);
 		
-		JSONObject postForObject = LiMuZhengXinUtils.doPostForToken(restTemplate, map);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map,
+				headers);
+
+		JSONObject postForObject = restTemplate.postForObject(LiMuZhengXinUtils.TEST_URL, request, JSONObject.class);
 		
 		return postForObject;
 	}
 	
 	@GetMapping("/area/{areaCode}")
-	@ApiOperation("公积金地区登陆元素查")
+	@ApiOperation("社保地区登陆元素查")
 	public JSONObject getAreaList(@PathVariable String areaCode) throws UnsupportedEncodingException {
-		String method = "api.housefund.getloginelements";
+		String method = "api.socialsecurity.getloginelements";
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 		map.add("method", method);
 		map.add("apiKey", LiMuZhengXinUtils.APIKEY);
@@ -77,9 +81,9 @@ public class HouseFundController {
 	}
 	
 	@PostMapping
-	@ApiOperation("公积金查询")
+	@ApiOperation("社保查询")
 	public JSONObject getResult(@RequestBody UserInfoDto dto) throws UnsupportedEncodingException {
-		String method = "api.housefund.get";
+		String method = "api.socialsecurity.get";
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 		map.add("method", method);
 		map.add("apiKey", LiMuZhengXinUtils.APIKEY);
@@ -101,7 +105,4 @@ public class HouseFundController {
 		
 		return postForObject;
 	}
-	
-	
-	
 }
