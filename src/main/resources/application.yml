@@ -62,7 +62,7 @@ lichi:
     clients:
     - client-id: lichi
       client-secret: abcdef
-      access-token-validity-seconds: 7200
+      access-token-validity-seconds: 0
       grant-types:
       - password, refresh_token,implicit
       scopes:
@@ -70,15 +70,4 @@ lichi:
     jwt-signing-key: lichi
     storeType: jwt   #token的存放方式
     
-  #第三方登陆
-  social:
-    qq:
-      provider-id: 
-      app-id: 
-      app-secret:  
-      providerId: callback.do
-    weixin:
-       app-id: wxd99431bbff8305a0
-       app-secret: 60f78681d063590a469f1b297feff3c4
-    filterProcessesUrl: /qqLogin
 

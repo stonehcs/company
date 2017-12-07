@@ -66,7 +66,51 @@ public class LiMuZhengXinUtils {
 		JSONObject postForObject = restTemplate.postForObject(TEST_URL, map, JSONObject.class);
 		return postForObject;
 	}
+	/**
+	 * 获取信息
+	 * @param restTemplate
+	 * @param method
+	 * @param bizType
+	 * @param token
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public static JSONObject getStatus(RestTemplate restTemplate,String method, String bizType, String token) throws UnsupportedEncodingException {
+		
+		JSONObject jsonObject = getInfo(restTemplate, method, bizType, token);
+		
+		return jsonObject;
+	}
 	
+	/**
+	 * 验证验证码
+	 * @param restTemplate
+	 * @param method
+	 * @param bizType
+	 * @param token
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public static JSONObject checkCode(RestTemplate restTemplate,String token,String input) throws UnsupportedEncodingException {
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+		map.add("method", "api.common.input");
+		map.add("apiKey", APIKEY);
+		map.add("version", "1.2.0");
+		map.add("token", token);
+		map.add("input", input);
+		String sign = createSign(map, false);
+		map.add("sign", sign);
+		JSONObject postForObject = restTemplate.postForObject(TEST_URL, map, JSONObject.class);
+		return postForObject;
+	}
+	
+	/**
+	 * 签名
+	 * @param map
+	 * @param encode
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
 	public static String createSign(MultiValueMap<String, String> map, boolean encode) throws UnsupportedEncodingException {
 		Set<String> keysSet = map.keySet();
 		Object[] keys = keysSet.toArray();

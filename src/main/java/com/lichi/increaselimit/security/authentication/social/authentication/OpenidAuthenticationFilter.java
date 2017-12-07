@@ -48,6 +48,7 @@ public class OpenidAuthenticationFilter extends AbstractAuthenticationProcessing
 		String openid = obtainOpenid(request);
 		String providerId = obtainProviderId(request);
 		String nickname = obtainNickname(request);
+		String headimgurl = obtainHeadimgurl(request);
 		if (openid == null) {
 			openid = "";
 		}
@@ -57,16 +58,21 @@ public class OpenidAuthenticationFilter extends AbstractAuthenticationProcessing
 		if (nickname == null) {
 			nickname = "";
 		}
+		if (headimgurl == null) {
+			headimgurl = "";
+		}
 
 		openid = openid.trim();
 		providerId = providerId.trim();
 		nickname = nickname.trim();
+		headimgurl = headimgurl.trim();
 
 		//设置用户信息
 		SocialUserInfo socialUserInfo = new SocialUserInfo();
 		socialUserInfo.setProviderId(providerId);
 		socialUserInfo.setProviderUserId(openid);
 		socialUserInfo.setDisplayName(nickname);
+		socialUserInfo.setImageUrl(headimgurl);
 		
 		OpenidAuthenticationToken authRequest = new OpenidAuthenticationToken(socialUserInfo);
 
@@ -76,6 +82,10 @@ public class OpenidAuthenticationFilter extends AbstractAuthenticationProcessing
 		return this.getAuthenticationManager().authenticate(authRequest);
 	}
 
+
+	private String obtainHeadimgurl(HttpServletRequest request) {
+		return request.getParameter("headimgurl");
+	}
 
 	/**
 	 * 获取手机号

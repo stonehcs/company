@@ -24,14 +24,27 @@
 	</properties>
 
 	<dependencies>
-		
+
+		<!-- 阿里短信 -->
+		<dependency>
+			<groupId>com.alicom.dysms</groupId>
+			<artifactId>alicom-dysms-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alicom.dysms</groupId>
+			<artifactId>alicom-dysms-core</artifactId>
+			<version>3.3.1</version>
+		</dependency>
+
 		<!-- jpush -->
 		<dependency>
 			<groupId>cn.jpush.api</groupId>
 			<artifactId>jpush-client</artifactId>
 			<version>3.3.3</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-parent</artifactId>

@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import com.alibaba.fastjson.JSONObject;
 import com.lichi.increaselimit.common.utils.BASE64Utils;
 import com.lichi.increaselimit.common.utils.LiMuZhengXinUtils;
-import com.lichi.increaselimit.third.controller.dto.UserInfoDto;
+import com.lichi.increaselimit.third.controller.dto.ThirdUserInfoDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -78,7 +78,7 @@ public class HouseFundController {
 	
 	@PostMapping
 	@ApiOperation("公积金查询")
-	public JSONObject getResult(@RequestBody UserInfoDto dto) throws UnsupportedEncodingException {
+	public JSONObject getResult(@RequestBody ThirdUserInfoDto dto) throws UnsupportedEncodingException {
 		String method = "api.housefund.get";
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 		map.add("method", method);
