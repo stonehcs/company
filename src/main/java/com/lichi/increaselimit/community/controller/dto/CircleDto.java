@@ -27,7 +27,6 @@ public class CircleDto implements Serializable{
     private String createUserId;
 
     @ApiModelProperty(value = "头像地址")
-    @NotBlank(message = "头像不能为空")
     private String url;
     
     @ApiModelProperty(value = "圈子描述")

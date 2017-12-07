@@ -4,9 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiOperation;
  * @author majie
  *
  */
-@Controller
+@RestController
 @Api(description = "验证码")
 public class ValidateCodeController {
 
