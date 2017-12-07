@@ -11,6 +11,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.common.enums.ResultEnum;
+import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.HuanXinUtils;
 import com.lichi.increaselimit.common.utils.UserIdUtils;
 import com.lichi.increaselimit.course.entity.Course;
@@ -64,7 +66,11 @@ public class UserServiceImpl implements UserService {
 		user.setCreateTime(new Date());
 		userMapper.insert(user);
 		//注册环信用户
-		HuanXinUtils.registerUser(userId, restTemplate);
+		try {
+			HuanXinUtils.registerUser(userId, restTemplate);
+		} catch (Exception e) {
+			throw new BusinessException(ResultEnum.REGISTER_ERROR);
+		}
 		return user;
 	}
 
@@ -88,6 +94,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public User insertMobileUser(String mobile) {
 		String userId = UserIdUtils.getUserId();
 		User user = new User();
@@ -97,9 +104,11 @@ public class UserServiceImpl implements UserService {
 		user.setMobile(mobile);
 		user.setCreateTime(new Date());
 		userMapper.insert(user);
-		
-		//注册环信用户
-		HuanXinUtils.registerUser(userId, restTemplate);
+		try {
+			HuanXinUtils.registerUser(userId, restTemplate);
+		} catch (Exception e) {
+			throw new BusinessException(ResultEnum.REGISTER_ERROR);
+		}
 		return user;
 	}
 
