@@ -53,7 +53,7 @@ lichi:
       height: 23
       width: 67
     sms:
-      expire-in: 60
+      expire-in: 900
       url: 
       length: 6
       
