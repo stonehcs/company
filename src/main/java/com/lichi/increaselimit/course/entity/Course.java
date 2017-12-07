@@ -65,10 +65,13 @@ public class Course implements Serializable{
 	/**
 	 * 是否是精品
 	 */
-	private boolean fine;
+	private Integer fine;
 	
 	/**
 	 * 1武汉 2成都 3广州 4...
 	 */
 	private Integer locationId;
+	
+	private Date updateTime;
+	private Date createTime;
 }

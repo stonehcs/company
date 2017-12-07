@@ -1,6 +1,7 @@
 package com.lichi.increaselimit.course.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -27,4 +28,6 @@ public class Teacher implements Serializable{
 	
 	private String imgUrl;
 	
+	private Date updateTime;
+	private Date createTime;
 }

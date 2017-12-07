@@ -19,10 +19,13 @@ import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.community.controller.dto.ArticleDto;
+import com.lichi.increaselimit.community.controller.dto.ArticleUpdateDto;
 import com.lichi.increaselimit.community.entity.Article;
 import com.lichi.increaselimit.community.service.ArticleService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -52,7 +55,11 @@ public class ArticleController {
 
     @PutMapping
     @ApiOperation(value = "更新帖子")
-    public ResultVo<Article> update(ArticleDto articledto){
+    public ResultVo<Article> update(@Valid ArticleUpdateDto articledto, BindingResult result){
+        if(result.hasErrors()){
+            String errors = result.getFieldError().getDefaultMessage();
+            return ResultVoUtil.error(1,errors);
+        }
     	Article article = new Article();
     	BeanUtils.copyProperties(articledto,article);
         articleService.update(article);
@@ -87,6 +94,7 @@ public class ArticleController {
     }
 
     @GetMapping("/{id}")
+    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "token", required = true, dataType = "string", paramType = "header",defaultValue="bearer ")})
     @ApiOperation(value = "根据id查询帖子")
     public ResultVo<Article> getArticle(@PathVariable  Integer id){
         Article article = articleService.get(id);

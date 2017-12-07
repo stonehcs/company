@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.course.controller.dto.TeacherDto;
+import com.lichi.increaselimit.course.controller.dto.TeacherUpdateDto;
 import com.lichi.increaselimit.course.entity.Teacher;
 import com.lichi.increaselimit.course.service.TeacherService;
 import io.swagger.annotations.Api;
@@ -77,7 +78,11 @@ public class TeacherController {
 
 	@PutMapping
 	@ApiOperation(value = "修改讲师")
-	public ResultVo<Teacher> updateTeacher(TeacherDto teacherDto) {
+	public ResultVo<Teacher> updateTeacher(@Valid TeacherUpdateDto teacherDto, BindingResult result) {
+		if (result.hasErrors()) {
+			String errors = result.getFieldError().getDefaultMessage();
+			return ResultVoUtil.error(1, errors);
+		}
 		Teacher teacher = new Teacher();
 		BeanUtils.copyProperties(teacherDto, teacher);
 		teacherService.updateTeacher(teacher);

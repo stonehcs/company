@@ -1,5 +1,6 @@
-package com.lichi.increaselimit.course.service.Impl;
+package com.lichi.increaselimit.course.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ public class TeacherServiceImpl implements TeacherService{
 
 	@Override
 	public void addTeacher(Teacher teacher) {
+		teacher.setCreateTime(new Date());
 		mapper.insertSelective(teacher);
 	}
 
@@ -56,6 +58,7 @@ public class TeacherServiceImpl implements TeacherService{
 
 	@Override
 	public void updateTeacher(Teacher teacher) {
+		teacher.setUpdateTime(new Date());
 		mapper.updateByPrimaryKeySelective(teacher);
 	}
 

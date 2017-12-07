@@ -62,4 +62,10 @@ public interface UserService {
 	 * @return
 	 */
 	PageInfo<Course> selectCourse(Integer page, Integer size, String id, Integer status);
+	
+	/**
+	 * 更新用户信息
+	 * @param user
+	 */
+	void updateUserInfo(User user);
 }

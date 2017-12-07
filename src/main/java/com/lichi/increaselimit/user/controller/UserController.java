@@ -4,9 +4,13 @@ import java.io.UnsupportedEncodingException;
 import java.security.SignatureException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +22,7 @@ import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
 import com.lichi.increaselimit.netloan.service.DiagnosisResultService;
 import com.lichi.increaselimit.security.UserUtils;
+import com.lichi.increaselimit.user.controller.dto.UserUpdateDto;
 import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.service.UserService;
 
@@ -65,42 +70,57 @@ public class UserController {
 
 	@GetMapping("/rank")
 	@ApiOperation("获取用户排行榜")
-//	@ApiImplicitParams({
-//			@ApiImplicitParam(name = "Authorization", value = "认证token", required = true, dataType = "string", paramType = "header", defaultValue = "bearer ") })
+	// @ApiImplicitParams({
+	// @ApiImplicitParam(name = "Authorization", value = "认证token", required = true,
+	// dataType = "string", paramType = "header", defaultValue = "bearer ") })
 	public ResultVo<PageInfo<User>> getUserRank(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
-			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size){
-		
-		PageInfo<User> user = userService.selectBank(page,size);
-		
+			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
+
+		PageInfo<User> user = userService.selectBank(page, size);
+
 		return ResultVoUtil.success(user);
 	}
-	
+
 	@GetMapping("/course")
 	@ApiOperation("获取用户课程")
-//	@ApiImplicitParams({
-//		@ApiImplicitParam(name = "Authorization", value = "认证token", required = true, dataType = "string", paramType = "header", defaultValue = "bearer ") })
+	// @ApiImplicitParams({
+	// @ApiImplicitParam(name = "Authorization", value = "认证token", required = true,
+	// dataType = "string", paramType = "header", defaultValue = "bearer ") })
 	public ResultVo<PageInfo<Course>> getUserCourse(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
 			@ApiParam(value = "状态 0报名  1 付费", required = true) @RequestParam Integer status,
-			@ApiParam(value = "用户id", required = true) @RequestParam String id){
-		
-		PageInfo<Course> userCourse = userService.selectCourse(page,size,id,status);
+			@ApiParam(value = "用户id", required = true) @RequestParam String id) {
+
+		PageInfo<Course> userCourse = userService.selectCourse(page, size, id, status);
 		return ResultVoUtil.success(userCourse);
 	}
-	
+
 	@GetMapping("/card")
 	@ApiOperation("刷卡任务")
-//	@ApiImplicitParams({
-//		@ApiImplicitParam(name = "Authorization", value = "认证token", required = true, dataType = "string", paramType = "header", defaultValue = "bearer ") })
+	// @ApiImplicitParams({
+	// @ApiImplicitParam(name = "Authorization", value = "认证token", required = true,
+	// dataType = "string", paramType = "header", defaultValue = "bearer ") })
 	public ResultVo<PageInfo<DiagnosisResult>> getUserCourse(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
-			@ApiParam(value = "用户id", required = true) @RequestParam String id){
-		
-		PageInfo<DiagnosisResult> result = diagnosisResultService.getCardTask(page,size,id);
+			@ApiParam(value = "用户id", required = true) @RequestParam String id) {
+
+		PageInfo<DiagnosisResult> result = diagnosisResultService.getCardTask(page, size, id);
 		return ResultVoUtil.success(result);
 	}
 
+	@PutMapping
+	@ApiOperation("修改用户信息")
+	public ResultVo<Object> updateUserInfo(@Valid UserUpdateDto dto, BindingResult result) {
+		if (result.hasErrors()) {
+			String errors = result.getFieldError().getDefaultMessage();
+			return ResultVoUtil.error(1, errors);
+		}
+		User user = new User();
+		BeanUtils.copyProperties(dto, user);
+		userService.updateUserInfo(user);
+		return ResultVoUtil.success();
+	}
 }

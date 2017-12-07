@@ -1,5 +1,6 @@
-package com.lichi.increaselimit.course.service.Impl;
+package com.lichi.increaselimit.course.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	public void addCourse(Course course) {
+		course.setCreateTime(new Date());
 		courseMapper.insertSelective(course);
 	}
 
@@ -48,6 +50,7 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	public void updateCourse(Course course) {
+		course.setUpdateTime(new Date());
 		courseMapper.updateByPrimaryKeySelective(course);
 	}
 

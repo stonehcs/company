@@ -1,5 +1,6 @@
 package com.lichi.increaselimit.user.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -60,6 +61,7 @@ public class UserServiceImpl implements UserService {
 		user.setUsername(socialUserInfo.getProviderUserId());
 		user.setNickname(socialUserInfo.getDisplayName());
 		// 用户表
+		user.setCreateTime(new Date());
 		userMapper.insert(user);
 		//注册环信用户
 		HuanXinUtils.registerUser(userId, restTemplate);
@@ -93,6 +95,7 @@ public class UserServiceImpl implements UserService {
 		user.setUsername(mobile);
 		user.setNickname(mobile);
 		user.setMobile(mobile);
+		user.setCreateTime(new Date());
 		userMapper.insert(user);
 		
 		//注册环信用户
@@ -115,6 +118,12 @@ public class UserServiceImpl implements UserService {
 		List<Course> list = userMapper.selectUserCourse(id,status);
 		PageInfo<Course> pageInfo = new PageInfo<Course>(list);
 		return pageInfo;
+	}
+
+	@Override
+	public void updateUserInfo(User user) {
+		user.setUpdateTime(new Date());
+		userMapper.updateByPrimaryKeySelective(user);
 	}
 
 }

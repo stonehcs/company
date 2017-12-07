@@ -1,6 +1,7 @@
 package com.lichi.increaselimit.user.entity;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -55,6 +56,9 @@ public class User implements UserDetails,SocialUserDetails{
 	 * 积分
 	 */
 	private Integer points;
+	
+	private Date updateTime;
+	private Date createTime;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

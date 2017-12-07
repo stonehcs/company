@@ -13,12 +13,16 @@ import lombok.Data;
  *
  */
 @Data
-public class TeacherDto implements Serializable{
+public class TeacherUpdateDto implements Serializable{
 
-	private static final long serialVersionUID = 3308075062590670824L;
+	
+	private static final long serialVersionUID = 8204456060633021678L;
+
+	@ApiModelProperty("讲师id,必填")
+	@NotNull(message = "讲师id不能为空")
+	private Integer id;
 	
 	@ApiModelProperty("老师姓名")
-	@NotNull(message = "老师姓名不能为空")
 	private String teachername;
 	
 	@ApiModelProperty("老师简介")

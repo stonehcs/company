@@ -21,6 +21,7 @@ import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.community.controller.dto.CircleDto;
+import com.lichi.increaselimit.community.controller.dto.CircleUpdateDto;
 import com.lichi.increaselimit.community.entity.Circle;
 import com.lichi.increaselimit.community.service.CircleService;
 
@@ -58,8 +59,13 @@ public class CircleController {
 
     @PutMapping
     @ApiOperation(value = "更新圈子信息")
-    public ResultVo<Circle> update(CircleDto circledto){
-    	log.info("更新圈子信息：{}" , circledto.getName());
+    public ResultVo<Circle> update(@Valid CircleUpdateDto circledto, BindingResult result){
+    	log.info("更新圈子信息：{}" , circledto.getId());
+        if(result.hasErrors()){
+            String errors = result.getFieldError().getDefaultMessage();
+            log.error("新建圈子参数错误：" + errors);
+            return ResultVoUtil.error(1,errors);
+        }
     	Circle circle = new Circle();
     	BeanUtils.copyProperties(circledto, circle);
         circleService.update(circle);

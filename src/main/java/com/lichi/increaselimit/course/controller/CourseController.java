@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.course.controller.dto.CourseDto;
+import com.lichi.increaselimit.course.controller.dto.CourseUpdateDto;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.entity.CourseVo;
 import com.lichi.increaselimit.course.service.CourseService;
@@ -81,7 +82,11 @@ public class CourseController {
 
 	@PutMapping
 	@ApiOperation(value = "修改课程")
-	public ResultVo<Course> updateCourse(CourseDto courseDto) {
+	public ResultVo<Course> updateCourse(@Valid CourseUpdateDto courseDto, BindingResult result) {
+		if (result.hasErrors()) {
+			String errors = result.getFieldError().getDefaultMessage();
+			return ResultVoUtil.error(1, errors);
+		}
 		Course course = new Course();
 		BeanUtils.copyProperties(courseDto, course);
 		courseService.updateCourse(course);
