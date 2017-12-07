@@ -1,5 +1,6 @@
 package com.lichi.increaselimit.common.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lichi.increaselimit.common.vo.ResultVo;
 
 /**
@@ -24,10 +25,11 @@ public class ResultVoUtil {
 	
 	/**
 	 * 成功 
-	 * @return
+	 * @return 
 	 */
-    public static <T> ResultVo<T> success() {
-        return success(null);
+    @SuppressWarnings("unchecked")
+	public static <T> ResultVo<T> success() {
+        return (ResultVo<T>) success(new JSONObject());
     }
     
     /**
@@ -36,10 +38,12 @@ public class ResultVoUtil {
      * @param msg
      * @return
      */
-    public static <T> ResultVo<T> error(Integer code, String msg) {
+    @SuppressWarnings("unchecked")
+	public static <T> ResultVo<T> error(Integer code, String msg) {
     	ResultVo<T> resultvo = new ResultVo<T>();
         resultvo.setCode(code);
         resultvo.setMsg(msg);
+        resultvo.setData((T) new JSONObject());
         return resultvo;
     }
 }
