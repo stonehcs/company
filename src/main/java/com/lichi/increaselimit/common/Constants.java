@@ -14,5 +14,10 @@ public interface Constants {
 	/**
 	 * 验证码存放在redis的时间
 	 */
-	public static final Long CODE_IN_REDIS_TIME = 60L;
+	public static final Long CODE_IN_REDIS_TIME = 900L;
+	
+	/**
+	 * 隔多久重发验证码
+	 */
+	public static final long CODE_RESEND = 60;
 }
