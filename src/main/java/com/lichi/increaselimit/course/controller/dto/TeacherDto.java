@@ -2,7 +2,7 @@ package com.lichi.increaselimit.course.controller.dto;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class TeacherDto implements Serializable{
 	private static final long serialVersionUID = 3308075062590670824L;
 	
 	@ApiModelProperty("老师姓名")
-	@NotNull(message = "老师姓名不能为空")
+	@NotBlank(message = "老师姓名不能为空")
 	private String teachername;
 	
 	@ApiModelProperty("老师简介")

@@ -1,6 +1,6 @@
 package com.lichi.increaselimit.user.controller.dto;
 
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,7 +11,7 @@ import lombok.Data;
 public class UserUpdateDto {
 
 	@ApiModelProperty("用户id,必填")
-	@NotNull(message = "用户信息不能为空")
+	@NotBlank(message = "用户id不能为空")
 	private String id;
 	
 	@ApiModelProperty("头像")

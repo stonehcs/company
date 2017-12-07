@@ -1,6 +1,6 @@
 package com.lichi.increaselimit.third.controller.dto;
 
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,11 +14,11 @@ import lombok.Setter;
 @Setter
 public class ThirdUserInfoDto {
 	
-	@NotNull(message = "账号不能为空")
+	@NotBlank(message = "账号不能为空")
 	private String username;
-	@NotNull(message = "密码不能为空")
+	@NotBlank(message = "密码不能为空")
 	private String password;
-	@NotNull(message = "地区不能为空")
+	@NotBlank(message = "地区不能为空")
 	private String area;
 	
 	private String realName;
