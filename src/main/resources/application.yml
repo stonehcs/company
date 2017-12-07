@@ -62,11 +62,15 @@ lichi:
     clients:
     - client-id: lichi
       client-secret: abcdef
-      access-token-validity-seconds: 0
+      access-token-validity-seconds: 0  #0表示不过期
       grant-types:
-      - password, refresh_token,implicit
+      - password
+      - refresh_token
+      - implicit
       scopes:
-      - all, read, write
+      - all
+      - read
+      - write
     jwt-signing-key: lichi
     storeType: jwt   #token的存放方式
     
