@@ -64,7 +64,8 @@ public class UserServiceImpl implements UserService {
 		user.setNickname(socialUserInfo.getDisplayName());
 		// 用户表
 		user.setCreateTime(new Date());
-		userMapper.insert(user);
+		user.setUpdateTime(new Date());
+		userMapper.insertSelective(user);
 		//注册环信用户
 		try {
 			HuanXinUtils.registerUser(userId, restTemplate);
@@ -103,7 +104,8 @@ public class UserServiceImpl implements UserService {
 		user.setNickname(mobile);
 		user.setMobile(mobile);
 		user.setCreateTime(new Date());
-		userMapper.insert(user);
+		user.setUpdateTime(new Date());
+		userMapper.insertSelective(user);
 		try {
 			HuanXinUtils.registerUser(userId, restTemplate);
 		} catch (Exception e) {

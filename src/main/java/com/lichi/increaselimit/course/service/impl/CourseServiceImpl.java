@@ -40,6 +40,7 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public void addCourse(Course course) {
 		course.setCreateTime(new Date());
+		course.setUpdateTime(new Date());
 		courseMapper.insertSelective(course);
 	}
 

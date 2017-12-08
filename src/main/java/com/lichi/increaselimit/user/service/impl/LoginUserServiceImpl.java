@@ -19,7 +19,7 @@ public class LoginUserServiceImpl implements LoginUserService{
 	@Override
 	public void addLoginUser(LoginUser login) {
 		login.setLoginTime(new Date());
-		loginMapper.insert(login);
+		loginMapper.insertSelective(login);
 	}
 
 	@Override

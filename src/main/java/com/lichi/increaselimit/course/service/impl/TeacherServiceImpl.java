@@ -39,6 +39,7 @@ public class TeacherServiceImpl implements TeacherService{
 	@Override
 	public void addTeacher(Teacher teacher) {
 		teacher.setCreateTime(new Date());
+		teacher.setUpdateTime(new Date());
 		mapper.insertSelective(teacher);
 	}
 

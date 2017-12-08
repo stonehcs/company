@@ -30,5 +30,11 @@ public interface CircleMapper extends BaseMapper<Circle>{
 	@Select("select a.*,b.nickname,b.id as createUserId from t_circle a, t_sys_user b where a.create_user_id = b.id")
 	List<CircleVo> selectList();
 	
+	/**
+	 * 模糊查询
+	 * @return
+	 */
+	@Select("select a.*,b.nickname,b.id as createUserId from t_circle a, t_sys_user b where a.create_user_id = b.id and a.name like '%' #{name} '%'")
+	List<CircleVo> selectListLike(String name);
 	
 }

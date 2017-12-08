@@ -1,5 +1,7 @@
 package com.lichi.increaselimit.community.service;
 
+import java.util.List;
+
 import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.community.entity.Circle;
 import com.lichi.increaselimit.community.entity.CircleVo;
@@ -49,5 +51,14 @@ public interface CircleService {
      * @return
      */
 	PageInfo<CircleVo> getHostByPage(Integer page, Integer size);
+
+	/**
+	 * 模糊查询圈子信息
+	 * @param size 
+	 * @param page 
+	 * @param name
+	 * @return
+	 */
+	List<CircleVo> seleteByLike(Integer page, Integer size, String name);
 
 }
