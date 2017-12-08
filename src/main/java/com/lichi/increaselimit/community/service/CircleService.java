@@ -2,6 +2,7 @@ package com.lichi.increaselimit.community.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.community.entity.Circle;
+import com.lichi.increaselimit.community.entity.CircleVo;
 
 /**
  * @author by majie on 2017/11/15.
@@ -13,7 +14,7 @@ public interface CircleService {
      * @param id
      * @return
      */
-    Circle get(Integer id);
+    CircleVo get(Integer id);
 
     /**
      * 查询所有圈子
@@ -21,7 +22,7 @@ public interface CircleService {
      * @param size
      * @return
      */
-    PageInfo<Circle> getByPage(Integer page, Integer size);
+    PageInfo<CircleVo> getByPage(Integer page, Integer size);
 
     /**
      * 新增圈子
@@ -47,6 +48,6 @@ public interface CircleService {
      * @param size
      * @return
      */
-	PageInfo<Circle> getHostByPage(Integer page, Integer size);
+	PageInfo<CircleVo> getHostByPage(Integer page, Integer size);
 
 }

@@ -23,6 +23,7 @@ import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.community.controller.dto.CircleDto;
 import com.lichi.increaselimit.community.controller.dto.CircleUpdateDto;
 import com.lichi.increaselimit.community.entity.Circle;
+import com.lichi.increaselimit.community.entity.CircleVo;
 import com.lichi.increaselimit.community.service.CircleService;
 
 import io.swagger.annotations.Api;
@@ -83,26 +84,26 @@ public class CircleController {
 
     @GetMapping
     @ApiOperation(value = "分页查询所有列表")
-    public ResultVo<PageInfo<Circle>> getArticle(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
+    public ResultVo<PageInfo<CircleVo>> getArticle(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
                                               @ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size){
-    	PageInfo<Circle> articles = circleService.getByPage(page,size);
+    	PageInfo<CircleVo> articles = circleService.getByPage(page,size);
         return ResultVoUtil.success(articles);
 
     }
     
     @GetMapping("/hot")
     @ApiOperation(value = "分页查询热门列表")
-    public ResultVo<PageInfo<Circle>> getHotArticle(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
+    public ResultVo<PageInfo<CircleVo>> getHotArticle(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
     		@ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size){
-    	PageInfo<Circle> articles = circleService.getHostByPage(page,size);
+    	PageInfo<CircleVo> articles = circleService.getHostByPage(page,size);
     	return ResultVoUtil.success(articles);
     	
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询圈子信息")
-    public ResultVo<Circle> getArticle(@PathVariable  Integer id){
-        Circle circle = circleService.get(id);
+    public ResultVo<CircleVo> getArticle(@PathVariable  Integer id){
+        CircleVo circle = circleService.get(id);
         return ResultVoUtil.success(circle);
     }
 

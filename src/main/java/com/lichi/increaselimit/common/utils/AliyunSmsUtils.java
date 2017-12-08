@@ -36,9 +36,9 @@ public class AliyunSmsUtils {
 		// 必填:待发送手机号
 		request.setPhoneNumbers(mobile);
 		// 必填:短信签名-可在短信控制台中找到
-		request.setSignName("阿里云短信测试专用");
+		request.setSignName("骊驰文化");
 		// 必填:短信模板-可在短信控制台中找到
-		request.setTemplateCode("SMS_116005103");
+		request.setTemplateCode("SMS_116560230");
 		// 验证码${code}，您正在登录，若非本人操作，请勿泄露。
 		request.setTemplateParam("{\"code\": " + code + "}");
 
@@ -55,7 +55,6 @@ public class AliyunSmsUtils {
 	}
 	
 	public static void main(String[] args) throws ClientException {
-		SendSmsResponse sendSms = sendSms("17749974977", "123456");
-		System.out.println(sendSms);
+		sendSms("17749974977", "123456");
 	}
 }

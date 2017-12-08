@@ -15,6 +15,7 @@ import com.lichi.increaselimit.community.dao.ArticleMapper;
 import com.lichi.increaselimit.community.dao.CircleMapper;
 import com.lichi.increaselimit.community.entity.Article;
 import com.lichi.increaselimit.community.entity.Circle;
+import com.lichi.increaselimit.community.entity.CircleVo;
 import com.lichi.increaselimit.community.service.CircleService;
 
 import tk.mybatis.mapper.entity.Example;
@@ -33,19 +34,19 @@ public class CircleImpl implements CircleService {
     private ArticleMapper articleDao;
 
     @Override
-    public Circle get(Integer id) {
-        return circleDao.selectByPrimaryKey(id);
+    public CircleVo get(Integer id) {
+        return circleDao.selectByCircleId(id);
     }
 
     @Override
-    public PageInfo<Circle> getByPage(Integer page, Integer size) {
+    public PageInfo<CircleVo> getByPage(Integer page, Integer size) {
     	PageHelper.startPage(page, size);
     	PageHelper.orderBy("sort1 desc,create_time desc");
         return getArticleCount();
     }
     
     @Override
-    public PageInfo<Circle> getHostByPage(Integer page, Integer size) {
+    public PageInfo<CircleVo> getHostByPage(Integer page, Integer size) {
     	PageHelper.startPage(page, size);
     	PageHelper.orderBy("sort2 desc,create_time desc");
     	return getArticleCount();
@@ -102,16 +103,16 @@ public class CircleImpl implements CircleService {
      * @param list
      * @return
      */
-	private PageInfo<Circle> getArticleCount() {
-		List<Circle> list = circleDao.selectAll();
+	private PageInfo<CircleVo> getArticleCount() {
+		List<CircleVo> list = circleDao.selectList();
 		if(list == null) {
     		return null;
     	}
-    	for (Circle circle : list) {
+    	for (CircleVo circle : list) {
     		Integer count = queryArticleCount(circle.getId());
     		circle.setCount(count);
     	}
-    	PageInfo<Circle> pageInfo = new PageInfo<Circle>(list);
+    	PageInfo<CircleVo> pageInfo = new PageInfo<CircleVo>(list);
     	return pageInfo;
 	}
 	
