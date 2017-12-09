@@ -1,7 +1,6 @@
 package com.lichi.increaselimit.community.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -110,10 +109,10 @@ public class CircleController {
     
     @GetMapping("/get/{name}")
     @ApiOperation(value = "根据圈子名字模糊查询")
-    public ResultVo<List<CircleVo>> getArticleLike(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
+    public ResultVo<PageInfo<CircleVo>> getArticleLike(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
     		@ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size,
     		@PathVariable  String name){
-    	List<CircleVo> circle = circleService.seleteByLike(page,size,name);
+    	PageInfo<CircleVo> circle = circleService.seleteByLike(page,size,name);
     	return ResultVoUtil.success(circle);
     }
 
