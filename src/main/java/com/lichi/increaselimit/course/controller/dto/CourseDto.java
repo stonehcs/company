@@ -43,6 +43,11 @@ public class CourseDto implements Serializable{
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date startTime;
 	
+	@ApiModelProperty("结课时间")
+	@NotNull(message = "结课时间不能为空")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date endTime;
+	
 	@ApiModelProperty("开课人数")
 	@NotNull(message = "开课人数不能为空")
 	private Integer person;

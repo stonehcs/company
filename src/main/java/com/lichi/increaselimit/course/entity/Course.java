@@ -48,6 +48,11 @@ public class Course implements Serializable{
 	private Date startTime;
 	
 	/**
+	 * 结课日期
+	 */
+	private Date endTime;
+	
+	/**
 	 * 人数
 	 */
 	private Integer person;

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.course.dao.CourseMapper;
@@ -26,9 +27,11 @@ public class TeacherServiceImpl implements TeacherService{
 	private CourseMapper courseMapper;
 	
 	@Override
-	public List<Teacher> getTeacherList(Integer page, Integer size) {
+	public PageInfo<Teacher> getTeacherList(Integer page, Integer size) {
 		PageHelper.startPage(page,size);
-		return mapper.selectAll();
+		List<Teacher> list = mapper.selectAll();
+		PageInfo<Teacher> pageInfo = new PageInfo<>(list);
+		return pageInfo;
 	}
 
 	@Override

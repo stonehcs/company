@@ -1,7 +1,5 @@
 package com.lichi.increaselimit.course.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.course.controller.dto.CourseDto;
@@ -45,11 +44,19 @@ public class CourseController {
 
 	@GetMapping("/list/{locationId}")
 	@ApiOperation(value = "查看课程列表")
-	public ResultVo<List<Course>> getCourseList(
+	public ResultVo<PageInfo<Course>> getCourseList(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
 			@PathVariable Integer locationId) {
-		List<Course> list = courseService.getCourseList(page, size, locationId);
+		PageInfo<Course> list = courseService.getCourseList(page, size, locationId);
+		return ResultVoUtil.success(list);
+	}
+	@GetMapping("/list")
+	@ApiOperation(value = "首页课程显示")
+	public ResultVo<PageInfo<Course>> getCourseList(
+			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
+			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
+		PageInfo<Course> list = courseService.getCourseList(page, size);
 		return ResultVoUtil.success(list);
 	}
 

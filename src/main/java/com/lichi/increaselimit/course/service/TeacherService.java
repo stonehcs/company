@@ -1,7 +1,6 @@
 package com.lichi.increaselimit.course.service;
 
-import java.util.List;
-
+import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.course.entity.Teacher;
 
 /**
@@ -18,7 +17,7 @@ public interface TeacherService {
 	 * @param locationId
 	 * @return
 	 */
-	List<Teacher> getTeacherList(Integer page, Integer size);
+	PageInfo<Teacher> getTeacherList(Integer page, Integer size);
 
 	/**
 	 * 根据id查找老师

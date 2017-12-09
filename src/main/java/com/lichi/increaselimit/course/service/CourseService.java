@@ -1,7 +1,6 @@
 package com.lichi.increaselimit.course.service;
 
-import java.util.List;
-
+import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.entity.CourseVo;
 
@@ -19,7 +18,7 @@ public interface CourseService {
 	 * @param size 
 	 * @return
 	 */
-	List<Course> getCourseList(Integer page, Integer size, Integer locationId);
+	PageInfo<Course> getCourseList(Integer page, Integer size, Integer locationId);
 
 	/**
 	 * 根据id查看课程
@@ -48,5 +47,13 @@ public interface CourseService {
 	 * 更新课程观看次数
 	 */
 	void updateCourseTimes(Integer id);
+
+	/**
+	 * 首页显示的课程
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	PageInfo<Course> getCourseList(Integer page, Integer size);
 
 }

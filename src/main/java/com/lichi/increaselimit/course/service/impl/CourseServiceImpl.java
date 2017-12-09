@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.course.dao.CourseMapper;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.entity.CourseVo;
@@ -23,12 +24,24 @@ public class CourseServiceImpl implements CourseService {
 	private CourseMapper courseMapper;
 
 	@Override
-	public List<Course> getCourseList(Integer page, Integer size, Integer locationId) {
+	public PageInfo<Course> getCourseList(Integer page, Integer size, Integer locationId) {
 		PageHelper.startPage(page, size);
 		Example example = new Example(Course.class);
 		example.createCriteria().andEqualTo("locationId", locationId);
 		List<Course> list = courseMapper.selectByExample(example);
-		return list;
+		PageInfo<Course> pageInfo = new PageInfo<>(list);
+		return pageInfo;
+	}
+	
+	@Override
+	public PageInfo<Course> getCourseList(Integer page, Integer size) {
+		PageHelper.startPage(page, size);
+		PageHelper.orderBy("start_time asc");
+		Example example = new Example(Course.class);
+		example.createCriteria().andCondition("end_time >=",new Date());
+		List<Course> list = courseMapper.selectByExample(example);
+		PageInfo<Course> pageInfo = new PageInfo<>(list);
+		return pageInfo;
 	}
 
 	@Override
@@ -59,5 +72,6 @@ public class CourseServiceImpl implements CourseService {
 	public void updateCourseTimes(Integer id) {
 		courseMapper.updateCourseTimes(id);
 	}
+
 
 }
