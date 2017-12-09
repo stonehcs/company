@@ -36,7 +36,7 @@ public class LoginUserController {
 	 * @return
 	 */
 	@GetMapping("/{id}")
-	@ApiOperation("获取所有的后台登陆客服")
+	@ApiOperation("随机获取一个客服")
 	public ResultVo<LoginUser> getAllLoginUser(@PathVariable String id) {
 		
 		List<LoginUser> list = loginUserService.getAll();
