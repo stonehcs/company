@@ -38,4 +38,6 @@ public class Article implements Serializable{
     private Integer circleId;
     
     private Integer sort;
+    
+    private String summary;
 }

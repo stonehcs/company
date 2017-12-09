@@ -3,6 +3,7 @@ package com.lichi.increaselimit.course.controller.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -45,6 +46,7 @@ public class CourseDto implements Serializable{
 	
 	@ApiModelProperty("结课时间")
 	@NotNull(message = "结课时间不能为空")
+	@Future(message = "结束时间应该大于当前时间")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date endTime;
 	

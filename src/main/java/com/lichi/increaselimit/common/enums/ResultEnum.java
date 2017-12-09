@@ -26,7 +26,7 @@ public enum ResultEnum {
     
     NOT_SUPPORT_ERROR(5, "不支持该银行卡类型"),
     
-    MOBILE_NUM_EMPTY(5, "手机号为空"),
+    MOBILE_NUM_EMPTY(5, "该手机号用户不存在"),
     
     MOBILE_ERROR(5, "请输入正确的手机号码"),
     
@@ -34,17 +34,23 @@ public enum ResultEnum {
     
     CODE_EXIST(5, "请一分钟后再尝试"),
     
+    CODE_NOT_EXIST(5, "验证码不存在"),
+    
     VALIDATECODE_ERROR(5, "请填写正确的验证码"),
     
     VALIDATECODE_TIMEOUT(5, "验证码已失效"),
 
     LOGIN_FAIL(25, "登录失败, 登录信息不正确"),
     
-    NO_LOGIN(25, "请先登陆"),
-    
     REGISTER_ERROR(25, "注册用户失败"),
+    
+    CONTENT_ERRO(25, "帖子内容异常"),
+    
+//    PASSWORD_NOT_CHANGE(25, "注册用户失败"),
 
     LOGOUT_SUCCESS(26, "登出成功"),
+    
+    TOKEN_EXPIRED(26, "token已失效"),
     ;
 
     private Integer code;

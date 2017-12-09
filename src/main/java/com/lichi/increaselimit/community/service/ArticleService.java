@@ -2,6 +2,7 @@ package com.lichi.increaselimit.community.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.community.entity.Article;
+import com.lichi.increaselimit.community.entity.ArticleVo;
 
 /**
  * @author by majie on 2017/11/15.
@@ -22,7 +23,7 @@ public interface ArticleService {
      * @param circleId 
      * @return
      */
-    PageInfo<Article> getByPage(Integer page, Integer size, Integer circleId);
+    PageInfo<ArticleVo> getByPage(Integer page, Integer size, Integer circleId);
 
     /**
      * 发帖子
@@ -48,5 +49,5 @@ public interface ArticleService {
      * @param size
      * @return
      */
-	PageInfo<Article> getHotByPage(Integer page, Integer size);
+	PageInfo<ArticleVo> getHotByPage(Integer page, Integer size);
 }

@@ -21,6 +21,7 @@ import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.community.controller.dto.ArticleDto;
 import com.lichi.increaselimit.community.controller.dto.ArticleUpdateDto;
 import com.lichi.increaselimit.community.entity.Article;
+import com.lichi.increaselimit.community.entity.ArticleVo;
 import com.lichi.increaselimit.community.service.ArticleService;
 
 import io.swagger.annotations.Api;
@@ -76,19 +77,19 @@ public class ArticleController {
 
     @GetMapping
     @ApiOperation(value = "分页查询列表")
-    public ResultVo<PageInfo<Article>> getArticle(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
+    public ResultVo<PageInfo<ArticleVo>> getArticle(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
                                               @ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size,
                                               @ApiParam(value = "圈子id",required = true) @RequestParam Integer circleId){
-    	PageInfo<Article> articles = articleService.getByPage(page,size,circleId);
+    	PageInfo<ArticleVo> articles = articleService.getByPage(page,size,circleId);
         return ResultVoUtil.success(articles);
 
     }
     
     @GetMapping("/hot")
     @ApiOperation(value = "查询热门帖子")
-    public ResultVo<PageInfo<Article>> getHotArticle(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
+    public ResultVo<PageInfo<ArticleVo>> getHotArticle(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
                                               @ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size){
-        PageInfo<Article> articles = articleService.getHotByPage(page,size);
+        PageInfo<ArticleVo> articles = articleService.getHotByPage(page,size);
         return ResultVoUtil.success(articles);
 
     }
