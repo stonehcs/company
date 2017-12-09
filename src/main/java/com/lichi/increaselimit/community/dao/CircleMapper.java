@@ -34,8 +34,9 @@ public interface CircleMapper extends BaseMapper<Circle>{
 	 * 模糊查询
 	 * @return
 	 */
-	@Select("select a.*,b.nickname,b.id as createUserId from t_circle a, t_sys_user b where a.create_user_id = b.id and a.name like concat('%',#{name},'%')"
-			+ " or b.nickname like concat('%',#{name},'%')")
+	@Select("SELECT a.*, b.nickname, b.id AS createUserId FROM t_circle a left JOIN t_sys_user b " + 
+			"ON a.create_user_id = b.id where a.name LIKE concat('%', #{name}, '%')" + 
+			"or b.nickname LIKE concat('%', #{name}, '%')")
 	List<CircleVo> selectListLike(String name);
 	
 }
