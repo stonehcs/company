@@ -15,7 +15,7 @@ public class UserUtils {
 	 * 获取当前用户名
 	 * @return
 	 */
-	public static User getUsername() {
+	public static User getUserInfo() {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return user;
 	}

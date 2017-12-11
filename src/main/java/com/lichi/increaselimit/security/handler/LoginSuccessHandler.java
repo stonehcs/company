@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.utils.UserIdUtils;
+import com.lichi.increaselimit.security.UserUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,7 +49,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 		redisUtils.set("login_token:" + username, UserIdUtils.getUserId(), 7200);
 		
 		response.setContentType("application/json;charset=UTF-8");
-		response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.success("登录成功")));
+		response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.success(UserUtils.getUserInfo())));
 	}
 
 }

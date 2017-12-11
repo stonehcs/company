@@ -36,7 +36,7 @@ public class TokenLoginFilter extends OncePerRequestFilter implements Initializi
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
-		String username = request.getHeader("username");
+		String username = request.getHeader("token");
 		log.info("登录用户:" + username);
 		if (!StringUtils.isBlank(username)) {
 			String tokenJson = redisUtils.get("login_token:" + username);
