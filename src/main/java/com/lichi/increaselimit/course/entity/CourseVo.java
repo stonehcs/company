@@ -18,6 +18,8 @@ public class CourseVo extends Course{
 	private String introduce;
 	
 	private String imgUrl;
+	
+	private Integer status;
 
 	public String getImgUrl() {
 		return imgUrl;
@@ -41,6 +43,14 @@ public class CourseVo extends Course{
 
 	public void setIntroduce(String introduce) {
 		this.introduce = introduce;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	
 	

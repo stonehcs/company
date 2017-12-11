@@ -24,12 +24,11 @@ public class CourseServiceImpl implements CourseService {
 	private CourseMapper courseMapper;
 
 	@Override
-	public PageInfo<Course> getCourseList(Integer page, Integer size, Integer locationId) {
+	public PageInfo<CourseVo> getCourseList(Integer page, Integer size, Integer locationId,String userId) {
 		PageHelper.startPage(page, size);
-		Example example = new Example(Course.class);
-		example.createCriteria().andEqualTo("locationId", locationId);
-		List<Course> list = courseMapper.selectByExample(example);
-		PageInfo<Course> pageInfo = new PageInfo<>(list);
+		PageHelper.orderBy("start_time asc");
+		List<CourseVo> list = courseMapper.selectList(locationId,userId);
+		PageInfo<CourseVo> pageInfo = new PageInfo<>(list);
 		return pageInfo;
 	}
 	

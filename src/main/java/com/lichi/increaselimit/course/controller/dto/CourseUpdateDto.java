@@ -88,4 +88,7 @@ public class CourseUpdateDto implements Serializable{
 	 */
 	@ApiModelProperty("1武汉 2成都 3广州 4...")
 	private Integer locationId;
+	
+	@ApiModelProperty("课程介绍")
+	private Integer description;
 }

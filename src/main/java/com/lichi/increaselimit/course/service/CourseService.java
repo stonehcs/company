@@ -18,7 +18,7 @@ public interface CourseService {
 	 * @param size 
 	 * @return
 	 */
-	PageInfo<Course> getCourseList(Integer page, Integer size, Integer locationId);
+	PageInfo<CourseVo> getCourseList(Integer page, Integer size, Integer locationId,String userId);
 
 	/**
 	 * 根据id查看课程
@@ -52,6 +52,8 @@ public interface CourseService {
 	 * 首页显示的课程
 	 * @param page
 	 * @param size
+	 * @param userId 
+	 * @param locationId 
 	 * @return
 	 */
 	PageInfo<Course> getCourseList(Integer page, Integer size);

@@ -70,4 +70,8 @@ public class CourseDto implements Serializable{
 	@ApiModelProperty("1武汉 2成都 3广州 4...")
 	@NotNull(message = "课程地址不能为空")
 	private Integer locationId;
+	
+	@ApiModelProperty("课程介绍")
+	@NotNull(message = "课程介绍不能为空")
+	private Integer description;
 }

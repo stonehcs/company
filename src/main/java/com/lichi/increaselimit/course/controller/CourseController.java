@@ -42,16 +42,18 @@ public class CourseController {
 	@Autowired
 	private CourseService courseService;
 
-	@GetMapping("/list/{locationId}")
+	@GetMapping("/list")
 	@ApiOperation(value = "查看课程列表")
-	public ResultVo<PageInfo<Course>> getCourseList(
+	public ResultVo<PageInfo<CourseVo>> getCourseList(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
-			@PathVariable Integer locationId) {
-		PageInfo<Course> list = courseService.getCourseList(page, size, locationId);
+			@ApiParam(value = "地区id", required = true) @RequestParam Integer locationId,
+			@ApiParam(value = "地区id", required = true) @RequestParam String userId) {
+		PageInfo<CourseVo> list = courseService.getCourseList(page, size, locationId,userId);
 		return ResultVoUtil.success(list);
 	}
-	@GetMapping("/list")
+	
+	@GetMapping("/index-course")
 	@ApiOperation(value = "首页课程显示")
 	public ResultVo<PageInfo<Course>> getCourseList(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
