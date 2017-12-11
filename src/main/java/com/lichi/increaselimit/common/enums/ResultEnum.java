@@ -46,6 +46,8 @@ public enum ResultEnum {
     
     CONTENT_ERRO(25, "帖子内容异常"),
     
+    ENDTIME_BIGGER_THEN_STARTTIME(25, "结束时间应该大于开课时间"),
+    
 //    PASSWORD_NOT_CHANGE(25, "注册用户失败"),
 
     LOGOUT_SUCCESS(26, "登出成功"),

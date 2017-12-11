@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.common.enums.ResultEnum;
+import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.course.dao.CourseMapper;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.entity.CourseVo;
@@ -53,6 +55,9 @@ public class CourseServiceImpl implements CourseService {
 	public void addCourse(Course course) {
 		course.setCreateTime(new Date());
 		course.setUpdateTime(new Date());
+		if(course.getEndTime().getTime() < course.getStartTime().getTime()) {
+			throw new BusinessException(ResultEnum.ENDTIME_BIGGER_THEN_STARTTIME);
+		}
 		courseMapper.insertSelective(course);
 	}
 
