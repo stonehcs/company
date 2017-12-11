@@ -44,7 +44,6 @@ public class HuanXinUtils {
 		JSONObject postForObject = restTemplate.postForObject(HX_POST_ACCESSTOKEN_URL, map, JSONObject.class);
 		
 		String accessToken = postForObject.get("access_token").toString();
-		System.out.println(accessToken);
 		
 		//该方法通过restTemplate请求远程restfulAPI
         HttpHeaders headers = new HttpHeaders();

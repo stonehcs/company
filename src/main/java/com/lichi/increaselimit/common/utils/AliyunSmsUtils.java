@@ -50,7 +50,6 @@ public class AliyunSmsUtils {
 
 		// hint 此处可能会抛出异常，注意catch
 		SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
-		System.out.println(JSONObject.toJSON(sendSmsResponse));
 		return sendSmsResponse;
 	}
 	

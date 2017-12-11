@@ -5,12 +5,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.commons.lang3.ClassUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
-import io.jsonwebtoken.lang.Assert;
 
 /**
  * 重写BeanUtils,不复制null值
@@ -27,9 +25,6 @@ public class CopyUtils extends BeanUtils{
 	
 	public static void copyProperties(Object source, Object target, Class<?> editable, String... ignoreProperties)  
 	        throws BeansException {  
-	  
-	    Assert.notNull(source, "Source must not be null");  
-	    Assert.notNull(target, "Target must not be null");  
 	  
 	    Class<?> actualEditable = target.getClass();  
 	    if (editable != null) {  

@@ -26,12 +26,7 @@ import com.lichi.increaselimit.user.controller.dto.UserUpdateDto;
 import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.service.UserService;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -56,15 +51,12 @@ public class UserController {
 	 */
 	@GetMapping
 	@ApiOperation("获取当前用户信息")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "Authorization", value = "认证token", required = true, dataType = "string", paramType = "header", defaultValue = "bearer ") })
 	public ResultVo<User> getCurrentUser(HttpServletRequest request)
-			throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException,
+			throws SignatureException,
 			IllegalArgumentException, UnsupportedEncodingException {
 
-		String username = UserUtils.getUsername();
-		User user = userService.loadUserInfoByUsername(username);
-
+		User user = UserUtils.getUsername();
+		
 		return ResultVoUtil.success(user);
 	}
 

@@ -141,7 +141,6 @@ public class LiMuZhengXinUtils {
 		}
 		temp.append(APISECRET);
 		
-		System.out.println(temp);
 		String sha1Hex = DigestUtils.sha1Hex(temp.toString());
 		
 		return sha1Hex;
