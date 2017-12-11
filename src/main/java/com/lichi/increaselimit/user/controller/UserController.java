@@ -55,7 +55,7 @@ public class UserController {
 			throws SignatureException,
 			IllegalArgumentException, UnsupportedEncodingException {
 
-		User user = UserUtils.getUsername();
+		User user = UserUtils.getUserInfo();
 		
 		return ResultVoUtil.success(user);
 	}
