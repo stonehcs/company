@@ -53,6 +53,11 @@ public enum ResultEnum {
     LOGOUT_SUCCESS(26, "登出成功"),
     
     TOKEN_EXPIRED(26, "token已失效"),
+    
+    NO_RESPONSE(26, "服务繁忙"),
+    
+    EMAIL_EXSIT(26, "邮箱已存在"),
+    
     ;
 
     private Integer code;

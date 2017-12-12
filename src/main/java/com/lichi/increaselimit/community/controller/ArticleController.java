@@ -25,8 +25,6 @@ import com.lichi.increaselimit.community.entity.ArticleVo;
 import com.lichi.increaselimit.community.service.ArticleService;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
