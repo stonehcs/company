@@ -36,31 +36,23 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 	
     @Override
     public void configure(HttpSecurity http) throws Exception {
-    	http.
-    		formLogin()
-    		.loginPage("/authentication/require") // 登陆校验权限，controller路径
-    		.loginProcessingUrl("/authentication/form") // 登陆表单路径，要和页面表达路径一样
-    		.successHandler(loginSuccessHandler)
-    		.failureHandler(loginFailureHandler);
-    	
-    	http.authorizeRequests()
-    			.antMatchers("/login.html", "/authentication/require", "/captcha-image")
-    			.permitAll()
-    			.and()
-    			.csrf().disable();
-    	
-
-		http.apply(validateCodeSecurityConfig)
-        	.and()
-        	.apply(smsCodeAuthenticationSecurityConfig)
-        	.and()
-        	.apply(socialAuthenticationSecurityConfig)
-    		.and()
-                .authorizeRequests()
-	                .antMatchers("/").permitAll()
-	                .antMatchers("/v2/**","/swagger**", "/druid/**","/swagger-resources/**",
-	                		"/oauth2/client","/social/signUp","/authentication/require","/code/sms").permitAll()
-	                .anyRequest().permitAll()
+    	http
+	    	.apply(validateCodeSecurityConfig)
+	    		.and()
+	    	.apply(smsCodeAuthenticationSecurityConfig)
+	    		.and()
+	    	.apply(socialAuthenticationSecurityConfig)
+				.and()
+			.formLogin()
+	    		.loginPage("/authentication/require") // 登陆校验权限，controller路径
+	    		.loginProcessingUrl("/authentication/form") // 登陆表单路径，要和页面表达路径一样
+	    		.successHandler(loginSuccessHandler)
+	    		.failureHandler(loginFailureHandler)
+	    		.and()
+	    	.authorizeRequests()
+    			.antMatchers("/","/login.html", "/authentication/require", "/captcha-image","/v2/**","/swagger**", "/druid/**","/swagger-resources/**",
+                		"/oauth2/client","/social/signUp","/authentication/require","/code/sms").permitAll()
+	             .anyRequest().permitAll()
                 .and()
                 .csrf().disable();
         

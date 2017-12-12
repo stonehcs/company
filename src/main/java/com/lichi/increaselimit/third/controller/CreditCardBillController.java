@@ -46,7 +46,7 @@ public class CreditCardBillController {
 	 * @throws UnsupportedEncodingException
 	 */
 	@PostMapping
-	public Object getToken(@Valid @RequestBody BillDto billDto, BindingResult result)
+	public Object getCreditCardBill(@Valid @RequestBody BillDto billDto, BindingResult result)
 			throws UnsupportedEncodingException {
 
 		if (result.hasErrors()) {
@@ -78,14 +78,25 @@ public class CreditCardBillController {
 
 		String code = postForObject.getString("code");
 		String token = null;
-		if ("0010".equals(code)) {
-			token = postForObject.getString("token");
+		
+		/**
+		 *  1.没受理成功直接返回
+		 *  2.受理成功以后看状态,是0006直接返回
+		 *  3.查询结果
+		 */
+		if (!"0010".equals(code)) {
+			return postForObject;
 		}
+		token = postForObject.getString("token");
 
-		// 查询结果
-		JSONObject jsonObject = LiMuZhengXinUtils.getInfo(restTemplate, "api.common.getResult", "bill", token);
+		postForObject = LiMuZhengXinUtils.getInfo(restTemplate, "getStatus", "bill", token);
+		if ("0006".equals(postForObject.getString("code"))) {
+			return postForObject;
+		}
+		
+		postForObject = LiMuZhengXinUtils.getInfo(restTemplate, "getResult", "bill", token);
 
-		return jsonObject;
+		return postForObject;
 	}
 
 }

@@ -28,7 +28,7 @@ import io.swagger.annotations.Api;
  */
 @RestController
 @RequestMapping("/study")
-@Api(description="学历查询")
+@Api(description = "学历查询")
 public class StudySearchController {
 
 	@Autowired
@@ -43,54 +43,46 @@ public class StudySearchController {
 	 * @throws UnsupportedEncodingException
 	 */
 	@PostMapping
-	public JSONObject getToken(@RequestParam String username, @RequestParam String password,
+	public JSONObject getStudy(@RequestParam String username, @RequestParam String password,
 			@RequestParam String method) throws UnsupportedEncodingException {
 		method = "api.education.get";
-
-			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-			map.add("method", method);
-			map.add("apiKey", LiMuZhengXinUtils.APIKEY);
-			map.add("version", "1.2.0");
-			map.add("username", username);
-			map.add("password", BASE64Utils.getBase64(password));
-			String sign = LiMuZhengXinUtils.createSign(map, false);
-			map.add("sign", sign);
-
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map,
-					headers);
-
-			JSONObject postForObject = restTemplate.postForObject(LiMuZhengXinUtils.TEST_URL, request, JSONObject.class);
-
-			String code = postForObject.getString("code");
-			String token = null;
-			if ("0010".equals(code)) {
-				token = postForObject.getString("token");
-		}
-
-		//查询结果
-		JSONObject jsonObject = getInfo("api.common.getResult", "education", token);
-		
-		//查询状态
-//		JSONObject jsonObject = getInfo(username, "api.common.getStatus", "education", token);
-
-		return jsonObject;
-	}
-
-	private JSONObject getInfo(String method, String bizType, String token)
-			throws UnsupportedEncodingException {
 
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 		map.add("method", method);
 		map.add("apiKey", LiMuZhengXinUtils.APIKEY);
 		map.add("version", "1.2.0");
-		map.add("bizType", "education");
-		map.add("token", token);
+		map.add("username", username);
+		map.add("password", BASE64Utils.getBase64(password));
 		String sign = LiMuZhengXinUtils.createSign(map, false);
 		map.add("sign", sign);
-		JSONObject postForObject = restTemplate.postForObject(LiMuZhengXinUtils.TEST_URL, map, JSONObject.class);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+		JSONObject postForObject = restTemplate.postForObject(LiMuZhengXinUtils.TEST_URL, request, JSONObject.class);
+
+		String code = postForObject.getString("code");
+		String token = null;
+		/**
+		 *  1.没受理成功直接返回
+		 *  2.受理成功以后看状态,是0006直接返回
+		 *  3.查询结果
+		 */
+		if (!"0010".equals(code)) {
+			return postForObject;
+		}
+		token = postForObject.getString("token");
+
+		postForObject = LiMuZhengXinUtils.getInfo(restTemplate, "getStatus", "education", token);
+		if ("0006".equals(postForObject.getString("code"))) {
+			return postForObject;
+		}
+		
+		postForObject = LiMuZhengXinUtils.getInfo(restTemplate, "getResult", "education", token);
+
 		return postForObject;
 	}
+
 }

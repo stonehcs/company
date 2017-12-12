@@ -56,7 +56,7 @@ public class LiMuZhengXinUtils {
 	public static JSONObject getInfo(RestTemplate restTemplate,String method, String bizType, String token) throws UnsupportedEncodingException {
 
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-		map.add("method", method);
+		map.add("method", "api.common." + method);
 		map.add("apiKey", APIKEY);
 		map.add("version", "1.2.0");
 		map.add("bizType", bizType);

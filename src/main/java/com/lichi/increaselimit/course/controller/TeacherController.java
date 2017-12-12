@@ -79,7 +79,7 @@ public class TeacherController {
 
 	@PutMapping
 	@ApiOperation(value = "修改讲师")
-	public ResultVo<Teacher> updateTeacher(@Valid TeacherUpdateDto teacherDto, BindingResult result) {
+	public ResultVo<Teacher> updateTeacher(@Valid @RequestBody TeacherUpdateDto teacherDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
 			return ResultVoUtil.error(1, errors);

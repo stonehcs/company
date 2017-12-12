@@ -56,7 +56,7 @@ public class ArticleController {
 
     @PutMapping
     @ApiOperation(value = "更新帖子")
-    public ResultVo<Article> update(@Valid ArticleUpdateDto articledto, BindingResult result){
+    public ResultVo<Article> update(@Valid @RequestBody ArticleUpdateDto articledto, BindingResult result){
         if(result.hasErrors()){
             String errors = result.getFieldError().getDefaultMessage();
             return ResultVoUtil.error(1,errors);
@@ -95,7 +95,7 @@ public class ArticleController {
     }
 
     @GetMapping("/{id}")
-    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "token", required = true, dataType = "string", paramType = "header",defaultValue="bearer ")})
+//    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "token", required = true, dataType = "string", paramType = "header",defaultValue="bearer ")})
     @ApiOperation(value = "根据id查询帖子")
     public ResultVo<Article> getArticle(@PathVariable  Integer id){
         Article article = articleService.get(id);

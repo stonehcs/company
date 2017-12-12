@@ -91,7 +91,7 @@ public class CourseController {
 
 	@PutMapping
 	@ApiOperation(value = "修改课程")
-	public ResultVo<Course> updateCourse(@Valid CourseUpdateDto courseDto, BindingResult result) {
+	public ResultVo<Course> updateCourse(@Valid @RequestBody CourseUpdateDto courseDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
 			return ResultVoUtil.error(1, errors);

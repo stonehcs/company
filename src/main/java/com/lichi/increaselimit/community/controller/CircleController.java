@@ -60,7 +60,7 @@ public class CircleController {
 
     @PutMapping
     @ApiOperation(value = "更新圈子信息")
-    public ResultVo<Circle> update(@Valid CircleUpdateDto circledto, BindingResult result){
+    public ResultVo<Circle> update(@Valid @RequestBody CircleUpdateDto circledto, BindingResult result){
     	log.info("更新圈子信息：{}" , circledto.getId());
         if(result.hasErrors()){
             String errors = result.getFieldError().getDefaultMessage();

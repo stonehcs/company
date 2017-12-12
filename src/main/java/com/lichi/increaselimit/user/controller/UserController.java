@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,9 +63,6 @@ public class UserController {
 
 	@GetMapping("/rank")
 	@ApiOperation("获取用户排行榜")
-	// @ApiImplicitParams({
-	// @ApiImplicitParam(name = "Authorization", value = "认证token", required = true,
-	// dataType = "string", paramType = "header", defaultValue = "bearer ") })
 	public ResultVo<PageInfo<User>> getUserRank(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
@@ -76,9 +74,6 @@ public class UserController {
 
 	@GetMapping("/course")
 	@ApiOperation("获取用户课程")
-	// @ApiImplicitParams({
-	// @ApiImplicitParam(name = "Authorization", value = "认证token", required = true,
-	// dataType = "string", paramType = "header", defaultValue = "bearer ") })
 	public ResultVo<PageInfo<Course>> getUserCourse(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
@@ -91,9 +86,6 @@ public class UserController {
 
 	@GetMapping("/card")
 	@ApiOperation("刷卡任务")
-	// @ApiImplicitParams({
-	// @ApiImplicitParam(name = "Authorization", value = "认证token", required = true,
-	// dataType = "string", paramType = "header", defaultValue = "bearer ") })
 	public ResultVo<PageInfo<DiagnosisResult>> getUserCourse(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
@@ -105,7 +97,7 @@ public class UserController {
 
 	@PutMapping
 	@ApiOperation("修改用户信息")
-	public ResultVo<Object> updateUserInfo(@Valid UserUpdateDto dto, BindingResult result) {
+	public ResultVo<Object> updateUserInfo(@Valid @RequestBody UserUpdateDto dto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
 			return ResultVoUtil.error(1, errors);
