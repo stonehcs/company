@@ -98,6 +98,15 @@ public class CreditCardBillController {
 		}
 		return ResultVoUtil.success(result);
 	}
+	
+	@ApiOperation("获取邮箱列表")
+	@GetMapping("/list/{userId}")
+	public Object getEmailList(@PathVariable String userId) {
+		
+		List<UserEmail> list = userEmailService.getList(userId);
+		
+		return ResultVoUtil.success(list);
+	}
 
 	private JSONObject getByUsername(String username, String password) throws UnsupportedEncodingException {
 		String method = "api.bill.get";
