@@ -68,7 +68,7 @@ public class CourseDto implements Serializable{
 	@ApiModelProperty("是否是精品课程,不传默认否")
 	private Integer fine;
 	
-	@ApiModelProperty("1武汉 2成都 3广州 4...")
+	@ApiModelProperty("1重庆 2成都 3广州 4武汉")
 	@NotNull(message = "课程地址不能为空")
 	private Integer locationId;
 	

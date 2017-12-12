@@ -36,7 +36,7 @@ public interface CourseMapper extends BaseMapper<Course>{
 	 * @param userId
 	 * @return
 	 */
-	@Select("select a.*,IFNULL(b.`status`,-1) as status,c.teachername from t_course a left join t_user_course b on a.id = b.course_id and b.user_id = #{userId}" + 
+	@Select("select a.*,IFNULL(b.`status`,-1) as status,c.teachername,b.img_url from t_course a left join t_user_course b on a.id = b.course_id and b.user_id = #{userId}" + 
 			"LEFT JOIN t_teacher c on a.teacher_id = c.id where location_id = #{locationId} and end_time > NOW()")
 	List<CourseVo> selectList(@Param(value = "locationId") Integer locationId, @Param(value = "userId") String userId);
 }
