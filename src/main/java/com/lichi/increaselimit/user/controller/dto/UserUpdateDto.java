@@ -38,4 +38,7 @@ public class UserUpdateDto {
 	
 	@ApiModelProperty("积分")
 	private Integer points;
+	
+	@ApiModelProperty("验证码")
+	private String code;
 }
