@@ -14,7 +14,7 @@ import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.HuanXinUtils;
-import com.lichi.increaselimit.common.utils.UserIdUtils;
+import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.user.dao.SocialUserMapper;
 import com.lichi.increaselimit.user.dao.UserMapper;
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional(rollbackFor = Exception.class)
 	public User insertSocialUser(SocialUserInfo socialUserInfo) {
 		User user = new User();
-		String userId = UserIdUtils.getUserId();
+		String userId = IdUtils.getId();
 		socialUserInfo.setUserId(userId);
 		// 第三方表
 		socialUserMapper.insertUserConnection(socialUserInfo);
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public User insertMobileUser(String mobile) {
-		String userId = UserIdUtils.getUserId();
+		String userId = IdUtils.getId();
 		User user = new User();
 		user.setId(userId);
 		user.setUsername(mobile);

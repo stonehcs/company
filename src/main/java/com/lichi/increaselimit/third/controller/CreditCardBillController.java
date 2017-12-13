@@ -1,14 +1,20 @@
 package com.lichi.increaselimit.third.controller;
 
-import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
@@ -17,21 +23,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lichi.increaselimit.common.enums.ResultEnum;
-import com.lichi.increaselimit.common.exception.BusinessException;
-import com.lichi.increaselimit.common.utils.BASE64Utils;
-import com.lichi.increaselimit.common.utils.LiMuZhengXinUtils;
+import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
-import com.lichi.increaselimit.third.controller.dto.BillDto;
+import com.lichi.increaselimit.third.controller.dto.UserEmailDto;
+import com.lichi.increaselimit.third.entity.CreditBill;
+import com.lichi.increaselimit.third.entity.CreditBillDetail;
+import com.lichi.increaselimit.third.entity.CreditBillVo;
 import com.lichi.increaselimit.third.entity.UserEmail;
+import com.lichi.increaselimit.third.service.CreditBillService;
 import com.lichi.increaselimit.third.service.UserEmailService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * 信用卡账单查询
@@ -48,104 +58,168 @@ public class CreditCardBillController {
 	private RestTemplate restTemplate;
 
 	@Autowired
+	private CreditBillService creditBillService;
+	@Autowired
 	private UserEmailService userEmailService;
 
-	@ApiOperation("登陆获取信用卡账单")
-	@PostMapping
-	@Transactional(rollbackFor = Exception.class)
-	public Object getCreditCardBill(@Valid @RequestBody BillDto billDto, BindingResult result) {
+	private static final String URL = "https://way.jd.com/creditsaas/get_creditcard_statements";
 
+	private static final String APPKEY = "c78285411a06e4a7196df56144a89bb8";
+
+	@ApiOperation("第一次输入email时候调用")
+	@PostMapping
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Object getCreditCardBill(@Valid @RequestBody UserEmailDto userEmail, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
 			return ResultVoUtil.error(1, errors);
 		}
-		String username = billDto.getUsername();
-		String password = billDto.getPassword();
-
 		try {
-			/**
-			 * 保存账户密码
-			 */
-			UserEmail userEmail = new UserEmail();
-			BeanUtils.copyProperties(billDto, userEmail);
-			userEmail.setEmail(username);
-			UserEmail user =  userEmailService.selectByPrimaryKey(username);
-			if(user == null) {
-				userEmailService.insert(userEmail);
-			}
-			return getByUsername(username, password);
+			String email = userEmail.getUsername();
+			String password = userEmail.getPassword();
+			String userId = userEmail.getUserId();
 
-		} catch (UnsupportedEncodingException e) {
-			throw new BusinessException(ResultEnum.NO_RESPONSE);
+			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+			map.add("email", email);
+			map.add("password", password);
+			map.add("appkey", APPKEY);
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map,
+					headers);
+			JSONObject jsonObject = restTemplate.postForObject(URL, request, JSONObject.class);
+
+			if ("10000".equals(jsonObject.getString("code"))) {
+				HashMap<String, Object> hashmap = (LinkedHashMap) jsonObject.get("result");
+				List list = (ArrayList) hashmap.get("result");
+				List<CreditBillVo> listvo = new ArrayList<>();
+				list.parallelStream().forEach(e -> {
+					CreditBillVo vo = new CreditBillVo();
+					MapToBean(e, vo, userId);
+					listvo.add(vo);
+				});
+				creditBillService.insert(listvo, userEmail);
+			}else {
+				return jsonObject;
+			}
+		} catch (Exception e) {
+			// throw new BusinessException(ResultEnum.NO_RESPONSE);
+			e.printStackTrace();
 		}
+
+		return ResultVoUtil.success();
 	}
 
-	@ApiOperation("直接获取信用卡账单")
-	@GetMapping("/{userId}")
-	public Object getCreditCardBill(@PathVariable String userId) {
-		
-		List<JSONObject> result = new ArrayList<>(); 
-		List<UserEmail> list = userEmailService.getList(userId);
-
-		for (UserEmail userEmail : list) {
-			try {
-				JSONObject json = getByUsername(userEmail.getEmail(), userEmail.getPassword());
-				result.add(json);
-			} catch (UnsupportedEncodingException e) {
-				throw new BusinessException(ResultEnum.NO_RESPONSE);
-			}
-
-		}
-		return ResultVoUtil.success(result);
-	}
-	
 	@ApiOperation("获取邮箱列表")
-	@GetMapping("/list/{userId}")
+	@GetMapping("/email/{userId}")
 	public Object getEmailList(@PathVariable String userId) {
-		
 		List<UserEmail> list = userEmailService.getList(userId);
-		
 		return ResultVoUtil.success(list);
 	}
 
-	private JSONObject getByUsername(String username, String password) throws UnsupportedEncodingException {
-		String method = "api.bill.get";
-
-		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-		map.add("method", method);
-		map.add("apiKey", LiMuZhengXinUtils.APIKEY);
-		map.add("version", "1.2.0");
-		map.add("billType", "email");
-		map.add("bankCode", "all");
-		map.add("username", username);
-		map.add("password", BASE64Utils.getBase64(password));
-		// if (!StringUtils.isBlank(billDto.getLoginType())) {
-		// map.add("loginType", billDto.getLoginType());
-		// }
-		String sign = LiMuZhengXinUtils.createSign(map, false);
-		map.add("sign", sign);
-
-		JSONObject postForObject = LiMuZhengXinUtils.doPostForToken(restTemplate, map);
-
-		String code = postForObject.getString("code");
-		String token = null;
-
-		/**
-		 * 1.没受理成功直接返回 2.受理成功以后看状态,是0006直接返回 3.查询结果
-		 */
-		if (!"0010".equals(code)) {
-			return postForObject;
-		}
-		token = postForObject.getString("token");
-
-		postForObject = LiMuZhengXinUtils.getInfo(restTemplate, "getStatus", "bill", token);
-		if ("0006".equals(postForObject.getString("code"))) {
-			return postForObject;
-		}
-		if ("0000".equals(postForObject.getString("code"))) {
-			postForObject = LiMuZhengXinUtils.getInfo(restTemplate, "getResult", "bill", token);
-		}
-		
-		return postForObject;
+	@ApiOperation("通过用户id获取新用卡信息")
+	@GetMapping("/{userId}")
+	public Object getCreditCardBill(@PathVariable String userId,
+			@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
+            @ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size) {
+		PageInfo<CreditBill> info = creditBillService.selectByUserId(userId,page,size);
+		return ResultVoUtil.success(info);
 	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void MapToBean(Object e, CreditBillVo vo, String userId) {
+		Map<String, Object> objMap = (LinkedHashMap) e;
+		List map_detail = (ArrayList) objMap.get("statement_detail");
+
+		String balanceRmb = (String) (objMap.getOrDefault("balance_rmb", ""));
+		String issueBank = (String) objMap.getOrDefault("issue_bank", "");
+		String holderName = (String) objMap.getOrDefault("holder_name", "xxx");
+		String last4digit = (String) objMap.getOrDefault("last4digit", "");
+		String paymentDueDate = (String) objMap.getOrDefault("payment_due_date", "");
+		// 替换/
+		paymentDueDate = replace(paymentDueDate);
+		String statementEndDate = (String) objMap.getOrDefault("statement_end_date", "");
+		statementEndDate = replace(statementEndDate);
+		String statementStartDate = (String) objMap.getOrDefault("statement_start_date", "");
+		statementStartDate = replace(statementStartDate);
+		String minPaymentRmb = (String) objMap.getOrDefault("min_payment_rmb", "");
+		String availablePoints = (String) objMap.getOrDefault("available_points", "");
+		String creditAmt = (String) objMap.getOrDefault("credit_amt", "");
+		String cashLimitAmt = (String) objMap.getOrDefault("cash_limit_amt", "");
+		CreditBill creditBill = new CreditBill();
+		String id = IdUtils.getId();
+		creditBill.setId(id);
+		creditBill.setBalanceRmb(balanceRmb);
+		creditBill.setIssueBank(issueBank);
+		creditBill.setHolderName(holderName);
+		creditBill.setLast4digit(last4digit);
+		creditBill.setPaymentDueDate(paymentDueDate);
+		creditBill.setStatementEndDate(statementEndDate);
+		creditBill.setStatementStartDate(statementStartDate);
+		creditBill.setMinPaymentRmb(minPaymentRmb);
+		creditBill.setAvailablePoints(availablePoints);
+		creditBill.setCreditAmt(creditAmt);
+		creditBill.setCashLimitAmt(cashLimitAmt);
+		creditBill.setUserId(userId);
+		if (StringUtils.isBlank(paymentDueDate) || StringUtils.isBlank(statementStartDate)) {
+			creditBill.setFreeDay(-1);
+		} else {
+			String[] dueDate = paymentDueDate.split("-");
+			LocalDate date1 = LocalDate.of(Integer.parseInt(dueDate[0]), Integer.parseInt(dueDate[1]),
+					Integer.parseInt(dueDate[2]));
+			String[] startDate = statementStartDate.split("-");
+			LocalDate date2 = LocalDate.of(Integer.parseInt(startDate[0]), Integer.parseInt(startDate[1]),
+					Integer.parseInt(startDate[2]));
+
+			long until = date2.until(date1, ChronoUnit.DAYS);
+			creditBill.setFreeDay((int) until);
+		}
+		List<CreditBillDetail> detail = getDetail(map_detail, id);
+
+		vo.setCreditBill(creditBill);
+		vo.setCreditBillDetail(detail);
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private List<CreditBillDetail> getDetail(List details, String id) {
+		List<CreditBillDetail> creditBillDetail = new ArrayList<>();
+
+		details.stream().forEach(e -> {
+			CreditBillDetail detail = new CreditBillDetail();
+			Map<String, Object> map_detail = (LinkedHashMap) e;
+			String transDate = (String) map_detail.getOrDefault("trans_date", "");
+			transDate = replace(transDate);
+			String statementStartDate = (String) map_detail.getOrDefault("statement_start_date", "");
+			statementStartDate = replace(statementStartDate);
+			String statementEndDate = (String) map_detail.getOrDefault("statement_end_date", "");
+			statementEndDate = replace(statementEndDate);
+			String last4digit = (String) map_detail.getOrDefault("last4digit", "");
+			String postCurrency = (String) map_detail.getOrDefault("post_currency", "");
+			if ("CNY".equals(postCurrency)) {
+				postCurrency = "RMB";
+			}
+			String transDesc = (String) map_detail.getOrDefault("trans_desc", "");
+			String postAmt = (String) map_detail.getOrDefault("post_amt", "");
+			detail.setCreditBillId(id);
+			detail.setLast4digit(last4digit);
+			detail.setPostAmt(postAmt);
+			detail.setPostCurrency(postCurrency);
+			detail.setStatementEndDate(statementEndDate);
+			detail.setStatementStartDate(statementStartDate);
+			detail.setTransDesc(transDesc);
+			detail.setTransDate(transDate);
+			creditBillDetail.add(detail);
+		});
+		return creditBillDetail;
+	}
+
+	private String replace(String date) {
+		if (date.contains("/")) {
+			date = date.replace("/", "-");
+		}
+		return date;
+	}
+
 }

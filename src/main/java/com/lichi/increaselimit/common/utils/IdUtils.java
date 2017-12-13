@@ -6,22 +6,17 @@ package com.lichi.increaselimit.common.utils;
  * @author majie
  *
  */
-public class UserIdUtils {
+public class IdUtils {
 
 	public static SnowflakeIdWorker SNOWFLAKEIDWORKER = new SnowflakeIdWorker(0, 0);
 
-	/**
-	 * 获取用户id
-	 * 
-	 * @return
-	 */
-	public static String getUserId() {
+	public static String getId() {
 		return SNOWFLAKEIDWORKER.nextId() + "";
 	}
 
 	public static void main(String[] args) {
 		for (int i = 0; i < 100; i++) {
-			System.out.println(getUserId());
+			System.out.println(getId());
 		}
 	}
 }

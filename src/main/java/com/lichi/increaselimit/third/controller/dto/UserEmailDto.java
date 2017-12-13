@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel("信用卡账单")
-public class BillDto {
+public class UserEmailDto {
 
 	@ApiModelProperty("账号")
 	@NotBlank(message = "账号不能为空")
@@ -29,15 +29,4 @@ public class BillDto {
 	@NotBlank(message = "密码不能为空")
 	private String password;
 	
-//	@ApiModelProperty("账单类型，email:邮箱账单")
-//	@NotBlank(message = "账单类型不能为空")
-//	private String billType = "email";
-//	
-//	
-//	@ApiModelProperty("账单银行，银行简称代码")
-//	@NotBlank(message = "账单银行不能为空")
-//	private String bankCode = "all";
-//	
-//	@ApiModelProperty("登陆类型。normal:正常登陆（默认），qr|{邮箱简码}  qr|qq代表qq邮箱扫码登陆")
-//	private String loginType;
 }

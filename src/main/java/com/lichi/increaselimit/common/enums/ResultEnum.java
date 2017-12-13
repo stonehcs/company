@@ -58,6 +58,8 @@ public enum ResultEnum {
     
     EMAIL_EXSIT(26, "邮箱已存在"),
     
+    NO_ONLINE_USER(26, "没有在线的客服"),
+    
     ;
 
     private Integer code;

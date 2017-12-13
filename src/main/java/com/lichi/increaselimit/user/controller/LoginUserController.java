@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lichi.increaselimit.common.enums.ResultEnum;
+import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.user.entity.LoginUser;
@@ -41,6 +43,9 @@ public class LoginUserController {
 		
 		List<LoginUser> list = loginUserService.getAll();
 		
+		if(null == list || list.size() == 0) {
+			throw new BusinessException(ResultEnum.NO_ONLINE_USER);
+		}
 		Collections.shuffle(list);
 		return ResultVoUtil.success(list.get(0));
 	}

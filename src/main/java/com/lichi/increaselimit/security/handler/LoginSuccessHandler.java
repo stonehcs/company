@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
-import com.lichi.increaselimit.common.utils.UserIdUtils;
+import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.security.UserUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 		
 		String username = StringUtils.isBlank(mobile) ? openid : mobile;
 		//将生成的token放入redis
-		redisUtils.set("login_token:" + username, UserIdUtils.getUserId(), 7200);
+		redisUtils.set("login_token:" + username, IdUtils.getId(), 7200);
 		
 		response.setContentType("application/json;charset=UTF-8");
 		response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.success(UserUtils.getUserInfo())));
