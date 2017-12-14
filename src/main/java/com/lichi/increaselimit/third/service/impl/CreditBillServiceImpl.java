@@ -53,7 +53,9 @@ public class CreditBillServiceImpl implements CreditBillService {
 		});
 		userEmailDao.insert(email);
 		creditBillDao.insertBatch(listbill);
-		creditBillDetailDao.insertList(details);
+		if(details != null && details.size() > 0) {
+			creditBillDetailDao.insertList(details);
+		}
 	}
 
 	/**
@@ -65,21 +67,21 @@ public class CreditBillServiceImpl implements CreditBillService {
 		PageHelper.orderBy("payment_due_date asc , statement_date desc");
 		LocalDate date = LocalDate.now().minusMonths(1);
 		date = date.minusDays(date.getDayOfMonth()-1);
-		Example example = new Example(CreditBill.class);
-		example.createCriteria().andEqualTo("userId", userId).andCondition("payment_due_date > now () or statement_date >",date);
-		List<CreditBill> list = creditBillDao.selectByExample(example);
+		List<CreditBill> list = creditBillDao.selectByUserId(userId,date);
 		list.stream().forEach( e -> {
 			if(!StringUtils.isBlank(e.getPaymentDueDate())) {
 				LocalDate parse = LocalDate.parse(e.getPaymentDueDate());
 				long until = LocalDate.now().until(parse, ChronoUnit.DAYS);
-				e.setPayDay((int)until);
+				e.setBillDay((int)until);
 			}
 			if(!StringUtils.isBlank(e.getStatementDate()) && StringUtils.isBlank(e.getPaymentDueDate())) {
 				LocalDate parse = LocalDate.parse(e.getStatementDate());
 				long until = parse.until(LocalDate.now(), ChronoUnit.DAYS);
-				e.setBillDay((int)until);
+				e.setPayDay((int)until);
 			}
 		});
+		
+//		list = list.stream().sorted(Comparator.comparing(null, null)).collect(Collectors.toList());
 		PageInfo<CreditBill> pageInfo = new PageInfo<>(list);
 		return pageInfo;
 	}

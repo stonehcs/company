@@ -131,6 +131,9 @@ public class CreditCardBillController {
 	public Object getCreditCardBill(@PathVariable String userId,
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
+		if(StringUtils.isBlank(userId)) {
+			return ResultVoUtil.success();
+		}
 		PageInfo<CreditBill> info = creditBillService.selectByUserId(userId, page, size);
 		return ResultVoUtil.success(info);
 	}
