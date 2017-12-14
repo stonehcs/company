@@ -3,6 +3,8 @@ package com.lichi.increaselimit.third.entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 /**
@@ -19,5 +21,6 @@ public class UserEmail {
 	
 	private String userId;
 	
+	@JsonIgnore
 	private String password;
 }

@@ -1,9 +1,11 @@
 package com.lichi.increaselimit.third.service.impl;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +68,18 @@ public class CreditBillServiceImpl implements CreditBillService {
 		Example example = new Example(CreditBill.class);
 		example.createCriteria().andEqualTo("userId", userId).andCondition("payment_due_date > now () or statement_date >",date);
 		List<CreditBill> list = creditBillDao.selectByExample(example);
+		list.stream().forEach( e -> {
+			if(!StringUtils.isBlank(e.getPaymentDueDate())) {
+				LocalDate parse = LocalDate.parse(e.getPaymentDueDate());
+				long until = LocalDate.now().until(parse, ChronoUnit.DAYS);
+				e.setPayDay((int)until);
+			}
+			if(!StringUtils.isBlank(e.getStatementDate()) && StringUtils.isBlank(e.getPaymentDueDate())) {
+				LocalDate parse = LocalDate.parse(e.getStatementDate());
+				long until = parse.until(LocalDate.now(), ChronoUnit.DAYS);
+				e.setBillDay((int)until);
+			}
+		});
 		PageInfo<CreditBill> pageInfo = new PageInfo<>(list);
 		return pageInfo;
 	}

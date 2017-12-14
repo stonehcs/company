@@ -2,6 +2,7 @@ package com.lichi.increaselimit.third.entity;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 
@@ -83,4 +84,10 @@ public class CreditBill {
 	 * 取现额度
 	 */
 	private String cashLimitAmt;
+	
+	@Transient
+	private Integer payDay = 0;
+	
+	@Transient
+	private Integer billDay = 0;
 }
