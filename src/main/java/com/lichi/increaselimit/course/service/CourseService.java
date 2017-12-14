@@ -57,7 +57,7 @@ public interface CourseService {
 	 * @param locationId 
 	 * @return
 	 */
-	PageInfo<Course> getCourseList(Integer page, Integer size);
+	PageInfo<CourseVo> getCourseList(Integer page, Integer size);
 
 
 	/**
@@ -73,5 +73,7 @@ public interface CourseService {
 	 * @param userId
 	 */
 	void courseSignUp(SignUpDto signUpDto);
+
+	PageInfo<CourseVo> seleteByLike(Integer page, Integer size, String name);
 
 }

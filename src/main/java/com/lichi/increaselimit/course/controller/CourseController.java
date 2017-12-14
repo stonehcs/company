@@ -59,10 +59,10 @@ public class CourseController {
 	
 	@GetMapping("/index-course")
 	@ApiOperation(value = "首页课程显示")
-	public ResultVo<PageInfo<Course>> getCourseList(
+	public ResultVo<PageInfo<CourseVo>> getCourseList(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
-		PageInfo<Course> list = courseService.getCourseList(page, size);
+		PageInfo<CourseVo> list = courseService.getCourseList(page, size);
 		return ResultVoUtil.success(list);
 	}
 
@@ -75,7 +75,7 @@ public class CourseController {
 
 	@PostMapping
 	@ApiOperation(value = "添加课程")
-	public ResultVo<Course> addCourse(@Valid @RequestBody CourseDto courseDto, BindingResult result) {
+	public ResultVo<CourseVo> addCourse(@Valid @RequestBody CourseDto courseDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
 			return ResultVoUtil.error(1, errors);
@@ -88,14 +88,14 @@ public class CourseController {
 
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "删除课程")
-	public ResultVo<Course> deleteCourse(@PathVariable Integer id) {
+	public ResultVo<CourseVo> deleteCourse(@PathVariable Integer id) {
 		courseService.deleteCourse(id);
 		return ResultVoUtil.success();
 	}
 
 	@PutMapping
 	@ApiOperation(value = "修改课程")
-	public ResultVo<Course> updateCourse(@Valid @RequestBody CourseUpdateDto courseDto, BindingResult result) {
+	public ResultVo<CourseVo> updateCourse(@Valid @RequestBody CourseUpdateDto courseDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
 			return ResultVoUtil.error(1, errors);
@@ -108,14 +108,14 @@ public class CourseController {
 
 	@PutMapping("/watch/{id}")
 	@ApiOperation(value = "修改课程观看次数")
-	public ResultVo<Course> updateCourse(@PathVariable Integer id) {
+	public ResultVo<CourseVo> updateCourse(@PathVariable Integer id) {
 		courseService.updateCourseTimes(id);
 		return ResultVoUtil.success();
 	}
 	
 	@PostMapping("/signUp")
 	@ApiOperation(value = "课程报名")
-	public ResultVo<Course> signUp(@Valid @RequestBody SignUpDto signUpDto,BindingResult result) {
+	public ResultVo<CourseVo> signUp(@Valid @RequestBody SignUpDto signUpDto,BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
 			return ResultVoUtil.error(1, errors);
@@ -142,4 +142,15 @@ public class CourseController {
 		courseService.coursePay(id,userId);
 		return ResultVoUtil.success();
 	}
+	
+	@GetMapping("/get/{name}")
+	@ApiOperation(value = "通过课程名称或者老师名称模糊查询")
+	public ResultVo<PageInfo<CourseVo>> getArticleLike(
+			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
+			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
+			@PathVariable String name) {
+		PageInfo<CourseVo> circle = courseService.seleteByLike(page, size, name);
+		return ResultVoUtil.success(circle);
+	}
+
 }
