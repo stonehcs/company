@@ -1,6 +1,7 @@
 package com.lichi.increaselimit.course.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -23,4 +24,10 @@ public class Video implements Serializable{
 	private String description;
 	
 	private String url;
+	
+	private String videoUrl;
+	
+	private Date createTime;
+	
+	private Date updateTime;
 }

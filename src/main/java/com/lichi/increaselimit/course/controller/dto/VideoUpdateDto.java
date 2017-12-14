@@ -23,4 +23,7 @@ public class VideoUpdateDto {
 	
 	@ApiModelProperty("视频url")
 	private String url;
+	
+	@ApiModelProperty("视频封面")
+	private String videoUrl;
 }

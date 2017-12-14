@@ -81,4 +81,6 @@ public class Course implements Serializable{
 	private Date createTime;
 	
 	private String description;
+	
+	private String courseUrl;
 }

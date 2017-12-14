@@ -91,4 +91,7 @@ public class CourseUpdateDto implements Serializable{
 	
 	@ApiModelProperty("课程介绍")
 	private Integer description;
+	
+	@ApiModelProperty("课程封面图")
+	private String courseUrl;
 }

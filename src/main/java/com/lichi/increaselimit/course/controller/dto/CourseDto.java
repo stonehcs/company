@@ -75,4 +75,8 @@ public class CourseDto implements Serializable{
 	@ApiModelProperty("课程介绍")
 	@NotNull(message = "课程介绍不能为空")
 	private String description;
+	
+	@ApiModelProperty("课程封面图")
+	@NotNull(message = "课程封面图不能为空")
+	private String courseUrl;
 }

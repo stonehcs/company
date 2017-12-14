@@ -25,4 +25,9 @@ public class VideoDto {
 	@ApiModelProperty("视频url")
 	@NotBlank(message = "视频url不能为空")
 	private String url;
+	
+	@ApiModelProperty("视频封面")
+	@NotBlank(message = "视频封面不能为空")
+	private String videoUrl;
+	
 }

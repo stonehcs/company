@@ -1,5 +1,6 @@
 package com.lichi.increaselimit.course.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class VideoServiceImpl implements VideoService {
 
 	@Override
 	public void addVideo(Video video) {
+		video.setCreateTime(new Date());
+		video.setUpdateTime(new Date());
 		videoMapper.insertSelective(video);
 	}
 
@@ -39,6 +42,7 @@ public class VideoServiceImpl implements VideoService {
 
 	@Override
 	public void updateVideo(Video video) {
+		video.setUpdateTime(new Date());
 		videoMapper.updateByPrimaryKey(video);
 	}
 
