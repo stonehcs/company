@@ -8,8 +8,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -17,11 +15,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +29,6 @@ import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
-import com.lichi.increaselimit.third.controller.dto.UserEmailDto;
 import com.lichi.increaselimit.third.entity.CreditBill;
 import com.lichi.increaselimit.third.entity.CreditBillDetail;
 import com.lichi.increaselimit.third.entity.CreditBillVo;
@@ -69,23 +64,23 @@ public class CreditCardBillController {
 	private static final String APPKEY = "c78285411a06e4a7196df56144a89bb8";
 
 	@ApiOperation("第一次输入email时候调用")
-	@PostMapping(consumes="application/json")
+	@PostMapping
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Object getCreditCardBill(@Valid @RequestBody UserEmailDto userEmail, BindingResult result) {
-		if (result.hasErrors()) {
-			String errors = result.getFieldError().getDefaultMessage();
-			return ResultVoUtil.error(1, errors);
-		}
-		try {
-			String email = userEmail.getUsername();
-			String password = userEmail.getPassword();
-			String userId = userEmail.getUserId();
+	public Object setEmail(@ApiParam(value = "用户id", required = true) @RequestParam(required = true) String userId,
+			@ApiParam(value = "邮箱", required = true) @RequestParam(required = true) String username,
+			@ApiParam(value = "密码", required = true) @RequestParam(required = true) String password) {
 
+		try {
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-			map.add("email", email);
+			map.add("email", username);
 			map.add("password", password);
 			map.add("appkey", APPKEY);
 
+			UserEmail email = new UserEmail();
+			email.setEmail(username);
+			email.setPassword(password);
+			email.setUserId(userId);
+			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -106,7 +101,7 @@ public class CreditCardBillController {
 					MapToBean(e, vo, userId);
 					listvo.add(vo);
 				});
-				creditBillService.insert(listvo, userEmail);
+				creditBillService.insert(listvo, email);
 			} else {
 				return jsonObject;
 			}
@@ -200,14 +195,14 @@ public class CreditCardBillController {
 			creditBill.setStatementDate(statementEndDate);
 		}
 
-		//初始化外层的银行卡后四位
+		// 初始化外层的银行卡后四位
 		if ("中国民生银行".equals(issueBank)) {
 			Long credit_card_stmt_id = (Long) objMap.getOrDefault("credit_card_stmt_id", "");
 			map_detail.stream().forEach(a -> {
-				
+
 				LinkedHashMap map = ((LinkedHashMap) a);
 				Long innerlong = (Long) map.getOrDefault("credit_card_stmt_id", "");
-				
+
 				if (credit_card_stmt_id.equals(innerlong)) {
 					String innerlast4digit = (String) map.getOrDefault("last4digit", "");
 
@@ -217,7 +212,7 @@ public class CreditCardBillController {
 
 			});
 		}
-		
+
 		// 初始化开始时间
 		if (StringUtils.isBlank(statementStartDate) && !StringUtils.isBlank(statementEndDate)) {
 			LocalDate date1 = LocalDate.parse(statementEndDate);
