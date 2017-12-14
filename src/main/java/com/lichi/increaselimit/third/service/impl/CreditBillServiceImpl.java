@@ -72,16 +72,18 @@ public class CreditBillServiceImpl implements CreditBillService {
 			if(!StringUtils.isBlank(e.getPaymentDueDate())) {
 				LocalDate parse = LocalDate.parse(e.getPaymentDueDate());
 				long until = LocalDate.now().until(parse, ChronoUnit.DAYS);
-				e.setBillDay((int)until);
+				e.setPayDay((int)until);
 			}
 			if(!StringUtils.isBlank(e.getStatementDate()) && StringUtils.isBlank(e.getPaymentDueDate())) {
 				LocalDate parse = LocalDate.parse(e.getStatementDate());
 				long until = parse.until(LocalDate.now(), ChronoUnit.DAYS);
-				e.setPayDay((int)until);
+				e.setBillDay((int)until);
 			}
 		});
 		
-//		list = list.stream().sorted(Comparator.comparing(null, null)).collect(Collectors.toList());
+		//排序
+		list.sort((a,b) -> a.getPayDay().compareTo(b.getPayDay()));
+		list.sort((a,b) -> a.getBillDay().compareTo(b.getBillDay()));
 		PageInfo<CreditBill> pageInfo = new PageInfo<>(list);
 		return pageInfo;
 	}

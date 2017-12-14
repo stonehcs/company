@@ -22,6 +22,8 @@ public class CourseVo extends Course{
 	private Integer signUpPerson;
 	
 	private Integer payPerson;
+	
+	private Integer status;
 
 	public String getImgUrl() {
 		return imgUrl;
@@ -61,6 +63,14 @@ public class CourseVo extends Course{
 
 	public void setPayPerson(Integer payPerson) {
 		this.payPerson = payPerson;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	
 	
