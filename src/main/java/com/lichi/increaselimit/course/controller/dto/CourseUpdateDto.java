@@ -90,8 +90,12 @@ public class CourseUpdateDto implements Serializable{
 	private Integer locationId;
 	
 	@ApiModelProperty("课程介绍")
-	private Integer description;
+	private String description;
 	
 	@ApiModelProperty("课程封面图")
 	private String courseUrl;
+	
+	
+	@ApiModelProperty("结课时间")
+	private Date endTime;
 }
