@@ -58,7 +58,7 @@ public class CourseServiceImpl implements CourseService {
 	public PageInfo<CourseVo> getCourseList(Integer page, Integer size) {
 		PageHelper.startPage(page, size);
 		PageHelper.orderBy("start_time asc");
-		List<CourseVo> list = courseMapper.selectList();
+		List<CourseVo> list = courseMapper.selectList1();
 		list.stream().forEach(e -> {
 			getPersons(e);
 		});
