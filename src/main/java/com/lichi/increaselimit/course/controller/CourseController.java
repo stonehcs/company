@@ -48,7 +48,7 @@ public class CourseController {
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
 			@ApiParam(value = "地区id", required = true) @RequestParam Integer locationId,
-			@ApiParam(value = "地区id", required = true) @RequestParam String userId) {
+			@ApiParam(value = "用户id", required = true) @RequestParam String userId) {
 		PageInfo<CourseVo> list = courseService.getCourseList(page, size, locationId,userId);
 		return ResultVoUtil.success(list);
 	}
@@ -108,5 +108,22 @@ public class CourseController {
 		courseService.updateCourseTimes(id);
 		return ResultVoUtil.success();
 	}
-
+	
+	@GetMapping("signUp")
+	@ApiOperation(value = "课程报名")
+	public ResultVo<Course> signUp(
+			@ApiParam(value = "课程id", required = true) @RequestParam Integer id,
+			@ApiParam(value = "地区id", required = true) @RequestParam String userId) {
+		courseService.courseSignUp(id,userId);
+		return ResultVoUtil.success();
+	}
+	
+	@GetMapping("pay")
+	@ApiOperation(value = "课程付费")
+	public ResultVo<Course> pay(
+			@ApiParam(value = "课程id", required = true) @RequestParam Integer id,
+			@ApiParam(value = "地区id", required = true) @RequestParam String userId) {
+		courseService.coursePay(id,userId);
+		return ResultVoUtil.success();
+	}
 }

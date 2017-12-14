@@ -45,6 +45,11 @@ public class CreditBill {
 	private String paymentDueDate;
 	
 	/**
+	 * 账单日
+	 */
+	private String statementDate;
+	
+	/**
 	 * 免息期(免息期等于还款日-账单周期开始日期)
 	 */
 	private Integer freeDay;

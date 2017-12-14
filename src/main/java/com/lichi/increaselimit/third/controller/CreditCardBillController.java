@@ -29,6 +29,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.common.enums.ResultEnum;
+import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.third.controller.dto.UserEmailDto;
@@ -93,9 +95,13 @@ public class CreditCardBillController {
 
 			if ("10000".equals(jsonObject.getString("code"))) {
 				HashMap<String, Object> hashmap = (LinkedHashMap) jsonObject.get("result");
+				String code = hashmap.get("code").toString();
+				if("1002".equals(code)) {
+					return jsonObject;
+				}
 				List list = (ArrayList) hashmap.get("result");
 				List<CreditBillVo> listvo = new ArrayList<>();
-				list.parallelStream().forEach(e -> {
+				list.stream().forEach(e -> {
 					CreditBillVo vo = new CreditBillVo();
 					MapToBean(e, vo, userId);
 					listvo.add(vo);
@@ -105,8 +111,8 @@ public class CreditCardBillController {
 				return jsonObject;
 			}
 		} catch (Exception e) {
-			// throw new BusinessException(ResultEnum.NO_RESPONSE);
 			e.printStackTrace();
+			 throw new BusinessException(ResultEnum.NO_RESPONSE);
 		}
 
 		return ResultVoUtil.success();
@@ -119,7 +125,7 @@ public class CreditCardBillController {
 		return ResultVoUtil.success(list);
 	}
 
-	@ApiOperation("通过用户id获取新用卡信息")
+	@ApiOperation("通过用户id获取未还款信息")
 	@GetMapping("/{userId}")
 	public Object getCreditCardBill(@PathVariable String userId,
 			@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
@@ -127,7 +133,20 @@ public class CreditCardBillController {
 		PageInfo<CreditBill> info = creditBillService.selectByUserId(userId,page,size);
 		return ResultVoUtil.success(info);
 	}
+	
+	@ApiOperation("通过银行名字和后四位查询信用卡信息")
+	@GetMapping
+	public Object get(@ApiParam(value = "用户id",required = true) @RequestParam(required = true) String userId,
+			@ApiParam(value = "银行名字",required = true) @RequestParam(required = true) String issueBank,
+			@ApiParam(value = "持卡人名字",required = true) @RequestParam(required = true) String holderName,
+			@ApiParam(value = "银行卡后四位",required = true) @RequestParam(required = true) String last4digit,
+			@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
+			@ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size) {
+		PageInfo<CreditBill> info = creditBillService.selectBank(userId,issueBank,holderName,last4digit,page,size);
+		return ResultVoUtil.success(info);
+	}
 
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void MapToBean(Object e, CreditBillVo vo, String userId) {
 		Map<String, Object> objMap = (LinkedHashMap) e;
@@ -142,6 +161,8 @@ public class CreditCardBillController {
 		paymentDueDate = replace(paymentDueDate);
 		String statementEndDate = (String) objMap.getOrDefault("statement_end_date", "");
 		statementEndDate = replace(statementEndDate);
+		String statementDate = (String) objMap.getOrDefault("statement_date", "");
+		statementDate = replace(statementDate);
 		String statementStartDate = (String) objMap.getOrDefault("statement_start_date", "");
 		statementStartDate = replace(statementStartDate);
 		String minPaymentRmb = (String) objMap.getOrDefault("min_payment_rmb", "");
@@ -156,6 +177,13 @@ public class CreditCardBillController {
 		creditBill.setHolderName(holderName);
 		creditBill.setLast4digit(last4digit);
 		creditBill.setPaymentDueDate(paymentDueDate);
+		
+		if(StringUtils.isBlank(statementEndDate) && !StringUtils.isBlank(paymentDueDate)) {
+			LocalDate date1 = LocalDate.parse(paymentDueDate);
+			
+			LocalDate date = date1.minusMonths(1);
+			statementEndDate = date.toString();
+		}
 		creditBill.setStatementEndDate(statementEndDate);
 		creditBill.setStatementStartDate(statementStartDate);
 		creditBill.setMinPaymentRmb(minPaymentRmb);
@@ -163,19 +191,42 @@ public class CreditCardBillController {
 		creditBill.setCreditAmt(creditAmt);
 		creditBill.setCashLimitAmt(cashLimitAmt);
 		creditBill.setUserId(userId);
+		creditBill.setStatementDate(statementDate);
+		
+		//初始化还款日
+		if("交通银行".equals(issueBank) && !StringUtils.isBlank(statementEndDate)) {
+			LocalDate date1 = LocalDate.parse(statementEndDate);
+			LocalDate date = date1.minusMonths(1);
+			statementEndDate = date.toString();
+			creditBill.setStatementDate(statementEndDate);
+		}
+//		
+//		if("中国民生银行".equals(issueBank)) {
+//			Long credit_card_stmt_id = (Long) objMap.getOrDefault("credit_card_stmt_id", "");
+//			Object limit = map_detail.stream().
+//				map(a -> credit_card_stmt_id == ((Long)((LinkedHashMap) a).getOrDefault("credit_card_stmt_id",""))).collect(Collectors.toList());
+//			System.out.println(limit);
+////			creditBill.setLast4digit(limit.get().toString());
+//		}
+		//初始化开始时间
+		if(StringUtils.isBlank(statementStartDate) && !StringUtils.isBlank(statementEndDate)) {
+			LocalDate date1 = LocalDate.parse(statementEndDate);
+			LocalDate date = date1.minusMonths(1);
+			statementStartDate = date.toString();
+			creditBill.setStatementStartDate(statementStartDate);
+		}
+		
+		//初始化免息期
 		if (StringUtils.isBlank(paymentDueDate) || StringUtils.isBlank(statementStartDate)) {
 			creditBill.setFreeDay(-1);
 		} else {
-			String[] dueDate = paymentDueDate.split("-");
-			LocalDate date1 = LocalDate.of(Integer.parseInt(dueDate[0]), Integer.parseInt(dueDate[1]),
-					Integer.parseInt(dueDate[2]));
-			String[] startDate = statementStartDate.split("-");
-			LocalDate date2 = LocalDate.of(Integer.parseInt(startDate[0]), Integer.parseInt(startDate[1]),
-					Integer.parseInt(startDate[2]));
+			LocalDate date1 = LocalDate.parse(paymentDueDate);
+			LocalDate date2 = LocalDate.parse(statementStartDate);
 
 			long until = date2.until(date1, ChronoUnit.DAYS);
 			creditBill.setFreeDay((int) until);
 		}
+
 		List<CreditBillDetail> detail = getDetail(map_detail, id);
 
 		vo.setCreditBill(creditBill);

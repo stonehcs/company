@@ -8,13 +8,14 @@
 		(id,available_points,balance_rmb,cash_limit_amt,
 		credit_amt,holder_name,issue_bank,last4digit,
 		min_payment_rmb,payment_due_date,
-		statement_end_date,statement_start_date,free_day)
+		statement_end_date,statement_start_date,free_day,statement_date,user_id)
 		values
 		<foreach collection="list" item="item" index="index"
 			separator=",">
 			(#{item.id},#{item.availablePoints},#{item.balanceRmb},
 			#{item.cashLimitAmt},#{item.creditAmt},#{item.holderName},#{item.issueBank},#{item.last4digit},
-			#{item.minPaymentRmb},#{item.paymentDueDate},#{item.statementEndDate},#{item.statementStartDate},#{item.freeDay})
+			#{item.minPaymentRmb},#{item.paymentDueDate},#{item.statementEndDate},#{item.statementStartDate},
+			#{item.freeDay},#{item.statementDate},#{item.userId})
 		</foreach>
 	</insert>
 </mapper>

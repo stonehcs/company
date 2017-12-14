@@ -58,4 +58,18 @@ public interface CourseService {
 	 */
 	PageInfo<Course> getCourseList(Integer page, Integer size);
 
+	/**
+	 * 课程报名
+	 * @param id
+	 * @param userId
+	 */
+	void courseSignUp(Integer id, String userId);
+
+	/**
+	 * 课程付费
+	 * @param id
+	 * @param userId
+	 */
+	void coursePay(Integer id, String userId);
+
 }

@@ -77,5 +77,15 @@ public class CourseServiceImpl implements CourseService {
 		courseMapper.updateCourseTimes(id);
 	}
 
+	@Override
+	public void courseSignUp(Integer id, String userId) {
+		courseMapper.courseSignUp(id,userId);
+	}
+
+	@Override
+	public void coursePay(Integer id, String userId) {
+		courseMapper.coursePay(id,userId);
+	}
+
 
 }

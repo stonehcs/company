@@ -30,7 +30,7 @@ public class CreditBillServiceImpl implements CreditBillService {
 
 	@Autowired
 	private CreditBillDetailDao creditBillDetailDao;
-	
+
 	@Autowired
 	private UserEmailDao userEmailDao;
 
@@ -38,7 +38,7 @@ public class CreditBillServiceImpl implements CreditBillService {
 	 * 插入信用卡订单，和email
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	public void insert(List<CreditBillVo> listvo,UserEmailDto userEmailDto) {
+	public void insert(List<CreditBillVo> listvo, UserEmailDto userEmailDto) {
 		List<CreditBill> listbill = new ArrayList<>();
 		List<CreditBillDetail> details = new ArrayList<>();
 		listvo.stream().forEach(e -> {
@@ -51,17 +51,31 @@ public class CreditBillServiceImpl implements CreditBillService {
 		});
 		UserEmail record = new UserEmail();
 		BeanUtils.copyProperties(userEmailDto, record);
+		record.setEmail(userEmailDto.getUsername());
 		userEmailDao.insert(record);
 		creditBillDao.insertBatch(listbill);
 		creditBillDetailDao.insertList(details);
 	}
 
 	@Override
-	public PageInfo<CreditBill> selectByUserId(String userId,Integer page, Integer size) {
+	public PageInfo<CreditBill> selectByUserId(String userId, Integer page, Integer size) {
 		PageHelper.startPage(page, size);
 		PageHelper.orderBy("payment_due_date desc");
 		Example example = new Example(CreditBill.class);
-		example.createCriteria().andEqualTo("userId",userId).andCondition("payment_due_date > now ()");
+		example.createCriteria().andEqualTo("userId", userId).andCondition("payment_due_date > now ()");
+		List<CreditBill> list = creditBillDao.selectByExample(example);
+		PageInfo<CreditBill> pageInfo = new PageInfo<>(list);
+		return pageInfo;
+	}
+
+	@Override
+	public PageInfo<CreditBill> selectBank(String userId, String issueBank,String holderName,String last4digit, Integer page,
+			Integer size) {
+		PageHelper.startPage(page, size);
+		PageHelper.orderBy("payment_due_date desc");
+		Example example = new Example(CreditBill.class);
+		example.createCriteria().andEqualTo("userId", userId).andEqualTo("issueBank", issueBank)
+				.andEqualTo("last4digit", last4digit).andEqualTo("holderName", holderName);
 		List<CreditBill> list = creditBillDao.selectByExample(example);
 		PageInfo<CreditBill> pageInfo = new PageInfo<>(list);
 		return pageInfo;
