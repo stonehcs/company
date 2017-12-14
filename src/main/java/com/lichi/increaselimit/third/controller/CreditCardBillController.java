@@ -69,7 +69,7 @@ public class CreditCardBillController {
 	private static final String APPKEY = "c78285411a06e4a7196df56144a89bb8";
 
 	@ApiOperation("第一次输入email时候调用")
-	@PostMapping
+	@PostMapping(consumes="application/json")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getCreditCardBill(@Valid @RequestBody UserEmailDto userEmail, BindingResult result) {
 		if (result.hasErrors()) {
