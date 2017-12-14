@@ -96,7 +96,7 @@ public class CreditCardBillController {
 			if ("10000".equals(jsonObject.getString("code"))) {
 				HashMap<String, Object> hashmap = (LinkedHashMap) jsonObject.get("result");
 				String code = hashmap.get("code").toString();
-				if("1002".equals(code)) {
+				if ("1002".equals(code)) {
 					return jsonObject;
 				}
 				List list = (ArrayList) hashmap.get("result");
@@ -107,12 +107,12 @@ public class CreditCardBillController {
 					listvo.add(vo);
 				});
 				creditBillService.insert(listvo, userEmail);
-			}else {
+			} else {
 				return jsonObject;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			 throw new BusinessException(ResultEnum.NO_RESPONSE);
+			throw new BusinessException(ResultEnum.NO_RESPONSE);
 		}
 
 		return ResultVoUtil.success();
@@ -128,25 +128,24 @@ public class CreditCardBillController {
 	@ApiOperation("通过用户id获取未还款信息")
 	@GetMapping("/{userId}")
 	public Object getCreditCardBill(@PathVariable String userId,
-			@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
-            @ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size) {
-		PageInfo<CreditBill> info = creditBillService.selectByUserId(userId,page,size);
-		return ResultVoUtil.success(info);
-	}
-	
-	@ApiOperation("通过银行名字和后四位查询信用卡信息")
-	@GetMapping
-	public Object get(@ApiParam(value = "用户id",required = true) @RequestParam(required = true) String userId,
-			@ApiParam(value = "银行名字",required = true) @RequestParam(required = true) String issueBank,
-			@ApiParam(value = "持卡人名字",required = true) @RequestParam(required = true) String holderName,
-			@ApiParam(value = "银行卡后四位",required = true) @RequestParam(required = true) String last4digit,
-			@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
-			@ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size) {
-		PageInfo<CreditBill> info = creditBillService.selectBank(userId,issueBank,holderName,last4digit,page,size);
+			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
+			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
+		PageInfo<CreditBill> info = creditBillService.selectByUserId(userId, page, size);
 		return ResultVoUtil.success(info);
 	}
 
-	
+	@ApiOperation("通过银行名字和后四位查询信用卡信息")
+	@GetMapping
+	public Object get(@ApiParam(value = "用户id", required = true) @RequestParam(required = true) String userId,
+			@ApiParam(value = "银行名字", required = true) @RequestParam(required = true) String issueBank,
+			@ApiParam(value = "持卡人名字", required = true) @RequestParam(required = true) String holderName,
+			@ApiParam(value = "银行卡后四位", required = true) @RequestParam(required = true) String last4digit,
+			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
+			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
+		PageInfo<CreditBill> info = creditBillService.selectBank(userId, issueBank, holderName, last4digit, page, size);
+		return ResultVoUtil.success(info);
+	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void MapToBean(Object e, CreditBillVo vo, String userId) {
 		Map<String, Object> objMap = (LinkedHashMap) e;
@@ -177,10 +176,10 @@ public class CreditCardBillController {
 		creditBill.setHolderName(holderName);
 		creditBill.setLast4digit(last4digit);
 		creditBill.setPaymentDueDate(paymentDueDate);
-		
-		if(StringUtils.isBlank(statementEndDate) && !StringUtils.isBlank(paymentDueDate)) {
+
+		if (StringUtils.isBlank(statementEndDate) && !StringUtils.isBlank(paymentDueDate)) {
 			LocalDate date1 = LocalDate.parse(paymentDueDate);
-			
+
 			LocalDate date = date1.minusMonths(1);
 			statementEndDate = date.toString();
 		}
@@ -192,31 +191,42 @@ public class CreditCardBillController {
 		creditBill.setCashLimitAmt(cashLimitAmt);
 		creditBill.setUserId(userId);
 		creditBill.setStatementDate(statementDate);
-		
-		//初始化还款日
-		if("交通银行".equals(issueBank) && !StringUtils.isBlank(statementEndDate)) {
+
+		// 初始化还款日
+		if ("交通银行".equals(issueBank) && !StringUtils.isBlank(statementEndDate)) {
 			LocalDate date1 = LocalDate.parse(statementEndDate);
 			LocalDate date = date1.minusMonths(1);
 			statementEndDate = date.toString();
 			creditBill.setStatementDate(statementEndDate);
 		}
-//		
-//		if("中国民生银行".equals(issueBank)) {
-//			Long credit_card_stmt_id = (Long) objMap.getOrDefault("credit_card_stmt_id", "");
-//			Object limit = map_detail.stream().
-//				map(a -> credit_card_stmt_id == ((Long)((LinkedHashMap) a).getOrDefault("credit_card_stmt_id",""))).collect(Collectors.toList());
-//			System.out.println(limit);
-////			creditBill.setLast4digit(limit.get().toString());
-//		}
-		//初始化开始时间
-		if(StringUtils.isBlank(statementStartDate) && !StringUtils.isBlank(statementEndDate)) {
+
+		//初始化外层的银行卡后四位
+		if ("中国民生银行".equals(issueBank)) {
+			Long credit_card_stmt_id = (Long) objMap.getOrDefault("credit_card_stmt_id", "");
+			map_detail.stream().forEach(a -> {
+				
+				LinkedHashMap map = ((LinkedHashMap) a);
+				Long innerlong = (Long) map.getOrDefault("credit_card_stmt_id", "");
+				
+				if (credit_card_stmt_id.equals(innerlong)) {
+					String innerlast4digit = (String) map.getOrDefault("last4digit", "");
+
+					creditBill.setLast4digit(innerlast4digit);
+
+				}
+
+			});
+		}
+		
+		// 初始化开始时间
+		if (StringUtils.isBlank(statementStartDate) && !StringUtils.isBlank(statementEndDate)) {
 			LocalDate date1 = LocalDate.parse(statementEndDate);
 			LocalDate date = date1.minusMonths(1);
 			statementStartDate = date.toString();
 			creditBill.setStatementStartDate(statementStartDate);
 		}
-		
-		//初始化免息期
+
+		// 初始化免息期
 		if (StringUtils.isBlank(paymentDueDate) || StringUtils.isBlank(statementStartDate)) {
 			creditBill.setFreeDay(-1);
 		} else {
