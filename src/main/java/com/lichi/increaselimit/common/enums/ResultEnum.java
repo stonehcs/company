@@ -30,7 +30,7 @@ public enum ResultEnum {
     
     MOBILE_ERROR(5, "请输入正确的手机号码"),
     
-    MOBILE_EXIST(5, "该手机号已存在"),
+    MOBILE_EXIST(5, "该手机号已被绑定"),
     
     CODE_EXIST(5, "请一分钟后再尝试"),
     

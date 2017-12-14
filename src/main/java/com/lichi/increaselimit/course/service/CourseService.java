@@ -1,6 +1,7 @@
 package com.lichi.increaselimit.course.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.course.controller.dto.SignUpDto;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.entity.CourseVo;
 
@@ -58,12 +59,6 @@ public interface CourseService {
 	 */
 	PageInfo<Course> getCourseList(Integer page, Integer size);
 
-	/**
-	 * 课程报名
-	 * @param id
-	 * @param userId
-	 */
-	void courseSignUp(Integer id, String userId);
 
 	/**
 	 * 课程付费
@@ -71,5 +66,12 @@ public interface CourseService {
 	 * @param userId
 	 */
 	void coursePay(Integer id, String userId);
+
+	/**
+	 * 课程报名
+	 * @param id
+	 * @param userId
+	 */
+	void courseSignUp(SignUpDto signUpDto);
 
 }

@@ -54,6 +54,6 @@ public interface CourseMapper extends BaseMapper<Course>{
 	 * @param id
 	 * @param userId
 	 */
-	@Insert("insert into t_user_course values(#{userId},#{id},1)")
-	void coursePay(Integer id, String userId);
+	@Update("update t_user_course set status = 1 where course_id = #{id} and userId = #{userId}")
+	void coursePay(@Param(value = "id") Integer id,@Param(value = "userId") String userId);
 }

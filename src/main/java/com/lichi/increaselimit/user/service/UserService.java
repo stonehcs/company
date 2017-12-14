@@ -45,6 +45,12 @@ public interface UserService {
 	 * @return 
 	 */
 	User insertMobileUser(String mobile);
+	/**
+	 * 插入用户
+	 * @param socialUserInfo
+	 * @return 
+	 */
+	User insert(User user);
 	
 	/**
 	 * 分页查询排行榜

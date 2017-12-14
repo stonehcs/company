@@ -12,10 +12,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
-import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.security.UserUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -45,8 +45,8 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 		String openid = request.getParameter("openid");
 		
 		String username = StringUtils.isBlank(mobile) ? openid : mobile;
-		//将生成的token放入redis
-		redisUtils.set("login_token:" + username, IdUtils.getId(), 7200);
+		//将生成的token放入redis,token设置为永久
+		redisUtils.set("login_token:" + username, JSONObject.toJSONString(UserUtils.getUserInfo()));
 		
 		response.setContentType("application/json;charset=UTF-8");
 		response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.success(UserUtils.getUserInfo())));

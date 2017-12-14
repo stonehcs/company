@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.common.enums.ResultEnum;
+import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
+import com.lichi.increaselimit.common.utils.StringUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.course.controller.dto.CourseDto;
 import com.lichi.increaselimit.course.controller.dto.CourseUpdateDto;
+import com.lichi.increaselimit.course.controller.dto.SignUpDto;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.entity.CourseVo;
 import com.lichi.increaselimit.course.service.CourseService;
@@ -109,20 +113,32 @@ public class CourseController {
 		return ResultVoUtil.success();
 	}
 	
-	@GetMapping("signUp")
+	@PostMapping("/signUp")
 	@ApiOperation(value = "课程报名")
-	public ResultVo<Course> signUp(
-			@ApiParam(value = "课程id", required = true) @RequestParam Integer id,
-			@ApiParam(value = "地区id", required = true) @RequestParam String userId) {
-		courseService.courseSignUp(id,userId);
+	public ResultVo<Course> signUp(@Valid @RequestBody SignUpDto signUpDto,BindingResult result) {
+		if (result.hasErrors()) {
+			String errors = result.getFieldError().getDefaultMessage();
+			return ResultVoUtil.error(1, errors);
+		}
+		
+		String mobile = signUpDto.getMobile();
+		if(!StringUtil.ValidateMobile(mobile)) {
+			throw new BusinessException(ResultEnum.MOBILE_ERROR);
+		}
+		
+		courseService.courseSignUp(signUpDto);
+		
 		return ResultVoUtil.success();
 	}
 	
-	@GetMapping("pay")
+	@GetMapping("/pay")
 	@ApiOperation(value = "课程付费")
 	public ResultVo<Course> pay(
 			@ApiParam(value = "课程id", required = true) @RequestParam Integer id,
-			@ApiParam(value = "地区id", required = true) @RequestParam String userId) {
+			@ApiParam(value = "地区id", required = true) @RequestParam String userId,
+			@ApiParam(value = "金额", required = true) @RequestParam Double money) {
+		
+		//这里有个金额的校验
 		courseService.coursePay(id,userId);
 		return ResultVoUtil.success();
 	}

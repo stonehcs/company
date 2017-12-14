@@ -137,4 +137,18 @@ public class UserServiceImpl implements UserService {
 		userMapper.updateByPrimaryKeySelective(user);
 	}
 
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public User insert(User user) {
+		user.setCreateTime(new Date());
+		user.setUpdateTime(new Date());
+		userMapper.insertSelective(user);
+		try {
+			HuanXinUtils.registerUser(user.getId(), restTemplate);
+		} catch (Exception e) {
+			throw new BusinessException(ResultEnum.REGISTER_ERROR);
+		}
+		return user;
+	}
+
 }
