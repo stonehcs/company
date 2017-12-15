@@ -25,6 +25,14 @@ public interface CreditBillService {
 	 * @return
 	 */
 	PageInfo<CreditBill> selectByUserId(String userId, Integer page, Integer size);
+	/**
+	 * 分页查询信用卡列表
+	 * @param userId
+	 * @param size 
+	 * @param page 
+	 * @return
+	 */
+	List<CreditBill> selectByUserId(String userId);
 
 	/**
 	 * 查询对应卡详情

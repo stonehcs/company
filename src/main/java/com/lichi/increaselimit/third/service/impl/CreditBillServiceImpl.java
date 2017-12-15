@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +45,7 @@ public class CreditBillServiceImpl implements CreditBillService {
 	public void insert(List<CreditBillVo> listvo, UserEmail email) {
 		List<CreditBill> listbill = new ArrayList<>();
 		List<CreditBillDetail> details = new ArrayList<>();
-		
+
 		listvo.stream().forEach(e -> {
 			CreditBill creditBillVo = e.getCreditBill();
 			listbill.add(creditBillVo);
@@ -53,7 +56,7 @@ public class CreditBillServiceImpl implements CreditBillService {
 		});
 		userEmailDao.insert(email);
 		creditBillDao.insertBatch(listbill);
-		if(details != null && details.size() > 0) {
+		if (details != null && details.size() > 0) {
 			creditBillDetailDao.insertList(details);
 		}
 	}
@@ -66,31 +69,31 @@ public class CreditBillServiceImpl implements CreditBillService {
 		PageHelper.startPage(page, size);
 		PageHelper.orderBy("payment_due_date asc , statement_date desc");
 		LocalDate date = LocalDate.now().minusMonths(1);
-		date = date.minusDays(date.getDayOfMonth()-1);
-		List<CreditBill> list = creditBillDao.selectByUserId(userId,date);
-		list.stream().forEach( e -> {
-			if(!StringUtils.isBlank(e.getPaymentDueDate())) {
+		date = date.minusDays(date.getDayOfMonth() - 1);
+		List<CreditBill> list = creditBillDao.selectByUserId(userId, date);
+		list.stream().forEach(e -> {
+			if (!StringUtils.isBlank(e.getPaymentDueDate())) {
 				LocalDate parse = LocalDate.parse(e.getPaymentDueDate());
 				long until = LocalDate.now().until(parse, ChronoUnit.DAYS);
-				e.setPayDay((int)until);
+				e.setPayDay((int) until);
 			}
-			if(!StringUtils.isBlank(e.getStatementDate()) && StringUtils.isBlank(e.getPaymentDueDate())) {
+			if (!StringUtils.isBlank(e.getStatementDate()) && StringUtils.isBlank(e.getPaymentDueDate())) {
 				LocalDate parse = LocalDate.parse(e.getStatementDate());
 				long until = parse.until(LocalDate.now(), ChronoUnit.DAYS);
-				e.setBillDay((int)until);
+				e.setBillDay((int) until);
 			}
 		});
-		
-		//排序
-		list.sort((a,b) -> a.getPayDay().compareTo(b.getPayDay()));
-		list.sort((a,b) -> a.getBillDay().compareTo(b.getBillDay()));
+
+		// 排序
+		list.sort((a, b) -> a.getPayDay().compareTo(b.getPayDay()));
+		list.sort((a, b) -> a.getBillDay().compareTo(b.getBillDay()));
 		PageInfo<CreditBill> pageInfo = new PageInfo<>(list);
 		return pageInfo;
 	}
 
 	@Override
-	public PageInfo<CreditBill> selectBank(String userId, String issueBank,String holderName,String last4digit, Integer page,
-			Integer size) {
+	public PageInfo<CreditBill> selectBank(String userId, String issueBank, String holderName, String last4digit,
+			Integer page, Integer size) {
 		PageHelper.startPage(page, size);
 		PageHelper.orderBy("payment_due_date desc");
 		Example example = new Example(CreditBill.class);
@@ -102,13 +105,37 @@ public class CreditBillServiceImpl implements CreditBillService {
 	}
 
 	@Override
-	public PageInfo<CreditBillDetail> selectBillDetail(String billId,Integer page, Integer size) {
+	public PageInfo<CreditBillDetail> selectBillDetail(String billId, Integer page, Integer size) {
 		PageHelper.startPage(page, size);
 		PageHelper.orderBy("statement_end_date desc,trans_date desc");
 		Example example = new Example(CreditBillDetail.class);
-		example.createCriteria().andEqualTo("creditBillId",billId);
+		example.createCriteria().andEqualTo("creditBillId", billId);
 		List<CreditBillDetail> list = creditBillDetailDao.selectByExample(example);
 		PageInfo<CreditBillDetail> pageInfo = new PageInfo<>(list);
 		return pageInfo;
+	}
+
+	/**
+	 * 通过用户名获取该用户下面邮箱绑定的所有信用卡信息
+	 */
+	@Override
+	public List<CreditBill> selectByUserId(String userId) {
+		List<CreditBill> resultlist = new ArrayList<>();
+		Example example = new Example(CreditBill.class);
+		example.createCriteria().andEqualTo("userId", userId);
+		List<CreditBill> list = creditBillDao.selectByExample(example);
+
+		Map<String, Map<String, List<CreditBill>>> result  = list.parallelStream()
+				.sorted((a, b) -> b.getStatementEndDate().compareTo(a.getStatementEndDate()))
+				.collect(Collectors.groupingBy(CreditBill::getIssueBank,Collectors.groupingBy(CreditBill::getLast4digit)));
+		result.entrySet().stream().forEach( e -> {
+			Map<String, List<CreditBill>> value1 = e.getValue();
+			value1.entrySet().stream().forEach(c -> {
+				List<CreditBill> value2 = c.getValue();
+				Optional<CreditBill> findFirst = value2.stream().findFirst();
+				resultlist.add(findFirst.get());
+			});
+		});
+		return resultlist;
 	}
 }

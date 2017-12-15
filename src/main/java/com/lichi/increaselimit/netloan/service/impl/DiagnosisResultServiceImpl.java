@@ -32,10 +32,10 @@ public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 	}
 
 	@Override
-	public DiagnosisResultList getResult(String userId, String bankname) {
+	public DiagnosisResultList getResult(String userId, String bankname,String last4digit) {
 		DiagnosisResultList result = new DiagnosisResultList();
 		Example example = new Example(DiagnosisResult.class);
-		example.createCriteria().andEqualTo("userId", userId).andEqualTo("bankname", bankname);
+		example.createCriteria().andEqualTo("userId", userId).andEqualTo("bankname", bankname).andEqualTo("last4", last4digit);
 		List<DiagnosisResult> list = diagnosisResultMapper.selectByExample(example);
 		List<DiagnosisResult> fixed = list.stream().filter(e -> 1 == e.getType()).collect(Collectors.toList());
 		List<DiagnosisResult> percent = list.stream().filter(e -> 2 == e.getType()).collect(Collectors.toList());

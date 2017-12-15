@@ -57,7 +57,7 @@ public class RandomUtils {
 	 * @param rangeR
 	 * @return
 	 */
-	public static Set<Integer> generateRandomArray(int n, double rangeL, double rangeR,int min,int max,int money) {
+	public static Set<Integer> generateRandomArray(int n, double rangeL, double rangeR,int min,int max,double money) {
 
 		assert rangeL <= rangeR;
 		

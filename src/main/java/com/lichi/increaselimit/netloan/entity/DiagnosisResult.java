@@ -58,4 +58,6 @@ public class DiagnosisResult implements Serializable{
 	 */
 	private Date time;
 	
+	private String last4;
+	
 }

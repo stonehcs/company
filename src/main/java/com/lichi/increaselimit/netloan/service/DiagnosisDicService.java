@@ -22,7 +22,9 @@ public interface DiagnosisDicService {
 	 * 获取诊断结果
 	 * @param bankname
 	 * @param money
+	 * @param string 后四位
+	 * @param userId 
 	 * @return
 	 */
-	DiagnosisResultList getResult(String bankname, int money);
+	DiagnosisResultList getResult(String bankname, double money, String string, String userId);
 }

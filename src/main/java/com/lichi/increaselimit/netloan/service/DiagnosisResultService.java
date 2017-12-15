@@ -23,9 +23,10 @@ public interface DiagnosisResultService {
 	 * 通过用户名和银行卡号获得诊断结果
 	 * @param userId
 	 * @param bankname
+	 * @param last4digit 
 	 * @return
 	 */
-	DiagnosisResultList getResult(String userId, String bankname);
+	DiagnosisResultList getResult(String userId, String bankname, String last4digit);
 
 	/**
 	 * 更新
