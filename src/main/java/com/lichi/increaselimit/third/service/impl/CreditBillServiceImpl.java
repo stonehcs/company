@@ -100,4 +100,15 @@ public class CreditBillServiceImpl implements CreditBillService {
 		PageInfo<CreditBill> pageInfo = new PageInfo<>(list);
 		return pageInfo;
 	}
+
+	@Override
+	public PageInfo<CreditBillDetail> selectBillDetail(String billId,Integer page, Integer size) {
+		PageHelper.startPage(page, size);
+		PageHelper.orderBy("statement_end_date desc,trans_date desc");
+		Example example = new Example(CreditBillDetail.class);
+		example.createCriteria().andEqualTo("creditBillId",billId);
+		List<CreditBillDetail> list = creditBillDetailDao.selectByExample(example);
+		PageInfo<CreditBillDetail> pageInfo = new PageInfo<>(list);
+		return pageInfo;
+	}
 }

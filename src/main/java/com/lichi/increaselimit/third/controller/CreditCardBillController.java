@@ -150,6 +150,16 @@ public class CreditCardBillController {
 		return ResultVoUtil.success(info);
 	}
 
+	@ApiOperation("通过账单主键获取账单详情")
+	@GetMapping("/detail/{billId}")
+	public Object get(@PathVariable String billId,
+			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
+			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
+		PageInfo<CreditBillDetail> info = creditBillService.selectBillDetail(billId,page,size);
+		return ResultVoUtil.success(info);
+	}
+	
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void MapToBean(Object e, CreditBillVo vo, String userId) {
 		Map<String, Object> objMap = (LinkedHashMap) e;

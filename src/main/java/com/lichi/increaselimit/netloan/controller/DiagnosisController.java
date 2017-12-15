@@ -52,4 +52,6 @@ public class DiagnosisController {
 		DiagnosisResultList result = diagnosisResultService.update(id, money);
 		return ResultVoUtil.success(result);
 	}
+	
+	
 }

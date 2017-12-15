@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.third.entity.CreditBill;
+import com.lichi.increaselimit.third.entity.CreditBillDetail;
 import com.lichi.increaselimit.third.entity.CreditBillVo;
 import com.lichi.increaselimit.third.entity.UserEmail;
 
@@ -36,4 +37,13 @@ public interface CreditBillService {
 	 * @return
 	 */
 	PageInfo<CreditBill> selectBank(String userId, String issueBank, String last4digit, String holderName, Integer page, Integer size);
+
+	/**
+	 * 获取订单详情
+	 * @param billId
+	 * @param size 
+	 * @param page 
+	 * @return
+	 */
+	PageInfo<CreditBillDetail> selectBillDetail(String billId, Integer page, Integer size);
 }

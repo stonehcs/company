@@ -76,8 +76,12 @@ public interface CourseMapper extends BaseMapper<Course>{
 	@Select("select count(course_id) from t_user_course where course_id = #{id} and status = #{status}")
 	Integer getCount(@Param(value = "id") Integer id, @Param(value = "status") Integer status);
 
+	/**
+	 * 首页列表
+	 * @return
+	 */
 	@Select("select a.*,b.teachername,b.introduce,b.img_url from t_course a left join t_teacher b on a.teacher_id = b.id where end_time > now()")
-	List<CourseVo> selectList1();
+	List<CourseVo> selectListIndex();
 	
 	@Select("select a.*,b.teachername,b.introduce,b.img_url from t_course a left join t_teacher b on a.teacher_id = b.id where a.location_id=#{locationId} and end_time > now()")
 	List<CourseVo> selectByLocationId(Integer locationId);
