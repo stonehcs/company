@@ -22,6 +22,9 @@
 		<logger name="com.lichi.increaselimit.netloan.dao" level="DEBUG"/>
 		<logger name="com.lichi.increaselimit.course.dao" level="DEBUG"/>
 		<logger name="com.lichi.increaselimit.user.dao" level="DEBUG"/>
+		<logger name="com.lichi.increaselimit.third.dao.CreditBillDao" level="DEBUG"/>
+		<logger name="com.lichi.increaselimit.third.dao.CreditBillDetailDao" level="DEBUG"/>
+		<logger name="com.lichi.increaselimit.third.dao.UserEmailDao" level="DEBUG"/>
 
 		<root level="info">
 			<appender-ref ref="CONSOLE" />

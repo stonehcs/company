@@ -43,7 +43,7 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public void updateVideo(Video video) {
 		video.setUpdateTime(new Date());
-		videoMapper.updateByPrimaryKey(video);
+		videoMapper.updateByPrimaryKeySelective(video);
 	}
 
 	@Override
