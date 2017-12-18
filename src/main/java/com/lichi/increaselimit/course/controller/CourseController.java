@@ -115,7 +115,7 @@ public class CourseController {
 	
 	@PostMapping("/signUp")
 	@ApiOperation(value = "课程报名")
-	public ResultVo<CourseVo> signUp(@Valid @RequestBody SignUpDto signUpDto,BindingResult result) {
+	public ResultVo<CourseVo> signUp(@Valid SignUpDto signUpDto,BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
 			return ResultVoUtil.error(1, errors);
