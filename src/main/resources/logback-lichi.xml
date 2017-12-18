@@ -49,6 +49,16 @@
 			</layout>
 		</appender>
 		
+		<!-- 打印mybatis日志 ,统配几次没成功，暂时列出所有-->
+		<logger name="com.lichi.increaselimit.user.dao" level="DEBUG"/>
+		<logger name="com.lichi.increaselimit.community.dao" level="DEBUG"/>
+		<logger name="com.lichi.increaselimit.netloan.dao" level="DEBUG"/>
+		<logger name="com.lichi.increaselimit.course.dao" level="DEBUG"/>
+		<logger name="com.lichi.increaselimit.user.dao" level="DEBUG"/>
+		<logger name="com.lichi.increaselimit.third.dao.CreditBillDao" level="DEBUG"/>
+		<logger name="com.lichi.increaselimit.third.dao.CreditBillDetailDao" level="DEBUG"/>
+		<logger name="com.lichi.increaselimit.third.dao.UserEmailDao" level="DEBUG"/>
+		
 		<root level="info">
 			<appender-ref ref="TEST-FILE" />
 		</root>

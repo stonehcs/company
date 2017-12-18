@@ -19,4 +19,6 @@ spring:
       remove-abandoned-timeout: 180     #关闭空闲连接超时时间 
       filters: stat     #sql监控,建议测试阶段用，生产阶段不要使用
     
-
+logging:
+  level:
+   root: debug 
