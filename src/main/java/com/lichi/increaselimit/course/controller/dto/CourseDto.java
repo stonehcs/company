@@ -36,9 +36,6 @@ public class CourseDto implements Serializable{
 	@ApiModelProperty("视频url")
 	private String url;
 	
-	@ApiModelProperty("观看次数,新增不用传入")
-	private Integer times;
-	
 	@ApiModelProperty("开课时间")
 	@NotNull(message = "开课时间不能为空")
 	@Future(message = "开课时间应该大于当前时间")

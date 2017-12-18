@@ -1,79 +1,55 @@
 spring:
   profiles:
     active:
-    - dev  #开发环境
-   
-  #时间格式
+    - dev
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Chongqing
     default-property-inclusion: non-null
-      
-#redis
   redis:
     database: 0
     host: 192.168.0.109
-#    host: localhost
     port: 6379
-    password: 
+    password: null
     pool:
       max-active: 8
       max-wait: -1
       max-idle: 8
       min-idle: 0
     timeout: 3000
-
-#mybatis
 mybatis:
   mapper-locations:
   - classpath:mapper/*/*.xml
-#  type-aliases-package: com.lichi.increaselimit
   configuration:
-    mapUnderscoreToCamelCase: true   #自动驼峰转换
+    mapUnderscoreToCamelCase: true
     useColumnLabel: true
-
-#通用mapper
 mapper:
-    mappers:
-        - com.lichi.increaselimit.common.mapper.BaseMapper
-    not-empty: false
-    identity: MYSQL
-
+  mappers:
+  - com.lichi.increaselimit.common.mapper.BaseMapper
+  not-empty: false
+  identity: MYSQL
 pagehelper:
-    helperDialect: mysql
-    reasonable: true
-    supportMethodsArguments: true
-    params: count=countSql
-    
-    
-    
-    
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 lichi:
-#验证码配置
   code:
     image:
       height: 23
       width: 67
     sms:
       expire-in: 900
-      url: 
+      url: null
       length: 6
+  http:
+    multipart:
+      enabled: true
+      file-size-threshold: 0
+      location: null
+      max-file-size: 1MB
+      max-request-size: 10Mb
       
-#oauth2.0安全认证的参数
-#  oauth2-properties:
-#    clients:
-#    - client-id: lichi
-#      client-secret: abcdef
-#      access-token-validity-seconds: 7200  #0表示不过期
-#      grant-types:
-#      - password
-#      - refresh_token
-#      - implicit
-#      scopes:
-#      - all
-#      - read
-#      - write
-#    jwt-signing-key: lichi
-#    storeType: jwt   #token的存放方式
-    
-
+logging:
+  config: 
+  - classpath:logback-lichi.xml

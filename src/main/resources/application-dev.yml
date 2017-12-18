@@ -1,9 +1,9 @@
+server:
+  port: 8080
 spring:
-  #数据库
   datasource:
-    driver-class-name:  com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.0.109:3306/test?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
-#    url: jdbc:mysql://localhost:3306/test?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
@@ -11,36 +11,10 @@ spring:
       initial-size: 8
       min-idle: 5
       max-active: 10
-      query-timeout: 6000   #查询超时时间 
-      transaction-query-timeout: 6000   #事务查询超时时间 
-      remove-abandoned-timeout: 180     #关闭空闲连接超时时间 
-      filters: stat     #sql监控,建议测试阶段用，生产阶段不要使用
-
+      query-timeout: 6000
+      transaction-query-timeout: 6000
+      remove-abandoned-timeout: 180
+      filters: stat
 security:
   basic:
     enabled: false
-        
-#  redis:
-#    database: 0
-#    host: 192.168.0.109
-#    port: 6379
-#    password: 123456
-#    pool:
-#      max-active: 8
-#      max-wait: -1
-#      max-idle: 8
-#      min-idle: 0
-#    timeout: 3000
-    
-server:
-  port: 8080
-
-  http:
-    multipart:
-      enabled: true
-      file-size-threshold: 0
-      location: 
-      max-file-size: 1MB
-      max-request-size: 10Mb
-      
-

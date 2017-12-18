@@ -1,3 +1,6 @@
+server:
+  port: 9091
+
 spring:
 
   #数据库
@@ -15,21 +18,5 @@ spring:
       transaction-query-timeout: 6000   #事务查询超时时间 
       remove-abandoned-timeout: 180     #关闭空闲连接超时时间 
       filters: stat     #sql监控,建议测试阶段用，生产阶段不要使用
-  #持久层
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
     
-server:
-  port: 9090
-
-  http:
-    multipart:
-      enabled: true
-      file-size-threshold: 0
-      location: 
-      max-file-size: 1MB
-      max-request-size: 10Mb
-      
 
