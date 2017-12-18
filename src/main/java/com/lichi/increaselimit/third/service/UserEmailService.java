@@ -24,6 +24,6 @@ public interface UserEmailService {
 	 * @param username
 	 * @return
 	 */
-	UserEmail selectByPrimaryKey(String username);
+	UserEmail selectByUsernameAndId(String username, String userId);
 
 }

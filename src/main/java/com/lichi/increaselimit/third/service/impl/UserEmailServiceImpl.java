@@ -28,9 +28,16 @@ public class UserEmailServiceImpl implements UserEmailService {
 		return userEmailDao.selectByExample(example);
 	}
 
+
 	@Override
-	public UserEmail selectByPrimaryKey(String username) {
-		return userEmailDao.selectByPrimaryKey(username);
+	public UserEmail selectByUsernameAndId(String username, String userId) {
+		Example example = new Example(UserEmail.class);
+		example.createCriteria().andEqualTo("userId",userId).andEqualTo("email",username);
+		List<UserEmail> list = userEmailDao.selectByExample(example);
+		if(list.isEmpty() || null == list) {
+			return null;
+		}
+		return list.get(0);
 	}
 
 }

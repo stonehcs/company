@@ -19,7 +19,7 @@ public class SignUpDto {
 	
 
 	@ApiModelProperty("课程id")
-	@NotNull(message = "课程标题不能为空")
+	@NotNull(message = "课程id不能为空")
 	private Integer id;
 	
 	@ApiModelProperty("用户id")

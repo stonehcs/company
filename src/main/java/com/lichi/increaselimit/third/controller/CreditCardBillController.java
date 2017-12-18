@@ -70,13 +70,13 @@ public class CreditCardBillController {
 			@ApiParam(value = "邮箱", required = true) @RequestParam(required = true) String username,
 			@ApiParam(value = "密码", required = true) @RequestParam(required = true) String password) {
 
-		try {
-			UserEmail userEmail = userEmailService.selectByPrimaryKey(username);
+			UserEmail userEmail = userEmailService.selectByUsernameAndId(username,userId);
 			
 			if(userEmail != null) {
 				throw new BusinessException(ResultEnum.EMAIL_EXSIT);
 			}
 			
+		try {
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 			map.add("email", username);
 			map.add("password", password);
