@@ -97,6 +97,13 @@ public class DiagnosisController {
 		DiagnosisResultList result = diagnosisResultService.getResult(userId, bankname, last4digit);
 		return ResultVoUtil.success(result);
 	}
+	
+	@ApiOperation("雷达文案")
+	@GetMapping("/radar")
+	public ResultVo<String[]> get() {
+		String[] strings = RADAR.split("\\r\\n");
+		return ResultVoUtil.success(strings);
+	}
 
 	@ApiOperation("更新消费金额")
 	@PutMapping
@@ -110,4 +117,13 @@ public class DiagnosisController {
 			+ "%s月账单分析完成。\r\n" + "%s月账单分析中......\r\n" + "%s月账单分析完成。\r\n" + "刷卡消费类型分析中......\r\n"
 			+ "刷卡消费类型分析完成。\r\n" + "%s银行诊断模型启动中...\r\n" + "%s银行诊断模型分析中.........\r\n" + "%s银行诊断模型分析完成。\r\n"
 			+ "一键诊断完成。";
+	
+	private final static String RADAR = "数据准备中...\r\n" + 
+			"银行卡基本信息确认完成。\r\n" + 
+			"最近3个月消费账单分析完成。\r\n" + 
+			"刷卡消费类型分析完成。\r\n" + 
+			"诊断模型分析完成。\r\n" + 
+			"一键诊断完成。";
+	
+	
 }
