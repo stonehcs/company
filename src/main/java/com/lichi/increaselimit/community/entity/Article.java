@@ -40,4 +40,6 @@ public class Article implements Serializable{
     private Integer sort;
     
     private String summary;
+    
+    private String articleImg;
 }

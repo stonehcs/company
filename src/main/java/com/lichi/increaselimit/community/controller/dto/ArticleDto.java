@@ -40,4 +40,8 @@ public class ArticleDto implements Serializable {
 	
 	@ApiModelProperty(value = "热门帖子排序")
 	private Integer sort;
+	
+	@ApiModelProperty(value = "帖子图片")
+	@NotBlank(message = "帖子图片不能为空")
+	private String articleImg;
 }

@@ -32,4 +32,6 @@ public class ArticleUpdateDto implements Serializable {
 
 	@ApiModelProperty(value = "热门帖子排序")
 	private Integer sort;
+	@ApiModelProperty(value = "帖子图片")
+	private String articleImg;
 }
