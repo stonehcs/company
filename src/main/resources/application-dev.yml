@@ -19,6 +19,6 @@ security:
   basic:
     enabled: false
 
-logging:
-  level:
-   root: debug 
+#logging:
+#  level:
+#   root: debug 

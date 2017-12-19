@@ -84,4 +84,13 @@ public class VideoController {
 		return ResultVoUtil.success();
 	}
 
+	@GetMapping("/get/{description}")
+	@ApiOperation(value = "根据视频描述模糊查询")
+	public ResultVo<PageInfo<Video>> getArticleLike(
+			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
+			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
+			@PathVariable String description) {
+		PageInfo<Video> video = videoService.seleteByLike(page, size, description);
+		return ResultVoUtil.success(video);
+	}
 }
