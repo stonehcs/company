@@ -22,6 +22,7 @@ import com.lichi.increaselimit.community.controller.dto.ArticleDto;
 import com.lichi.increaselimit.community.controller.dto.ArticleUpdateDto;
 import com.lichi.increaselimit.community.entity.Article;
 import com.lichi.increaselimit.community.entity.ArticleVo;
+import com.lichi.increaselimit.community.entity.CircleArticle;
 import com.lichi.increaselimit.community.service.ArticleService;
 
 import io.swagger.annotations.Api;
@@ -90,6 +91,15 @@ public class ArticleController {
         PageInfo<ArticleVo> articles = articleService.getHotByPage(page,size);
         return ResultVoUtil.success(articles);
 
+    }
+    
+    @GetMapping("/index-article")
+    @ApiOperation(value = "查询首页帖子信息")
+    public ResultVo<PageInfo<CircleArticle>> getList(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
+    		@ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size){
+    	PageInfo<CircleArticle> articles = articleService.getIndexArticle(page,size);
+    	return ResultVoUtil.success(articles);
+    	
     }
 
     @GetMapping("/{id}")

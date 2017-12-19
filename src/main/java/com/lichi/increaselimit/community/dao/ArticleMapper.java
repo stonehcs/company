@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import com.lichi.increaselimit.common.mapper.BaseMapper;
 import com.lichi.increaselimit.community.entity.Article;
 import com.lichi.increaselimit.community.entity.ArticleVo;
+import com.lichi.increaselimit.community.entity.CircleArticle;
 
 
 /**
@@ -28,6 +29,10 @@ public interface ArticleMapper extends BaseMapper<Article>{
 	@Select("select a.*,b.nickname,b.id as createUserId from t_article a ,"
 			+ " t_sys_user b where a.create_user_id = b.id")
 	List<ArticleVo> selectHot();
+
+	@Select("select a.*,b.name from t_article a ,"
+			+ " t_circle b where a.circle_id = b.id")
+	List<CircleArticle> selectIndex();
 	
 
 }
