@@ -83,4 +83,14 @@ public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 		return cardTaskCount;
 	}
 
+	@Override
+	public void updateStatus(Integer id, Integer status) {
+		
+		DiagnosisResult result = new DiagnosisResult();
+		result.setId(id);
+		result.setStatus(status);
+		diagnosisResultMapper.updateByPrimaryKeySelective(result );
+		
+	}
+
 }
