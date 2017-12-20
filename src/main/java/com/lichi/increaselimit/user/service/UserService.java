@@ -2,6 +2,7 @@ package com.lichi.increaselimit.user.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.course.entity.Course;
+import com.lichi.increaselimit.user.entity.CourseCount;
 import com.lichi.increaselimit.user.entity.SocialUserInfo;
 import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.entity.UserRank;
@@ -66,6 +67,7 @@ public interface UserService {
 	 * @param id
 	 * @param page
 	 * @param size
+	 * @param status 
 	 * @return
 	 */
 	PageInfo<Course> selectCourse(Integer page, Integer size, String id, Integer status);
@@ -82,4 +84,11 @@ public interface UserService {
 	 * @return
 	 */
 	UserRank getUserRank(String id);
+	
+	/**
+	 * 获取我的课程
+	 * @param id
+	 * @return
+	 */
+	CourseCount getMyCourse(String id);
 }

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.course.controller.dto.SignUpDto;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.entity.CourseVo;
+import com.lichi.increaselimit.user.entity.CourseCount;
 
 /**
  * CourseService
@@ -74,6 +75,20 @@ public interface CourseService {
 	 */
 	void courseSignUp(SignUpDto signUpDto);
 
+	/**
+	 * 模糊查询
+	 * @param page
+	 * @param size
+	 * @param name
+	 * @return
+	 */
 	PageInfo<CourseVo> seleteByLike(Integer page, Integer size, String name);
+
+	/**
+	 * 查询我的课程
+	 * @param id
+	 * @return
+	 */
+	CourseCount getMyCourse(String id);
 
 }

@@ -55,11 +55,15 @@ public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 	}
 
 	@Override
-	public PageInfo<DiagnosisResult> getCardTask(Integer page, Integer size, String id) {
+	public PageInfo<DiagnosisResult> getCardTask(Integer page, Integer size, String id,Integer status) {
 		PageHelper.startPage(page, size);
 		PageHelper.orderBy("time desc");
 		Example example = new Example(DiagnosisResult.class);
-		example.createCriteria().andEqualTo("userId", id);
+		if(status != null) {
+			example.createCriteria().andEqualTo("userId", id).andEqualTo("status", status);
+		}else {
+			example.createCriteria().andEqualTo("userId", id);
+		}
 		List<DiagnosisResult> list = diagnosisResultMapper.selectByExample(example);
 		PageInfo<DiagnosisResult> pageInfo = new PageInfo<>(list);
 		return pageInfo;
@@ -71,8 +75,8 @@ public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 		Example example = new Example(DiagnosisResult.class);
 		example.createCriteria().andEqualTo("userId", id);
 		List<DiagnosisResult> list = diagnosisResultMapper.selectByExample(example);
-		long undone = list.stream().filter(e -> e.getDone() == 0).count();
-		long done = list.stream().filter(e -> e.getDone() == 1).count();
+		long undone = list.stream().filter(e -> e.getStatus() == 0).count();
+		long done = list.stream().filter(e -> e.getStatus() == 1).count();
 		cardTaskCount.setTotal(null == list ? 0 : list.size());
 		cardTaskCount.setDone((int) done);
 		cardTaskCount.setUndone((int) undone);

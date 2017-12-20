@@ -85,4 +85,13 @@ public interface CourseMapper extends BaseMapper<Course>{
 	
 	@Select("select a.*,b.teachername,b.introduce,b.img_url from t_course a left join t_teacher b on a.teacher_id = b.id where a.location_id=#{locationId} and end_time > now()")
 	List<CourseVo> selectByLocationId(Integer locationId);
+
+	/**
+	 * 获取我的课程
+	 * @param id
+	 * @param i
+	 * @return
+	 */
+	@Select("select count(*) from t_user_course where user_id = #{id} and status = #{status}")
+	Integer getMyCourse(@Param(value = "id") String id, @Param(value = "status") Integer status);
 }

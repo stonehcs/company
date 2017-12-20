@@ -73,7 +73,7 @@ public class DiagnosisController {
 		double money = Double.parseDouble(creditAmt);
 
 		DiagnosisResultList result = diagnosisDicService.getResult(creditBill.getIssueBank(), money,
-				creditBill.getLast4digit(), creditBill.getUserId());
+				creditBill.getLast4digit(), creditBill.getUserId(),creditBill.getHolderName());
 
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM");
 		LocalDate time1 = LocalDate.now().minusMonths(1);

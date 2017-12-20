@@ -60,9 +60,11 @@ public class DiagnosisResult implements Serializable{
 	
 	private String last4;
 	
+	private String holderName;
+	
 	/**
 	 * 是否完成
 	 */
-	private Integer done;
+	private Integer status;
 	
 }

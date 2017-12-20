@@ -83,7 +83,7 @@ public class DiagnosisDicServiceImpl implements DiagnosisDicService {
 	}
 
 	@Override
-	public DiagnosisResultList getResult(String bankname, double money,String last4,String userId) {
+	public DiagnosisResultList getResult(String bankname, double money,String last4,String userId,String holderName) {
 
 		DiagnosisResultList result = new DiagnosisResultList();
 		List<DiagnosisResult> list = new ArrayList<>();
@@ -100,7 +100,7 @@ public class DiagnosisDicServiceImpl implements DiagnosisDicService {
 		// 获取随机金额
 		Set<Integer> random = RandomUtils.generateRandomArray(rand, entity.getMin(), entity.getMax());
 
-		getResult(list, random, result, 1, bankname,last4,userId);
+		getResult(list, random, result, 1, bankname,last4,userId,holderName);
 
 		// 百分比
 		DiagnosisMoudle entity2 = getDiagnosisMoudle(bankname, 2);
@@ -114,7 +114,7 @@ public class DiagnosisDicServiceImpl implements DiagnosisDicService {
 		Set<Integer> set = RandomUtils.generateRandomArray(per, entity2.getMinPer(), entity2.getMaxPer(),
 				entity2.getMin(), entity2.getMax(), money);
 
-		getResult(percent, set, result, 2, bankname,last4,userId);
+		getResult(percent, set, result, 2, bankname,last4,userId,holderName);
 
 		return result;
 	}
@@ -131,7 +131,7 @@ public class DiagnosisDicServiceImpl implements DiagnosisDicService {
 	 *            固定 or 百分比
 	 * @param bankname 
 	 */
-	private void getResult(List<DiagnosisResult> list, Set<Integer> random, DiagnosisResultList result, int type, String bankname,String last4,String userId) {
+	private void getResult(List<DiagnosisResult> list, Set<Integer> random, DiagnosisResultList result, int type, String bankname,String last4,String userId,String holderName) {
 		for (Integer integer : random) {
 			String name = getNameByMoney(integer, type);
 			if (StringUtils.isBlank(name)) {
@@ -145,7 +145,8 @@ public class DiagnosisDicServiceImpl implements DiagnosisDicService {
 			diagnosisResult.setUserId(userId);
 			diagnosisResult.setLast4(last4);
 			diagnosisResult.setConsumeMoney(0d);
-			diagnosisResult.setDone(0);
+			diagnosisResult.setStatus(0);
+			diagnosisResult.setHolderName(holderName);
 			list.add(diagnosisResult);
 
 			if (1 == type) {

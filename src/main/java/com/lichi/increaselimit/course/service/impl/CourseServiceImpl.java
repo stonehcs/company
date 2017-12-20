@@ -26,6 +26,7 @@ import com.lichi.increaselimit.course.entity.CourseVo;
 import com.lichi.increaselimit.course.service.CourseService;
 import com.lichi.increaselimit.security.authentication.mobile.SmsCodeAuthenticationToken;
 import com.lichi.increaselimit.security.validate.code.ValidateCode;
+import com.lichi.increaselimit.user.entity.CourseCount;
 import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.service.UserService;
 
@@ -206,6 +207,13 @@ public class CourseServiceImpl implements CourseService {
 		} else {
 			throw new BusinessException(ResultEnum.CODE_NOT_EXIST);
 		}
+	}
+
+	@Override
+	public CourseCount getMyCourse(String id) {
+		Integer signUp = courseMapper.getMyCourse(id,0);
+		Integer pay = courseMapper.getMyCourse(id,1);
+		return new CourseCount(pay, signUp);
 	}
 
 

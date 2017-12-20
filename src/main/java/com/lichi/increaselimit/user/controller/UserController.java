@@ -33,6 +33,7 @@ import com.lichi.increaselimit.netloan.service.DiagnosisResultService;
 import com.lichi.increaselimit.security.UserUtils;
 import com.lichi.increaselimit.security.validate.code.ValidateCode;
 import com.lichi.increaselimit.user.controller.dto.UserUpdateDto;
+import com.lichi.increaselimit.user.entity.CourseCount;
 import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.entity.UserRank;
 import com.lichi.increaselimit.user.service.UserService;
@@ -100,20 +101,28 @@ public class UserController {
 		PageInfo<Course> userCourse = userService.selectCourse(page, size, id, status);
 		return ResultVoUtil.success(userCourse);
 	}
+	@GetMapping("/mycourse")
+	@ApiOperation("我的课程")
+	public ResultVo<CourseCount> getMyCourse(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
+		
+		CourseCount userCourse = userService.getMyCourse(id);
+		return ResultVoUtil.success(userCourse);
+	}
 
 	@GetMapping("/card")
 	@ApiOperation("刷卡任务")
-	public ResultVo<PageInfo<DiagnosisResult>> getUserCourse(
+	public ResultVo<PageInfo<DiagnosisResult>> getCardTask(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
+			@ApiParam(value = "状态id", required = false) @RequestParam(required = false) Integer status,
 			@ApiParam(value = "用户id", required = true) @RequestParam String id) {
-
-		PageInfo<DiagnosisResult> result = diagnosisResultService.getCardTask(page, size, id);
+		PageInfo<DiagnosisResult> result = diagnosisResultService.getCardTask(page, size, id,status);
 		return ResultVoUtil.success(result);
 	}
+	
 	@GetMapping("/task-count")
 	@ApiOperation("刷卡任务条数")
-	public ResultVo<CardTaskCount> getUserCourse(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
+	public ResultVo<CardTaskCount> getCardTask(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
 		
 		CardTaskCount result = diagnosisResultService.getCardTaskCount(id);
 		return ResultVoUtil.success(result);

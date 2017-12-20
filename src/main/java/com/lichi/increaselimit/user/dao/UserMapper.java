@@ -49,4 +49,5 @@ public interface UserMapper extends BaseMapper<User> {
 	@Select("select * from (select @rownum:=@rownum+1  rownum , a.id , a.rank,a.points from t_user a,(SELECT @rownum:=0) r  "
 			+ "order by a.rank desc ) t where t.rownum = #{rownum}")
 	UserRank getRankByRow(Integer rownum);
+
 }

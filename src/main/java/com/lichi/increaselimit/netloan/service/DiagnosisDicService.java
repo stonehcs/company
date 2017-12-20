@@ -24,7 +24,8 @@ public interface DiagnosisDicService {
 	 * @param money
 	 * @param string 后四位
 	 * @param userId 
+	 * @param holderName 
 	 * @return
 	 */
-	DiagnosisResultList getResult(String bankname, double money, String string, String userId);
+	DiagnosisResultList getResult(String bankname, double money, String string, String userId, String holderName);
 }

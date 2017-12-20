@@ -42,9 +42,10 @@ public interface DiagnosisResultService {
 	 * @param page
 	 * @param size
 	 * @param id
+	 * @param status 
 	 * @return
 	 */
-	PageInfo<DiagnosisResult> getCardTask(Integer page, Integer size, String id);
+	PageInfo<DiagnosisResult> getCardTask(Integer page, Integer size, String id, Integer status);
 
 	/**
 	 * 获取刷卡任务数量
