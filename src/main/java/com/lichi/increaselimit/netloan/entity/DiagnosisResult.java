@@ -60,4 +60,9 @@ public class DiagnosisResult implements Serializable{
 	
 	private String last4;
 	
+	/**
+	 * 是否完成
+	 */
+	private Integer done;
+	
 }

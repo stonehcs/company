@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.netloan.dao.DiagnosisResultMapper;
+import com.lichi.increaselimit.netloan.entity.CardTaskCount;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResultList;
 import com.lichi.increaselimit.netloan.service.DiagnosisResultService;
@@ -62,6 +63,20 @@ public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 		List<DiagnosisResult> list = diagnosisResultMapper.selectByExample(example);
 		PageInfo<DiagnosisResult> pageInfo = new PageInfo<>(list);
 		return pageInfo;
+	}
+
+	@Override
+	public CardTaskCount getCardTaskCount(String id) {
+		CardTaskCount cardTaskCount = new CardTaskCount();
+		Example example = new Example(DiagnosisResult.class);
+		example.createCriteria().andEqualTo("userId", id);
+		List<DiagnosisResult> list = diagnosisResultMapper.selectByExample(example);
+		long undone = list.stream().filter(e -> e.getDone() == 0).count();
+		long done = list.stream().filter(e -> e.getDone() == 1).count();
+		cardTaskCount.setTotal(null == list ? 0 : list.size());
+		cardTaskCount.setDone((int) done);
+		cardTaskCount.setUndone((int) undone);
+		return cardTaskCount;
 	}
 
 }

@@ -27,6 +27,7 @@ import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.utils.StringUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.course.entity.Course;
+import com.lichi.increaselimit.netloan.entity.CardTaskCount;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
 import com.lichi.increaselimit.netloan.service.DiagnosisResultService;
 import com.lichi.increaselimit.security.UserUtils;
@@ -102,6 +103,13 @@ public class UserController {
 			@ApiParam(value = "用户id", required = true) @RequestParam String id) {
 
 		PageInfo<DiagnosisResult> result = diagnosisResultService.getCardTask(page, size, id);
+		return ResultVoUtil.success(result);
+	}
+	@GetMapping("/task-count")
+	@ApiOperation("刷卡任务条数")
+	public ResultVo<CardTaskCount> getUserCourse(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
+		
+		CardTaskCount result = diagnosisResultService.getCardTaskCount(id);
 		return ResultVoUtil.success(result);
 	}
 

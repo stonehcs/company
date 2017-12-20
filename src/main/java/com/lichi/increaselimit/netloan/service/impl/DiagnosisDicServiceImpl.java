@@ -145,6 +145,7 @@ public class DiagnosisDicServiceImpl implements DiagnosisDicService {
 			diagnosisResult.setUserId(userId);
 			diagnosisResult.setLast4(last4);
 			diagnosisResult.setConsumeMoney(0d);
+			diagnosisResult.setDone(0);
 			list.add(diagnosisResult);
 
 			if (1 == type) {
