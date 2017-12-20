@@ -20,6 +20,7 @@ import com.lichi.increaselimit.user.dao.SocialUserMapper;
 import com.lichi.increaselimit.user.dao.UserMapper;
 import com.lichi.increaselimit.user.entity.SocialUserInfo;
 import com.lichi.increaselimit.user.entity.User;
+import com.lichi.increaselimit.user.entity.UserRank;
 import com.lichi.increaselimit.user.service.UserService;
 
 import tk.mybatis.mapper.entity.Example;
@@ -31,10 +32,10 @@ public class UserServiceImpl implements UserService {
 	private UserMapper userMapper;
 	@Autowired
 	private SocialUserMapper socialUserMapper;
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
- 
+
 	@Override
 	public User loadUserInfoByMobile(String mobile) {
 		User user = userMapper.loadUserInfoByMobile(mobile);
@@ -66,7 +67,7 @@ public class UserServiceImpl implements UserService {
 		user.setCreateTime(new Date());
 		user.setUpdateTime(new Date());
 		userMapper.insertSelective(user);
-		//注册环信用户
+		// 注册环信用户
 		try {
 			HuanXinUtils.registerUser(userId, restTemplate);
 		} catch (Exception e) {
@@ -116,7 +117,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public PageInfo<User> selectBank(Integer page, Integer size) {
-		PageHelper.startPage(page,size);
+		PageHelper.startPage(page, size);
 		PageHelper.orderBy("rank desc");
 		List<User> list = userMapper.selectAll();
 		PageInfo<User> pageInfo = new PageInfo<User>(list);
@@ -125,8 +126,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public PageInfo<Course> selectCourse(Integer page, Integer size, String id, Integer status) {
-		PageHelper.startPage(page,size);
-		List<Course> list = userMapper.selectUserCourse(id,status);
+		PageHelper.startPage(page, size);
+		List<Course> list = userMapper.selectUserCourse(id, status);
 		PageInfo<Course> pageInfo = new PageInfo<Course>(list);
 		return pageInfo;
 	}
@@ -149,6 +150,21 @@ public class UserServiceImpl implements UserService {
 			throw new BusinessException(ResultEnum.REGISTER_ERROR);
 		}
 		return user;
+	}
+
+	@Override
+	public UserRank getUserRank(String id) {
+		UserRank userRank = userMapper.getRank(id);
+		if (userRank != null) {
+
+			if (userRank.getRownum() != 1) {
+				UserRank rankByRow = userMapper.getRankByRow(userRank.getRownum() + 1);
+				userRank.setDiff(rankByRow.getPoints() - userRank.getPoints());
+			} else {
+				userRank.setDiff(0);
+			}
+		}
+		return userRank;
 	}
 
 }

@@ -34,6 +34,7 @@ import com.lichi.increaselimit.security.UserUtils;
 import com.lichi.increaselimit.security.validate.code.ValidateCode;
 import com.lichi.increaselimit.user.controller.dto.UserUpdateDto;
 import com.lichi.increaselimit.user.entity.User;
+import com.lichi.increaselimit.user.entity.UserRank;
 import com.lichi.increaselimit.user.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -58,9 +59,6 @@ public class UserController {
 
 	@Autowired
 	private RedisUtils redisUtils;
-	/**
-	 * 获取当前用户信息
-	 */
 	@GetMapping
 	@ApiOperation("获取当前用户信息")
 	public ResultVo<User> getCurrentUser(HttpServletRequest request)
@@ -70,6 +68,14 @@ public class UserController {
 		User user = UserUtils.getUserInfo();
 		
 		return ResultVoUtil.success(user);
+	}
+	
+	@GetMapping("/rank/ranking")
+	@ApiOperation("获取当前用户名次")
+	public ResultVo<UserRank> getCurrentUser(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
+		UserRank userRank = userService.getUserRank(id);
+		
+		return ResultVoUtil.success(userRank);
 	}
 
 	@GetMapping("/rank")

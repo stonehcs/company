@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.user.entity.SocialUserInfo;
 import com.lichi.increaselimit.user.entity.User;
+import com.lichi.increaselimit.user.entity.UserRank;
 
 /**
  * 用户service
@@ -74,4 +75,11 @@ public interface UserService {
 	 * @param user
 	 */
 	void updateUserInfo(User user);
+	
+	/**
+	 * 获取当前用户排名
+	 * @param id
+	 * @return
+	 */
+	UserRank getUserRank(String id);
 }
