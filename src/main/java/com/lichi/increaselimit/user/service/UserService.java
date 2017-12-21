@@ -6,6 +6,7 @@ import com.lichi.increaselimit.user.entity.CourseCount;
 import com.lichi.increaselimit.user.entity.SocialUserInfo;
 import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.entity.UserRank;
+import com.lichi.increaselimit.user.entity.VipLevel;
 
 /**
  * 用户service
@@ -91,4 +92,11 @@ public interface UserService {
 	 * @return
 	 */
 	CourseCount getMyCourse(String id);
+	
+	/**
+	 * 通过level等级获取level信息
+	 * @param level
+	 * @return
+	 */
+	VipLevel getLevel(Integer level);
 }

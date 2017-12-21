@@ -10,6 +10,7 @@ import com.lichi.increaselimit.common.mapper.BaseMapper;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.entity.UserRank;
+import com.lichi.increaselimit.user.entity.VipLevel;
 
 /**
  * userdao
@@ -49,5 +50,8 @@ public interface UserMapper extends BaseMapper<User> {
 	@Select("select * from (select @rownum:=@rownum+1  rownum , a.id , a.rank,a.points from t_user a,(SELECT @rownum:=0) r  "
 			+ "order by a.rank desc ) t where t.rownum = #{rownum}")
 	UserRank getRankByRow(Integer rownum);
+
+	@Select("select * from t_vip_level where level = #{level}")
+	VipLevel selectLevelInfo(Integer level);
 
 }

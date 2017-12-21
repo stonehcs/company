@@ -36,6 +36,8 @@ import com.lichi.increaselimit.user.controller.dto.UserUpdateDto;
 import com.lichi.increaselimit.user.entity.CourseCount;
 import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.entity.UserRank;
+import com.lichi.increaselimit.user.entity.UserVo;
+import com.lichi.increaselimit.user.entity.VipLevel;
 import com.lichi.increaselimit.user.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -62,13 +64,22 @@ public class UserController {
 	private RedisUtils redisUtils;
 	@GetMapping
 	@ApiOperation("获取当前用户信息")
-	public ResultVo<User> getCurrentUser(HttpServletRequest request)
+	public ResultVo<Object> getCurrentUser(HttpServletRequest request)
 			throws SignatureException,
 			IllegalArgumentException, UnsupportedEncodingException {
 
-		User user = UserUtils.getUserInfo();
+		Object principal = UserUtils.getUserInfo();
+		if(principal instanceof User) {
+			User user = (User) principal;
+			VipLevel level = userService.getLevel(user.getVipLevel());
+			UserVo uservo = new UserVo();
+			BeanUtils.copyProperties(user, uservo);
+			uservo.setLevelName(level.getLevelName());
+			return ResultVoUtil.success(uservo);
+		}else {
+			return ResultVoUtil.success(principal);
+		}
 		
-		return ResultVoUtil.success(user);
 	}
 	
 	@GetMapping("/rank/ranking")

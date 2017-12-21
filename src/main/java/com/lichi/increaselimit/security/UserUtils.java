@@ -2,8 +2,6 @@ package com.lichi.increaselimit.security;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.lichi.increaselimit.user.entity.User;
-
 /**
  * 获取当前用户信息
  * @author majie
@@ -12,11 +10,11 @@ import com.lichi.increaselimit.user.entity.User;
 public class UserUtils {
 	
 	/**
-	 * 获取当前用户名
+	 * 获取当前用户信息
 	 * @return
 	 */
-	public static User getUserInfo() {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return user;
+	public static Object getUserInfo() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return principal;
 	}
 }

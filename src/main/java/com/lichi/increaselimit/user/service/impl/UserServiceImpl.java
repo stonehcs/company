@@ -23,6 +23,7 @@ import com.lichi.increaselimit.user.entity.CourseCount;
 import com.lichi.increaselimit.user.entity.SocialUserInfo;
 import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.entity.UserRank;
+import com.lichi.increaselimit.user.entity.VipLevel;
 import com.lichi.increaselimit.user.service.UserService;
 
 import tk.mybatis.mapper.entity.Example;
@@ -174,6 +175,10 @@ public class UserServiceImpl implements UserService {
 		return userRank;
 	}
 
+	@Override
+	public VipLevel getLevel(Integer level) {
+		return userMapper.selectLevelInfo(level);
+	}
 
 
 }
