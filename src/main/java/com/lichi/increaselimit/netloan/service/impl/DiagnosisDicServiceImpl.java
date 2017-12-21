@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lichi.increaselimit.common.enums.ResultEnum;
-import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.RandomUtils;
 import com.lichi.increaselimit.netloan.dao.DiagnosisDicMapper;
 import com.lichi.increaselimit.netloan.dao.DiagnosisMoudleMapper;
@@ -19,6 +18,7 @@ import com.lichi.increaselimit.netloan.entity.DiagnosisDic;
 import com.lichi.increaselimit.netloan.entity.DiagnosisMoudle;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResultList;
+import com.lichi.increaselimit.netloan.exception.CardException;
 import com.lichi.increaselimit.netloan.service.DiagnosisDicService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -70,14 +70,15 @@ public class DiagnosisDicServiceImpl implements DiagnosisDicService {
 	 * 
 	 * @param bankname
 	 * @param type
+	 * @param last4 
 	 * @return
 	 */
-	private DiagnosisMoudle getDiagnosisMoudle(String bankname, int type) {
+	private DiagnosisMoudle getDiagnosisMoudle(String bankname, int type, String last4) {
 		Example example = new Example(DiagnosisMoudle.class);
 		example.createCriteria().andEqualTo("bankname", bankname).andEqualTo("type", type);
 		List<DiagnosisMoudle> list = diagnosisMoudleMapper.selectByExample(example);
 		if (list.isEmpty()) {
-			throw new BusinessException(ResultEnum.NOT_SUPPORT_ERROR);
+			throw new CardException(ResultEnum.NOT_SUPPORT_ERROR,bankname,last4);
 		}
 		return list.get(0);
 	}
@@ -90,7 +91,7 @@ public class DiagnosisDicServiceImpl implements DiagnosisDicService {
 		List<DiagnosisResult> percent = new ArrayList<>();
 
 		// 固定模式
-		DiagnosisMoudle entity = getDiagnosisMoudle(bankname, 1);
+		DiagnosisMoudle entity = getDiagnosisMoudle(bankname, 1,last4);
 
 		// 获取随机次数
 		Integer rand = RandomUtils.generateRandomArray(entity.getMinTimes(), entity.getMaxTimes());
@@ -103,7 +104,7 @@ public class DiagnosisDicServiceImpl implements DiagnosisDicService {
 		getResult(list, random, result, 1, bankname,last4,userId,holderName);
 
 		// 百分比
-		DiagnosisMoudle entity2 = getDiagnosisMoudle(bankname, 2);
+		DiagnosisMoudle entity2 = getDiagnosisMoudle(bankname, 2 ,last4);
 
 		// 获取随机次数
 		Integer per = RandomUtils.generateRandomArray(entity2.getMinTimes(), entity.getMaxTimes());

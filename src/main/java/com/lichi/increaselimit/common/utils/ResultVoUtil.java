@@ -33,17 +33,30 @@ public class ResultVoUtil {
     }
     
     /**
+     * 失败码 + 信息 + 数据
+     * @param code
+     * @param msg
+     * @return
+     */
+	public static <T> ResultVo<T> error(int code ,String msg ,T object) {
+    	ResultVo<T> resultvo = new ResultVo<T>();
+        resultvo.setCode(code);
+        resultvo.setMsg(msg);
+        resultvo.setData(object);
+        return resultvo;
+    }
+    /**
      * 失败码 + 信息
      * @param code
      * @param msg
      * @return
      */
     @SuppressWarnings("unchecked")
-	public static <T> ResultVo<T> error(Integer code, String msg) {
+    public static <T> ResultVo<T> error(Integer code, String msg) {
     	ResultVo<T> resultvo = new ResultVo<T>();
-        resultvo.setCode(code);
-        resultvo.setMsg(msg);
-        resultvo.setData((T) new JSONObject());
-        return resultvo;
+    	resultvo.setCode(code);
+    	resultvo.setMsg(msg);
+    	resultvo.setData((T) new JSONObject());
+    	return resultvo;
     }
 }
