@@ -50,6 +50,7 @@ public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 		DiagnosisResult record = new DiagnosisResult();
 		record.setId(id);
 		record.setMoney(money);
+		record.setStatus(1);
 		diagnosisResultMapper.updateByPrimaryKeySelective(record);
 		return null;
 	}
@@ -81,16 +82,6 @@ public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 		cardTaskCount.setDone((int) done);
 		cardTaskCount.setUndone((int) undone);
 		return cardTaskCount;
-	}
-
-	@Override
-	public void updateStatus(Integer id, Integer status) {
-		
-		DiagnosisResult result = new DiagnosisResult();
-		result.setId(id);
-		result.setStatus(status);
-		diagnosisResultMapper.updateByPrimaryKeySelective(result );
-		
 	}
 
 }

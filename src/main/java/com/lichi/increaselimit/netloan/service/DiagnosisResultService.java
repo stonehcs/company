@@ -54,10 +54,4 @@ public interface DiagnosisResultService {
 	 */
 	CardTaskCount getCardTaskCount(String id);
 
-	/**
-	 * 更新完成状态
-	 * @param id
-	 * @param status
-	 */
-	void updateStatus(Integer id, Integer status);
 }

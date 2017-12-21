@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -106,18 +106,12 @@ public class DiagnosisController {
 	}
 
 	@ApiOperation("更新消费金额")
-	@PutMapping
+	@PostMapping("/update")
 	public ResultVo<DiagnosisResultList> update(@RequestParam Integer id, @RequestParam Double money) {
 		DiagnosisResultList result = diagnosisResultService.update(id, money);
 		return ResultVoUtil.success(result);
 	}
 	
-	@ApiOperation("更新状态")
-	@PutMapping("/update")
-	public ResultVo<DiagnosisResultList> updateStatus(@RequestParam Integer id, @RequestParam Integer status) {
-		diagnosisResultService.updateStatus(id, status);
-		return ResultVoUtil.success();
-	}
 
 	private final static String TEXT = "%s银行, 户主：%s，固定额度：%s，临时额度：%s，系统确认中......\r\n" + "银行基本信息确认完成。\r\n"
 			+ "最近3个月消费账单分析中......\r\n" + "%s账单分析中......\r\n" + "%s月账单分析完成。\r\n" + "%s月账单分析中......\r\n"
