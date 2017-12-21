@@ -107,9 +107,9 @@ public class DiagnosisController {
 
 	@ApiOperation("更新消费金额")
 	@PostMapping("/update")
-	public ResultVo<DiagnosisResultList> update(@RequestParam Integer id, @RequestParam Double money) {
-		DiagnosisResultList result = diagnosisResultService.update(id, money);
-		return ResultVoUtil.success(result);
+	public Object update(@RequestParam Integer id, @RequestParam Double money) {
+		diagnosisResultService.update(id, money);
+		return ResultVoUtil.success();
 	}
 	
 

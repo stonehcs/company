@@ -46,13 +46,12 @@ public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 	}
 
 	@Override
-	public DiagnosisResultList update(Integer id, Double money) {
+	public void update(Integer id, Double money) {
 		DiagnosisResult record = new DiagnosisResult();
 		record.setId(id);
-		record.setMoney(money);
+		record.setConsumeMoney(money);
 		record.setStatus(1);
 		diagnosisResultMapper.updateByPrimaryKeySelective(record);
-		return null;
 	}
 
 	@Override

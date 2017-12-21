@@ -35,7 +35,7 @@ public interface DiagnosisResultService {
 	 * @param money
 	 * @return
 	 */
-	DiagnosisResultList update(Integer id, Double money);
+	void update(Integer id, Double money);
 
 	/**
 	 * 获取刷卡任务
