@@ -13,12 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.alibaba.fastjson.JSONObject;
+import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.security.properties.SecurityConstants;
 import com.lichi.increaselimit.security.properties.SecurityProperties;
 
@@ -34,8 +35,8 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 	/**
 	 * 验证码校验失败处理器
 	 */
-	@Autowired
-	private AuthenticationFailureHandler authenticationFailureHandler;
+//	@Autowired
+//	private AuthenticationFailureHandler authenticationFailureHandler;
 	/**
 	 * 系统配置信息
 	 */
@@ -96,8 +97,10 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 						.validate(new ServletWebRequest(request, response));
 				logger.info("验证码校验通过");
 			} catch (ValidateCodeException exception) {
-				authenticationFailureHandler.onAuthenticationFailure(request, response, exception);
+				response.setContentType("application/json;charset=UTF-8");
+				response.getWriter().write(JSONObject.toJSONString(ResultVoUtil.error(500, "SMS验证码不存在")));
 				return;
+//				authenticationFailureHandler.onAuthenticationFailure(request, response, exception);
 			}
 		}
 

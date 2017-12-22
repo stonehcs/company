@@ -40,8 +40,7 @@ public class ValidateCodeController {
 	 */
 	@GetMapping(SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/{type}")
 	@ApiOperation(value = "短信验证码路径  sms?mobile=xxxxx,图片验证码image")
-	public ResultVo<Object> createCode(HttpServletRequest request, HttpServletResponse response, @PathVariable String type)
-			throws Exception {
+	public ResultVo<Object> createCode(HttpServletRequest request, HttpServletResponse response, @PathVariable String type){
 		log.info("发送验证码,验证码类型:{}",type);
 		validateCodeProcessorHolder.findValidateCodeProcessor(type).create(new ServletWebRequest(request, response));
 		return ResultVoUtil.success();

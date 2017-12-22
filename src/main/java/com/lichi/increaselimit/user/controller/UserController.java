@@ -82,17 +82,18 @@ public class UserController {
 	@GetMapping("/rank/ranking")
 	@ApiOperation("获取当前用户名次")
 	public ResultVo<UserRank> getCurrentUserRank(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
+		
+		log.info("获取当前用户名次,用户id:{}" + id);
 		UserRank userRank = userService.getUserRank(id);
-
 		return ResultVoUtil.success(userRank);
 	}
 
 	@GetMapping("/rank")
-	@ApiOperation("获取用户排行榜")
+	@ApiOperation("获取所有用户排行榜")
 	public ResultVo<PageInfo<User>> getUserRank(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
-
+		log.info("获取所有用户排行榜");
 		PageInfo<User> user = userService.selectBank(page, size);
 
 		return ResultVoUtil.success(user);
@@ -105,7 +106,7 @@ public class UserController {
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
 			@ApiParam(value = "状态 0报名  1 付费", required = true) @RequestParam Integer status,
 			@ApiParam(value = "用户id", required = true) @RequestParam String id) {
-
+		log.info("获取用户课程,用户id:{},课程状态:{}",id,status);
 		PageInfo<Course> userCourse = userService.selectCourse(page, size, id, status);
 		return ResultVoUtil.success(userCourse);
 	}
@@ -113,7 +114,7 @@ public class UserController {
 	@GetMapping("/mycourse")
 	@ApiOperation("我的课程")
 	public ResultVo<CourseCount> getMyCourse(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
-
+		log.info("我的课程,用户id:{}",id);
 		CourseCount userCourse = userService.getMyCourse(id);
 		return ResultVoUtil.success(userCourse);
 	}
@@ -125,6 +126,7 @@ public class UserController {
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
 			@ApiParam(value = "状态id", required = false) @RequestParam(required = false) Integer status,
 			@ApiParam(value = "用户id", required = true) @RequestParam String id) {
+		log.info("我的刷卡任务,用户id:{}",id);
 		PageInfo<DiagnosisResult> result = diagnosisResultService.getCardTask(page, size, id, status);
 		return ResultVoUtil.success(result);
 	}
@@ -132,7 +134,7 @@ public class UserController {
 	@GetMapping("/task-count")
 	@ApiOperation("刷卡任务条数")
 	public ResultVo<CardTaskCount> getCardTask(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
-
+		log.info("刷卡任务条数,用户id:{}",id);
 		CardTaskCount result = diagnosisResultService.getCardTaskCount(id);
 		return ResultVoUtil.success(result);
 	}
@@ -142,6 +144,7 @@ public class UserController {
 	public ResultVo<Object> updateUserInfo(@Valid @RequestBody UserUpdateDto dto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
+			log.error("修改用户信息参数错误:{}",errors);
 			return ResultVoUtil.error(1, errors);
 		}
 		if (!StringUtils.isBlank(dto.getMobile())) {
@@ -160,6 +163,7 @@ public class UserController {
 				throw new BusinessException(ResultEnum.VALIDATECODE_ERROR);
 			}
 		}
+		log.info("修改用户信息,用户id:{}",dto.getId());
 		User user = new User();
 		BeanUtils.copyProperties(dto, user);
 		userService.updateUserInfo(user);

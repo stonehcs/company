@@ -41,10 +41,14 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
 	 * springframework.web.context.request.ServletWebRequest)
 	 */
 	@Override
-	public void create(ServletWebRequest request) throws Exception {
-		C validateCode = generate(request);
-		save(request, validateCode);
-		send(request, validateCode);
+	public void create(ServletWebRequest request) {
+		try {
+			C validateCode = generate(request);
+			save(request, validateCode);
+			send(request, validateCode);
+		} catch (Exception e) {
+			throw new ValidateCodeException("验证码发送失败");
+		}
 	}
 
 	/**
