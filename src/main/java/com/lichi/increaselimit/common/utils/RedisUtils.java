@@ -1,6 +1,7 @@
 package com.lichi.increaselimit.common.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +98,31 @@ public class RedisUtils {
 						return null;
 					}
 					return new String(bs, REDIS_CODE);
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+		});
+	}
+	/**
+	 * @param key
+	 * @return
+	 */
+	public Set<String> getKeys(final String key) {
+		return (Set<String>) redisTemplate.execute(new RedisCallback() {
+			@Override
+			public Set<String> doInRedis(RedisConnection connection) throws DataAccessException {
+				try {
+					Set<byte[]> bs = connection.keys(key.getBytes());
+					if(bs == null) {
+						return null;
+					}
+					Set<String> result = new HashSet<>();
+					for (byte[] bs2 : bs) {
+						result.add(new String(bs2, REDIS_CODE));
+					}
+					return result;
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}

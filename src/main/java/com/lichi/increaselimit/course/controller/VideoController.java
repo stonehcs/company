@@ -26,10 +26,12 @@ import com.lichi.increaselimit.course.service.VideoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/video")
 @Api(description = "视频")
+@Slf4j
 public class VideoController {
 
 	@Autowired
@@ -40,6 +42,7 @@ public class VideoController {
 	public ResultVo<PageInfo<Video>> getVideoList(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
+		log.info("首页视频显示");
 		PageInfo<Video> list = videoService.getVideoList(page, size);
 		return ResultVoUtil.success(list);
 	}
@@ -47,6 +50,7 @@ public class VideoController {
 	@GetMapping("/{id}")
 	@ApiOperation(value = "查看视频详情")
 	public ResultVo<Video> getVideo(@PathVariable Integer id) {
+		log.info("查看视频详情,视频id:{}",id);
 		Video Video = videoService.getVideo(id);
 		return ResultVoUtil.success(Video);
 	}
@@ -56,8 +60,10 @@ public class VideoController {
 	public ResultVo<Video> addVideo(@Valid @RequestBody VideoDto VideoDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
+			log.error("添加视频参数错误:{}" + errors);
 			return ResultVoUtil.error(1, errors);
 		}
+		log.info("添加视频,视频描述:{}",VideoDto.getDescription());
 		Video Video = new Video();
 		BeanUtils.copyProperties(VideoDto, Video);
 		videoService.addVideo(Video);
@@ -67,6 +73,7 @@ public class VideoController {
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "删除视频")
 	public ResultVo<Video> deleteVideo(@PathVariable Integer id) {
+		log.info("删除视频,视频id:{}",id);
 		videoService.deleteVideo(id);
 		return ResultVoUtil.success();
 	}
@@ -76,8 +83,10 @@ public class VideoController {
 	public ResultVo<Video> updateVideo(@Valid @RequestBody VideoUpdateDto VideoDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
+			log.error("修改视频参数错误:{}" + errors);
 			return ResultVoUtil.error(1, errors);
 		}
+		log.info("修改视频,视频id:{}",VideoDto.getId());
 		Video Video = new Video();
 		BeanUtils.copyProperties(VideoDto, Video);
 		videoService.updateVideo(Video);
@@ -90,6 +99,7 @@ public class VideoController {
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
 			@PathVariable String description) {
+		log.info("模糊查询视频,关键字:{}",description);
 		PageInfo<Video> video = videoService.seleteByLike(page, size, description);
 		return ResultVoUtil.success(video);
 	}

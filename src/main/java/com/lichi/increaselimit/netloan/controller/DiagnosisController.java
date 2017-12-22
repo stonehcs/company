@@ -52,6 +52,7 @@ public class DiagnosisController {
 	@GetMapping("/bill/{userId}")
 	public ResultVo<List<CreditBill>> diagnosis(@PathVariable String userId) {
 		// List<DiagnosisResultList> resultlist = new ArrayList<DiagnosisResultList>();
+		log.info("获取当前用户所用信用卡,用户id:{}",userId);
 		List<CreditBill> list = creditBillService.selectByUserId(userId);
 		// list.forEach(e -> {
 		// String creditAmt = e.getCreditAmt();
@@ -69,7 +70,7 @@ public class DiagnosisController {
 	@GetMapping
 	public ResultVo<DiagnosisResultList> diagnosis(CreditBill creditBill) throws IOException {
 
-		log.info("用户id:" + creditBill.getUserId());
+		log.info("一键提额,用户id:{}",creditBill.getUserId());
 		
 		String creditAmt = creditBill.getCreditAmt();
 		creditAmt = StringUtils.isBlank(creditAmt) ? "10000" : creditAmt;
@@ -98,6 +99,7 @@ public class DiagnosisController {
 			@ApiParam(value = "用户id", required = true) @RequestParam(required = true) String userId,
 			@ApiParam(value = "银行卡名字", required = true) @RequestParam(required = true) String bankname,
 			@ApiParam(value = "卡号后四位", required = true) @RequestParam(required = true) String last4digit) {
+		log.info("查询诊断结果,用户id:{}",userId);
 		DiagnosisResultList result = diagnosisResultService.getResult(userId, bankname, last4digit);
 		return ResultVoUtil.success(result);
 	}
@@ -105,6 +107,7 @@ public class DiagnosisController {
 	@ApiOperation("雷达文案")
 	@GetMapping("/radar")
 	public ResultVo<String[]> get() {
+		log.info("获取雷达文案");
 		String[] strings = RADAR.split("\\r\\n");
 		return ResultVoUtil.success(strings);
 	}
@@ -112,6 +115,7 @@ public class DiagnosisController {
 	@ApiOperation("更新消费金额")
 	@PostMapping("/update")
 	public Object update(@RequestParam Integer id, @RequestParam Double money) {
+		log.info("更新诊断结果消费金额,诊断结果的id:{}",id);
 		diagnosisResultService.update(id, money);
 		return ResultVoUtil.success();
 	}

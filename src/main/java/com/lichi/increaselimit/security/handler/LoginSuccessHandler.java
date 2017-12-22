@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lichi.increaselimit.common.Constants;
 import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
@@ -39,17 +40,17 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws ServletException, IOException {
-		log.info("登录成功");
 
 		User user = (User)authentication.getPrincipal();
+		log.info("登录成功,用户id:{}",user.getId());
 		
 		String token = IdUtils.getUUID();
 		
 		//将生成的token放入redis,token设置为永久
-		redisUtils.set("login_user:" + token, JSONObject.toJSONString(user));
+		redisUtils.set(Constants.LOGIN_USER + token, JSONObject.toJSONString(user));
 		
 		response.setContentType("application/json;charset=UTF-8");
-		response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.success(user)));
+		response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.success(token)));
 	}
 
 }

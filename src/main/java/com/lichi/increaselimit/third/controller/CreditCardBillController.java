@@ -39,6 +39,7 @@ import com.lichi.increaselimit.third.service.UserEmailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 信用卡账单查询
@@ -49,6 +50,7 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping("/bill")
 @Api(description = "信用卡账单查询")
+@Slf4j
 public class CreditCardBillController {
 
 	@Autowired
@@ -70,11 +72,13 @@ public class CreditCardBillController {
 			@ApiParam(value = "邮箱", required = true) @RequestParam(required = true) String username,
 			@ApiParam(value = "密码", required = true) @RequestParam(required = true) String password) {
 
-			UserEmail userEmail = userEmailService.selectByUsernameAndId(username,userId);
+		log.info("查询信用卡账单,用户邮箱:{}",username);
+		
+		UserEmail userEmail = userEmailService.selectByUsernameAndId(username,userId);
 			
-			if(userEmail != null) {
-				throw new BusinessException(ResultEnum.EMAIL_EXSIT);
-			}
+		if(userEmail != null) {
+			throw new BusinessException(ResultEnum.EMAIL_EXSIT);
+		}
 			
 		try {
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
@@ -122,6 +126,7 @@ public class CreditCardBillController {
 	@ApiOperation("获取邮箱列表")
 	@GetMapping("/email/{userId}")
 	public Object getEmailList(@PathVariable String userId) {
+		log.info("获取当前用户邮箱列表,用户id:{}",userId);
 		List<UserEmail> list = userEmailService.getList(userId);
 		return ResultVoUtil.success(list);
 	}
@@ -131,9 +136,7 @@ public class CreditCardBillController {
 	public Object getCreditCardBill(@PathVariable String userId,
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
-		if(StringUtils.isBlank(userId)) {
-			return ResultVoUtil.success();
-		}
+		log.info("获取用户未还款信息,用户id:{}",userId);
 		PageInfo<CreditBill> info = creditBillService.selectByUserId(userId, page, size);
 		return ResultVoUtil.success(info);
 	}
@@ -146,6 +149,7 @@ public class CreditCardBillController {
 			@ApiParam(value = "银行卡后四位", required = true) @RequestParam(required = true) String last4digit,
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
+		log.info("通过银行名字和后四位查询信用卡信息,用户id:{},银行名字:{},持卡人名字:{},银行卡后四位:{}",userId,issueBank,holderName,last4digit);
 		PageInfo<CreditBill> info = creditBillService.selectBank(userId, issueBank, holderName, last4digit, page, size);
 		return ResultVoUtil.success(info);
 	}
@@ -155,6 +159,7 @@ public class CreditCardBillController {
 	public Object get(@PathVariable String billId,
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
+		log.info("通过账单主键获取账单详情,账单id:{}",billId);
 		PageInfo<CreditBillDetail> info = creditBillService.selectBillDetail(billId,page,size);
 		return ResultVoUtil.success(info);
 	}

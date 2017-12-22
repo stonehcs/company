@@ -46,7 +46,7 @@ public class CircleController {
     @PostMapping
     @ApiOperation(value = "新建圈子")
     public ResultVo<Circle> postArticle(@Valid @RequestBody CircleDto circledto, BindingResult result) throws IOException{
-    	log.info("新建圈子：{}" , circledto.getName());
+    	log.info("新建圈子,圈子名字：{}" , circledto.getName());
         if(result.hasErrors()){
             String errors = result.getFieldError().getDefaultMessage();
             log.error("新建圈子参数错误：" + errors);
@@ -61,7 +61,7 @@ public class CircleController {
     @PutMapping
     @ApiOperation(value = "更新圈子信息")
     public ResultVo<Circle> update(@Valid @RequestBody CircleUpdateDto circledto, BindingResult result){
-    	log.info("更新圈子信息：{}" , circledto.getId());
+    	log.info("更新圈子信息,圈子id：{}" , circledto.getId());
         if(result.hasErrors()){
             String errors = result.getFieldError().getDefaultMessage();
             log.error("新建圈子参数错误：" + errors);
@@ -77,7 +77,7 @@ public class CircleController {
     @DeleteMapping("/{id}")
     @ApiOperation(value = "根据id删除圈子")
     public ResultVo<Circle> deleteArticle(@PathVariable  Integer id){
-    	log.info("删除圈子信息：id为{}" ,id);
+    	log.info("删除圈子信息id:{}" ,id);
         circleService.delete(id);
         return ResultVoUtil.success();
     }
@@ -86,6 +86,7 @@ public class CircleController {
     @ApiOperation(value = "分页查询所有列表")
     public ResultVo<PageInfo<CircleVo>> getArticle(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
                                               @ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size){
+    	log.info("分页查询所有列表");
     	PageInfo<CircleVo> articles = circleService.getByPage(page,size);
         return ResultVoUtil.success(articles);
 
@@ -95,6 +96,7 @@ public class CircleController {
     @ApiOperation(value = "分页查询热门列表")
     public ResultVo<PageInfo<CircleVo>> getHotArticle(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
     		@ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size){
+    	log.info("分页查询热门列表");
     	PageInfo<CircleVo> articles = circleService.getHostByPage(page,size);
     	return ResultVoUtil.success(articles);
     	
@@ -103,6 +105,7 @@ public class CircleController {
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询圈子信息")
     public ResultVo<CircleVo> getArticle(@PathVariable  Integer id){
+    	log.info("根据id:{}查询圈子信息",id);
         CircleVo circle = circleService.get(id);
         return ResultVoUtil.success(circle);
     }
@@ -112,6 +115,7 @@ public class CircleController {
     public ResultVo<PageInfo<CircleVo>> getArticleLike(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
     		@ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size,
     		@PathVariable  String name){
+    	log.info("模糊查询圈子信息,关键字:{}",name);
     	PageInfo<CircleVo> circle = circleService.seleteByLike(page,size,name);
     	return ResultVoUtil.success(circle);
     }

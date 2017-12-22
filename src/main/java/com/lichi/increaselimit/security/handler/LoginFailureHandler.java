@@ -31,7 +31,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler{
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
-		log.info("登录认证失败");
+		log.info("登录认证失败,手机号为:{}",request.getParameter("mobile"));
 		response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		response.setContentType("application/json;charset=UTF-8");
 		exception.printStackTrace();

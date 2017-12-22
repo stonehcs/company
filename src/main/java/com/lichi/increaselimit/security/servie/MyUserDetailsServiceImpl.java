@@ -20,11 +20,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Component
-//@Primary
 public class MyUserDetailsServiceImpl implements UserDetailsService,SocialUserDetailsService {
 
-	// @Autowired
-	// private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private UserService userService;
@@ -32,14 +29,13 @@ public class MyUserDetailsServiceImpl implements UserDetailsService,SocialUserDe
 	@Override
 	public UserDetails loadUserByUsername(String mobile) throws UsernameNotFoundException {
 
-		log.info("手机号码为:" + mobile);
+		log.info("手机号登录,手机号码为:" + mobile);
 		return userService.loadUserInfoByMobile(mobile);
-		// return new User(mobile, passwordEncoder.encode("123456"),
-		// AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
 	}
 
 	@Override
 	public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
+		log.info("第三方登录,用户登录:" + userId);
 		return userService.loadUserInfoByUserId(userId);
 	}
 

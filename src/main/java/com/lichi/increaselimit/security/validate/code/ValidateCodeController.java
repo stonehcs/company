@@ -14,9 +14,8 @@ import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.security.properties.SecurityConstants;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 验证码生成器
@@ -25,6 +24,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @Api(description = "验证码")
+@Slf4j
 public class ValidateCodeController {
 
 	@Autowired
@@ -40,9 +40,9 @@ public class ValidateCodeController {
 	 */
 	@GetMapping(SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/{type}")
 	@ApiOperation(value = "短信验证码路径  sms?mobile=xxxxx,图片验证码image")
-	@ApiImplicitParams({@ApiImplicitParam(name = "deviceId", value = "设备id", required = true, dataType = "string", paramType = "header",defaultValue="007")})
 	public ResultVo<Object> createCode(HttpServletRequest request, HttpServletResponse response, @PathVariable String type)
 			throws Exception {
+		log.info("发送验证码,验证码类型:{}",type);
 		validateCodeProcessorHolder.findValidateCodeProcessor(type).create(new ServletWebRequest(request, response));
 		return ResultVoUtil.success();
 	}

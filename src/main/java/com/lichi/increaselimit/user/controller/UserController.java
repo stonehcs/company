@@ -39,6 +39,7 @@ import com.lichi.increaselimit.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 测试controller
@@ -49,6 +50,7 @@ import io.swagger.annotations.ApiParam;
 @Api(description = "我的")
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
 	@Autowired
@@ -62,8 +64,10 @@ public class UserController {
 	@GetMapping
 	@ApiOperation("获取当前用户信息")
 	public ResultVo<Object> getCurrentUser(@RequestHeader("token") String token) {
+		
+		log.info("当前用户token:" + token);
 
-		String string = redisUtils.get("login_user:" + token);
+		String string = redisUtils.get(Constants.LOGIN_USER + token);
 		
 		if(StringUtils.isBlank(string)) {
 			throw new BusinessException(ResultEnum.LOGIN_TIME_OUT);
