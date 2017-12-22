@@ -49,8 +49,10 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 		//将生成的token放入redis,token设置为永久
 		redisUtils.set(Constants.LOGIN_USER + token, JSONObject.toJSONString(user));
 		
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("token", token);
 		response.setContentType("application/json;charset=UTF-8");
-		response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.success(token)));
+		response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.success(jsonObject)));
 	}
 
 }

@@ -98,7 +98,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 				logger.info("验证码校验通过");
 			} catch (ValidateCodeException exception) {
 				response.setContentType("application/json;charset=UTF-8");
-				response.getWriter().write(JSONObject.toJSONString(ResultVoUtil.error(500, "SMS验证码不存在","")));
+				response.getWriter().write(JSONObject.toJSONString(ResultVoUtil.error(500, "SMS验证码不存在")));
 				return;
 //				authenticationFailureHandler.onAuthenticationFailure(request, response, exception);
 			}
