@@ -60,6 +60,8 @@ public enum ResultEnum {
     
     NO_ONLINE_USER(26, "没有在线的客服"),
     
+    LOGIN_TIME_OUT(26, "登录超时,请重新登录"),
+    
     ;
 
     private Integer code;

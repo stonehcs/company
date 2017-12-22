@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +22,6 @@ import com.lichi.increaselimit.course.dao.CourseMapper;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.entity.CourseVo;
 import com.lichi.increaselimit.course.service.CourseService;
-import com.lichi.increaselimit.security.authentication.mobile.SmsCodeAuthenticationToken;
 import com.lichi.increaselimit.security.validate.code.ValidateCode;
 import com.lichi.increaselimit.user.entity.CourseCount;
 import com.lichi.increaselimit.user.entity.User;
@@ -163,11 +160,8 @@ public class CourseServiceImpl implements CourseService {
 			user2.setUsername(mobile);
 			user2.setNickname(signUpDto.getUsername());
 			User insert = userService.insert(user2);
-			
-			SmsCodeAuthenticationToken smsCodeAuthenticationToken = new SmsCodeAuthenticationToken(insert,insert.getAuthorities());
 			// 给用户登陆
-			SecurityContextHolder.getContext().setAuthentication((Authentication) smsCodeAuthenticationToken);
-			redisUtils.set("login_token:" + mobile, JSONObject.toJSONString(insert));
+			redisUtils.set("login_token:" + userId, JSONObject.toJSONString(insert));
 		}
 		//如果验证码不存在，但是用户名存在，说明已经登陆了,更新下用户名
 		else if (StringUtils.isBlank(signUpDto.getCode()) && !StringUtils.isBlank(userId)) {

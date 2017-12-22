@@ -54,6 +54,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
                 		"/oauth2/client","/social/signUp","/authentication/require","/code/sms").permitAll()
 	             .anyRequest().permitAll()
                 .and()
+            .sessionManagement().disable()
                 .csrf().disable();
         
     }

@@ -1,9 +1,5 @@
 package com.lichi.increaselimit.user.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.security.SignatureException;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +27,6 @@ import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.netloan.entity.CardTaskCount;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
 import com.lichi.increaselimit.netloan.service.DiagnosisResultService;
-import com.lichi.increaselimit.security.UserUtils;
 import com.lichi.increaselimit.security.validate.code.ValidateCode;
 import com.lichi.increaselimit.user.controller.dto.UserUpdateDto;
 import com.lichi.increaselimit.user.entity.CourseCount;
@@ -62,31 +58,28 @@ public class UserController {
 
 	@Autowired
 	private RedisUtils redisUtils;
+
 	@GetMapping
 	@ApiOperation("获取当前用户信息")
-	public ResultVo<Object> getCurrentUser(HttpServletRequest request)
-			throws SignatureException,
-			IllegalArgumentException, UnsupportedEncodingException {
+	public ResultVo<Object> getCurrentUser(@RequestHeader("token") String token) {
 
-		Object principal = UserUtils.getUserInfo();
-		if(principal instanceof User) {
-			User user = (User) principal;
-			VipLevel level = userService.getLevel(user.getVipLevel());
-			UserVo uservo = new UserVo();
-			BeanUtils.copyProperties(user, uservo);
-			uservo.setLevelName(level.getLevelName());
-			return ResultVoUtil.success(uservo);
-		}else {
-			return ResultVoUtil.success(principal);
-		}
+		String string = redisUtils.get("login_user:" + token);
 		
+		if(StringUtils.isBlank(string)) {
+			throw new BusinessException(ResultEnum.LOGIN_TIME_OUT);
+		}
+		UserVo vo = JSONObject.parseObject(string, UserVo.class);
+		VipLevel level = userService.getLevel(vo.getVipLevel());
+		vo.setLevelName(level.getLevelName());
+		return ResultVoUtil.success(vo);
+
 	}
-	
+
 	@GetMapping("/rank/ranking")
 	@ApiOperation("获取当前用户名次")
-	public ResultVo<UserRank> getCurrentUser(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
+	public ResultVo<UserRank> getCurrentUserRank(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
 		UserRank userRank = userService.getUserRank(id);
-		
+
 		return ResultVoUtil.success(userRank);
 	}
 
@@ -112,10 +105,11 @@ public class UserController {
 		PageInfo<Course> userCourse = userService.selectCourse(page, size, id, status);
 		return ResultVoUtil.success(userCourse);
 	}
+
 	@GetMapping("/mycourse")
 	@ApiOperation("我的课程")
 	public ResultVo<CourseCount> getMyCourse(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
-		
+
 		CourseCount userCourse = userService.getMyCourse(id);
 		return ResultVoUtil.success(userCourse);
 	}
@@ -127,14 +121,14 @@ public class UserController {
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
 			@ApiParam(value = "状态id", required = false) @RequestParam(required = false) Integer status,
 			@ApiParam(value = "用户id", required = true) @RequestParam String id) {
-		PageInfo<DiagnosisResult> result = diagnosisResultService.getCardTask(page, size, id,status);
+		PageInfo<DiagnosisResult> result = diagnosisResultService.getCardTask(page, size, id, status);
 		return ResultVoUtil.success(result);
 	}
-	
+
 	@GetMapping("/task-count")
 	@ApiOperation("刷卡任务条数")
 	public ResultVo<CardTaskCount> getCardTask(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
-		
+
 		CardTaskCount result = diagnosisResultService.getCardTaskCount(id);
 		return ResultVoUtil.success(result);
 	}
@@ -146,11 +140,11 @@ public class UserController {
 			String errors = result.getFieldError().getDefaultMessage();
 			return ResultVoUtil.error(1, errors);
 		}
-		if(!StringUtils.isBlank(dto.getMobile())) {
-			if(!StringUtil.ValidateMobile(dto.getMobile())) {
+		if (!StringUtils.isBlank(dto.getMobile())) {
+			if (!StringUtil.ValidateMobile(dto.getMobile())) {
 				throw new BusinessException(ResultEnum.MOBILE_ERROR);
 			}
-			if(StringUtils.isBlank(dto.getCode())) {
+			if (StringUtils.isBlank(dto.getCode())) {
 				throw new BusinessException(ResultEnum.VALIDATECODE_ERROR);
 			}
 			String json = redisUtils.get(Constants.MOBILE_REDIS_KEY + dto.getMobile());

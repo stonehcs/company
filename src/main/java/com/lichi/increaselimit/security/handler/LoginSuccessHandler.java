@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -14,9 +13,10 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
-import com.lichi.increaselimit.security.UserUtils;
+import com.lichi.increaselimit.user.entity.User;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,15 +41,15 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			Authentication authentication) throws ServletException, IOException {
 		log.info("登录成功");
 
-		String mobile = request.getParameter("mobile");
-		String openid = request.getParameter("openid");
+		User user = (User)authentication.getPrincipal();
 		
-		String username = StringUtils.isBlank(mobile) ? openid : mobile;
+		String token = IdUtils.getUUID();
+		
 		//将生成的token放入redis,token设置为永久
-		redisUtils.set("login_token:" + username, JSONObject.toJSONString(UserUtils.getUserInfo()));
+		redisUtils.set("login_user:" + token, JSONObject.toJSONString(user));
 		
 		response.setContentType("application/json;charset=UTF-8");
-		response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.success(UserUtils.getUserInfo())));
+		response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.success(user)));
 	}
 
 }

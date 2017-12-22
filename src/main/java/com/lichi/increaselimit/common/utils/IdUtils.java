@@ -1,5 +1,7 @@
 package com.lichi.increaselimit.common.utils;
 
+import java.util.UUID;
+
 /**
  * 生成用户id
  * 
@@ -13,6 +15,12 @@ public class IdUtils {
 	public static String getId() {
 		return SNOWFLAKEIDWORKER.nextId() + "";
 	}
+	
+	public static String getUUID() {
+		return UUID.randomUUID().toString().replaceAll("-", "");
+	}
+	
+	
 
 	public static void main(String[] args) {
 		for (int i = 0; i < 100; i++) {
