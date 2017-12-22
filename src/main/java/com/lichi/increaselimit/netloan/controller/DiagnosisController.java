@@ -25,6 +25,7 @@ import com.lichi.increaselimit.third.service.CreditBillService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 诊断
@@ -35,6 +36,7 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping("/diagnosis")
 @Api(description = "诊断")
+@Slf4j
 public class DiagnosisController {
 
 	@Autowired
@@ -67,6 +69,8 @@ public class DiagnosisController {
 	@GetMapping
 	public ResultVo<DiagnosisResultList> diagnosis(CreditBill creditBill) throws IOException {
 
+		log.info("用户id:" + creditBill.getUserId());
+		
 		String creditAmt = creditBill.getCreditAmt();
 		creditAmt = StringUtils.isBlank(creditAmt) ? "10000" : creditAmt;
 		creditAmt = creditAmt.replaceAll(",", "");
