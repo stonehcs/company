@@ -169,4 +169,12 @@ public class UserController {
 		userService.updateUserInfo(user);
 		return ResultVoUtil.success();
 	}
+	
+	@GetMapping("/logout")
+	@ApiOperation("退出登录")
+	public ResultVo<User> logout(@RequestHeader String token) {
+		log.info("退出登录,用户token:{}",token);
+		redisUtils.del(Constants.LOGIN_USER + token);
+		return ResultVoUtil.success();
+	}
 }

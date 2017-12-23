@@ -105,7 +105,6 @@ public class ArticleController {
     }
 
     @GetMapping("/{id}")
-//    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "token", required = true, dataType = "string", paramType = "header",defaultValue="bearer ")})
     @ApiOperation(value = "根据id查询帖子")
     public ResultVo<Article> getArticle(@PathVariable  Integer id){
     	log.info("查询id:{}对应的帖子信息",id);

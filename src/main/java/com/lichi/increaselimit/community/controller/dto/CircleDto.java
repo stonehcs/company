@@ -22,10 +22,6 @@ public class CircleDto implements Serializable{
     @NotBlank(message = "圈子名字不能为空")
     private String name;
 
-    @ApiModelProperty(value = "用户id")
-    @NotBlank(message = "用户id不能为空")
-    private String createUserId;
-
     @ApiModelProperty(value = "头像地址")
     private String url;
     

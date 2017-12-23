@@ -30,10 +30,6 @@ public class ArticleDto implements Serializable {
 	@NotBlank(message = "内容不能为空")
 	private String content;
 
-	@ApiModelProperty(value = "创建人")
-	@NotBlank(message = "创建人不能为空")
-	private String createUserId;
-
 	@ApiModelProperty(value = "圈子id")
 	@NotNull(message = "圈子id不能为空")
 	private Integer circleId;
