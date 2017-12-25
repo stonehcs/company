@@ -13,6 +13,11 @@ public class UserVo extends User{
 	public void setLevelName(String levelName) {
 		this.levelName = levelName;
 	}
+
+	@Override
+	public String toString() {
+		return "UserVo [levelName=" + levelName + "]";
+	}
 	
 	
 }
