@@ -59,6 +59,7 @@ public class User implements UserDetails,SocialUserDetails{
 	private Date updateTime;
 	private Date createTime;
 	
+	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return null;
