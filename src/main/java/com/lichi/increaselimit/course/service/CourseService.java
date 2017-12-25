@@ -72,8 +72,9 @@ public interface CourseService {
 	 * 课程报名
 	 * @param id
 	 * @param userId
+	 * @return 
 	 */
-	void courseSignUp(SignUpDto signUpDto);
+	String courseSignUp(SignUpDto signUpDto);
 
 	/**
 	 * 模糊查询

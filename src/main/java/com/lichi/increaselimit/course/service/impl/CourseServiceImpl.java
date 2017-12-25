@@ -128,10 +128,12 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void courseSignUp(SignUpDto signUpDto) {
+	public String courseSignUp(SignUpDto signUpDto) {
 		String mobile = signUpDto.getMobile();
 
 		String userId = signUpDto.getUserId();
+		
+		String token = null;
 		
 		// 有验证码和用户id,说明手机号不存在，需要给用户绑定手机号
 		if (!StringUtils.isBlank(signUpDto.getCode()) && !StringUtils.isBlank(userId)) {
@@ -160,8 +162,9 @@ public class CourseServiceImpl implements CourseService {
 			user2.setUsername(mobile);
 			user2.setNickname(signUpDto.getUsername());
 			User insert = userService.insert(user2);
+			token = IdUtils.getUUID();
 			// 给用户登陆
-			redisUtils.set("login_token:" + userId, JSONObject.toJSONString(insert));
+			redisUtils.set("login_token:" + token, JSONObject.toJSONString(insert));
 		}
 		//如果验证码不存在，但是用户名存在，说明已经登陆了,更新下用户名
 		else if (StringUtils.isBlank(signUpDto.getCode()) && !StringUtils.isBlank(userId)) {
@@ -173,6 +176,7 @@ public class CourseServiceImpl implements CourseService {
 			throw new BusinessException(ResultEnum.PARAM_ERROR);
 		}
 		courseMapper.courseSignUp(signUpDto.getId(), userId);
+		return token;
 
 	}
 
