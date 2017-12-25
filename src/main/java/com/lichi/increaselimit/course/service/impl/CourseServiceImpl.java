@@ -175,6 +175,13 @@ public class CourseServiceImpl implements CourseService {
 		}else {
 			throw new BusinessException(ResultEnum.PARAM_ERROR);
 		}
+		Integer status = courseMapper.selectStatus(signUpDto.getId(), userId);
+		if(0 == status) {
+			throw new BusinessException(ResultEnum.COURSE_HAS_SIGNUP);
+		}
+		if(1 == status) {
+			throw new BusinessException(ResultEnum.COURSE_HAS_PAY);
+		}
 		courseMapper.courseSignUp(signUpDto.getId(), userId);
 		return token;
 

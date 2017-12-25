@@ -62,6 +62,9 @@ public enum ResultEnum {
     
     LOGIN_TIME_OUT(26, "登录超时,请重新登录"),
     
+    COURSE_HAS_SIGNUP(26, "该课程已报名"),
+    COURSE_HAS_PAY(26, "该课程已付费"),
+    
     ;
 
     private Integer code;
