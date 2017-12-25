@@ -183,6 +183,8 @@ public class CourseServiceImpl implements CourseService {
 			throw new BusinessException(ResultEnum.COURSE_HAS_PAY);
 		}
 		courseMapper.courseSignUp(signUpDto.getId(), userId);
+		
+		redisUtils.del("code:sms:" + mobile);
 		return token;
 
 	}
