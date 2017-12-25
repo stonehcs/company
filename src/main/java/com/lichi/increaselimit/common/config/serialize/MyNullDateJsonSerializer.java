@@ -14,7 +14,7 @@ public class MyNullDateJsonSerializer extends JsonSerializer<Object> {
 			throws IOException, JsonProcessingException {
 
         if (value == null) {
-        	gen.writeObject(0);
+        	gen.writeObject("0000-00-00 00:00:00");
         } else {
         	gen.writeObject(value);
         }
