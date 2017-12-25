@@ -1,6 +1,5 @@
 package com.lichi.increaselimit.course.service.impl;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lichi.increaselimit.common.Constants;
 import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.IdUtils;
@@ -199,14 +197,7 @@ public class CourseServiceImpl implements CourseService {
 		String string = redisUtils.get("code:sms:" + mobile);
 		if (StringUtils.isNoneBlank(string)) {
 			ValidateCode validateCode = JSONObject.parseObject(string, ValidateCode.class);
-			LocalDateTime localDateTime = LocalDateTime.now();
-			LocalDateTime minusSeconds = validateCode.getExpireTime().minusSeconds(Constants.CODE_IN_REDIS_TIME)
-					.plusSeconds(Constants.CODE_RESEND);
-
-			if (minusSeconds.compareTo(localDateTime) > 0) {
-				throw new BusinessException(ResultEnum.CODE_EXIST);
-			}
-
+			
 			if (!code.equals(validateCode.getCode())) {
 				throw new BusinessException(ResultEnum.VALIDATECODE_ERROR);
 			}
