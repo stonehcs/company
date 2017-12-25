@@ -5,11 +5,11 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Chongqing
-    default-property-inclusion: non-null
+#    default-property-inclusion: non-null
   redis:
     database: 0
-#    host: 192.168.0.109
-    host: localhost
+    host: 192.168.100.109
+#    host: localhost
     port: 6379
     password: 
     pool:
