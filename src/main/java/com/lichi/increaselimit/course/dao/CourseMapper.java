@@ -111,5 +111,5 @@ public interface CourseMapper extends BaseMapper<Course> {
 	 * @return
 	 */
 	@Select("select status from t_user_course where user_id = #{userId} and course_id = #{id}")
-	Integer selectStatus(@Param(value = "id") Integer id, @Param(value = "status") String userId);
+	Integer selectStatus(@Param(value = "id") Integer id, @Param(value = "userId") String userId);
 }
