@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lichi.increaselimit.course.dao.VideoMapper;
+import com.lichi.increaselimit.course.dao.VideoDao;
 import com.lichi.increaselimit.course.entity.Video;
 import com.lichi.increaselimit.course.service.VideoService;
 
@@ -21,7 +21,7 @@ import com.lichi.increaselimit.course.service.VideoService;
 public class VideoServiceImpl implements VideoService {
 
 	@Autowired
-	private VideoMapper videoMapper;
+	private VideoDao videoMapper;
 	
 	@Override
 	public Video getVideo(Integer id) {

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lichi.increaselimit.netloan.dao.DiagnosisResultMapper;
+import com.lichi.increaselimit.netloan.dao.DiagnosisResultDao;
 import com.lichi.increaselimit.netloan.entity.CardTaskCount;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResultList;
@@ -26,7 +26,7 @@ import tk.mybatis.mapper.entity.Example;
 public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 
 	@Autowired
-	private DiagnosisResultMapper diagnosisResultMapper;
+	private DiagnosisResultDao diagnosisResultMapper;
 
 	public void insertList(List<DiagnosisResult> list) {
 		diagnosisResultMapper.insertList(list);

@@ -13,7 +13,7 @@ import com.lichi.increaselimit.community.entity.CircleVo;
  * @author by majie on 2017/11/15.
  */
 @Mapper
-public interface CircleMapper extends BaseMapper<Circle>{
+public interface CircleDao extends BaseMapper<Circle>{
 
 	/**
 	 * 根据圈子id查询对应圈子信息

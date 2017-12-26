@@ -19,7 +19,7 @@ import com.lichi.increaselimit.user.entity.VipLevel;
  *
  */
 @Mapper
-public interface UserMapper extends BaseMapper<User> {
+public interface UserDao extends BaseMapper<User> {
 
 	/**
 	 * 获取用户信息

@@ -17,8 +17,8 @@ import com.lichi.increaselimit.common.utils.HuanXinUtils;
 import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.service.CourseService;
-import com.lichi.increaselimit.user.dao.SocialUserMapper;
-import com.lichi.increaselimit.user.dao.UserMapper;
+import com.lichi.increaselimit.user.dao.SocialUserDao;
+import com.lichi.increaselimit.user.dao.UserDao;
 import com.lichi.increaselimit.user.entity.CourseCount;
 import com.lichi.increaselimit.user.entity.SocialUserInfo;
 import com.lichi.increaselimit.user.entity.User;
@@ -32,9 +32,9 @@ import tk.mybatis.mapper.entity.Example;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private UserMapper userMapper;
+	private UserDao userMapper;
 	@Autowired
-	private SocialUserMapper socialUserMapper;
+	private SocialUserDao socialUserMapper;
 	@Autowired
 	private CourseService courseService;
 	

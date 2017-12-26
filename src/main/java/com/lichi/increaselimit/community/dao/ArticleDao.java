@@ -15,7 +15,7 @@ import com.lichi.increaselimit.community.entity.CircleArticle;
  * @author by majie on 2017/11/15.
  */
 @Mapper
-public interface ArticleMapper extends BaseMapper<Article>{
+public interface ArticleDao extends BaseMapper<Article>{
 
 	/**
 	 * 根据圈子id查询帖子列表

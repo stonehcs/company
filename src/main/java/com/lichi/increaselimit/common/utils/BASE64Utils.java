@@ -15,7 +15,7 @@ import sun.misc.BASE64Encoder;
 public class BASE64Utils {
 
 	public static void main(String[] args) {
-		String str = "123456";
+		String str = "1234qwer";
 		String base64 = getBase64(str);
 		System.out.println(base64);
 		String res = getFromBase64(base64);

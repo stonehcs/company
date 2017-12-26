@@ -12,6 +12,6 @@ import com.lichi.increaselimit.course.entity.Teacher;
  *
  */
 @Mapper
-public interface TeacherMapper extends BaseMapper<Teacher> {
+public interface TeacherDao extends BaseMapper<Teacher> {
 
 }

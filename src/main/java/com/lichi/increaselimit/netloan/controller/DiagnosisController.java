@@ -1,6 +1,5 @@
 package com.lichi.increaselimit.netloan.controller;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -68,7 +67,7 @@ public class DiagnosisController {
 
 	@ApiOperation("一键提额")
 	@GetMapping
-	public ResultVo<DiagnosisResultList> diagnosis(CreditBill creditBill) throws IOException {
+	public ResultVo<DiagnosisResultList> diagnosis(CreditBill creditBill){
 
 		log.info("一键提额,用户id:{}",creditBill.getUserId());
 		

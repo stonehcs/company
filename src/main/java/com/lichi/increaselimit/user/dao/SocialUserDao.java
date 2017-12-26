@@ -14,7 +14,7 @@ import com.lichi.increaselimit.user.entity.SocialUserInfo;
  *
  */
 @Mapper
-public interface SocialUserMapper extends BaseMapper<SocialUserInfo>{
+public interface SocialUserDao extends BaseMapper<SocialUserInfo>{
 	
 	/**
 	 * 获取用户信息

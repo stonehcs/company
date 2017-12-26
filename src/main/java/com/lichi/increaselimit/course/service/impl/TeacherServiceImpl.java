@@ -10,8 +10,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
-import com.lichi.increaselimit.course.dao.CourseMapper;
-import com.lichi.increaselimit.course.dao.TeacherMapper;
+import com.lichi.increaselimit.course.dao.CourseDao;
+import com.lichi.increaselimit.course.dao.TeacherDao;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.entity.Teacher;
 import com.lichi.increaselimit.course.service.TeacherService;
@@ -22,9 +22,9 @@ import tk.mybatis.mapper.entity.Example;
 public class TeacherServiceImpl implements TeacherService{
 
 	@Autowired
-	private TeacherMapper mapper;
+	private TeacherDao mapper;
 	@Autowired
-	private CourseMapper courseMapper;
+	private CourseDao courseMapper;
 	
 	@Override
 	public PageInfo<Teacher> getTeacherList(Integer page, Integer size) {

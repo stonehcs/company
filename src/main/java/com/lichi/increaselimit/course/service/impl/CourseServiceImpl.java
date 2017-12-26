@@ -17,7 +17,7 @@ import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.course.controller.dto.SignUpDto;
-import com.lichi.increaselimit.course.dao.CourseMapper;
+import com.lichi.increaselimit.course.dao.CourseDao;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.entity.CourseVo;
 import com.lichi.increaselimit.course.service.CourseService;
@@ -31,7 +31,7 @@ import com.lichi.increaselimit.user.service.UserService;
 public class CourseServiceImpl implements CourseService {
 
 	@Autowired
-	private CourseMapper courseMapper;
+	private CourseDao courseMapper;
 
 	@Autowired
 	private UserService userService;

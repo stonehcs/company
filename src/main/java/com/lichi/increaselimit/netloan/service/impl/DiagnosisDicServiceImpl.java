@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.utils.RandomUtils;
-import com.lichi.increaselimit.netloan.dao.DiagnosisDicMapper;
-import com.lichi.increaselimit.netloan.dao.DiagnosisMoudleMapper;
-import com.lichi.increaselimit.netloan.dao.DiagnosisResultMapper;
+import com.lichi.increaselimit.netloan.dao.DiagnosisDicDao;
+import com.lichi.increaselimit.netloan.dao.DiagnosisMoudleDao;
+import com.lichi.increaselimit.netloan.dao.DiagnosisResultDao;
 import com.lichi.increaselimit.netloan.entity.DiagnosisDic;
 import com.lichi.increaselimit.netloan.entity.DiagnosisMoudle;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
@@ -35,11 +35,11 @@ import tk.mybatis.mapper.entity.Example;
 public class DiagnosisDicServiceImpl implements DiagnosisDicService {
 
 	@Autowired
-	private DiagnosisDicMapper diagnosisDicMapper;
+	private DiagnosisDicDao diagnosisDicMapper;
 	@Autowired
-	private DiagnosisMoudleMapper diagnosisMoudleMapper;
+	private DiagnosisMoudleDao diagnosisMoudleMapper;
 	@Autowired
-	private DiagnosisResultMapper diagnosisResultMapper;
+	private DiagnosisResultDao diagnosisResultMapper;
 
 	@Override
 	public String getNameByMoney(int money, int type) {

@@ -11,8 +11,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
-import com.lichi.increaselimit.community.dao.ArticleMapper;
-import com.lichi.increaselimit.community.dao.CircleMapper;
+import com.lichi.increaselimit.community.dao.ArticleDao;
+import com.lichi.increaselimit.community.dao.CircleDao;
 import com.lichi.increaselimit.community.entity.Article;
 import com.lichi.increaselimit.community.entity.Circle;
 import com.lichi.increaselimit.community.entity.CircleVo;
@@ -28,10 +28,10 @@ import tk.mybatis.mapper.entity.Example;
 public class CircleImpl implements CircleService {
 
     @Autowired
-    private CircleMapper circleDao;
+    private CircleDao circleDao;
 
     @Autowired
-    private ArticleMapper articleDao;
+    private ArticleDao articleDao;
 
     @Override
     public CircleVo get(Integer id) {

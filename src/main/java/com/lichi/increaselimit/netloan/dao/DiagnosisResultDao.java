@@ -11,6 +11,6 @@ import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
  *
  */
 @Mapper
-public interface DiagnosisResultMapper extends BaseMapper<DiagnosisResult>{
+public interface DiagnosisResultDao extends BaseMapper<DiagnosisResult>{
 
 }
