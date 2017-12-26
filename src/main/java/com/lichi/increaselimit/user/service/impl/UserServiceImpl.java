@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,9 +66,14 @@ public class UserServiceImpl implements UserService {
 		// 第三方表
 		socialUserMapper.insertUserConnection(socialUserInfo);
 		user.setId(userId);
-		user.setHeadImg(socialUserInfo.getImageUrl());
+		if(StringUtils.isBlank(socialUserInfo.getImageUrl())) {
+			user.setHeadImg("ozlfwi1zj.bkt.clouddn.com/默认头像.jpg");
+		}else {
+			user.setHeadImg(socialUserInfo.getImageUrl());
+		}
 		user.setUsername(socialUserInfo.getProviderUserId());
 		user.setNickname(socialUserInfo.getDisplayName());
+		user.setVipLevel(1);
 		// 用户表
 		user.setCreateTime(new Date());
 		user.setUpdateTime(new Date());
@@ -111,6 +117,8 @@ public class UserServiceImpl implements UserService {
 		user.setMobile(mobile);
 		user.setCreateTime(new Date());
 		user.setUpdateTime(new Date());
+		user.setVipLevel(1);
+		user.setHeadImg("ozlfwi1zj.bkt.clouddn.com/默认头像.jpg");
 		userMapper.insertSelective(user);
 		try {
 			HuanXinUtils.registerUser(userId, restTemplate);
