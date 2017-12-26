@@ -7,8 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -139,9 +138,9 @@ public class UserController {
 		return ResultVoUtil.success(result);
 	}
 
-	@PutMapping
+	@PostMapping
 	@ApiOperation("修改用户信息,如果是修改手机要先发验证码")
-	public ResultVo<Object> updateUserInfo(@Valid @RequestBody UserUpdateDto dto, BindingResult result) {
+	public ResultVo<Object> updateUserInfo(@Valid UserUpdateDto dto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
 			log.error("修改用户信息参数错误:{}",errors);
