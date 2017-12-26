@@ -1,7 +1,7 @@
 package com.lichi.increaselimit.common;
 
 /**
- * 常亮
+ * 常量
  * @author majie
  *
  */

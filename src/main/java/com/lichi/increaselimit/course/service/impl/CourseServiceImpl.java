@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.common.Constants;
 import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.IdUtils;
@@ -174,15 +175,15 @@ public class CourseServiceImpl implements CourseService {
 			throw new BusinessException(ResultEnum.PARAM_ERROR);
 		}
 		Integer status = courseMapper.selectStatus(signUpDto.getId(), userId);
-		if(0 == status) {
+		if(null == status) {
+			courseMapper.courseSignUp(signUpDto.getId(), userId);
+			redisUtils.del(Constants.MOBILE_REDIS_KEY + mobile);
+		}else if(0 == status) {
 			throw new BusinessException(ResultEnum.COURSE_HAS_SIGNUP);
-		}
-		if(1 == status) {
+		}else if(1 == status) {
 			throw new BusinessException(ResultEnum.COURSE_HAS_PAY);
 		}
-		courseMapper.courseSignUp(signUpDto.getId(), userId);
 		
-		redisUtils.del("code:sms:" + mobile);
 		return token;
 
 	}
@@ -194,7 +195,7 @@ public class CourseServiceImpl implements CourseService {
 	 * @param code
 	 */
 	private void validateRedisCode(String mobile, String code) {
-		String string = redisUtils.get("code:sms:" + mobile);
+		String string = redisUtils.get(Constants.MOBILE_REDIS_KEY + mobile);
 		if (StringUtils.isNoneBlank(string)) {
 			ValidateCode validateCode = JSONObject.parseObject(string, ValidateCode.class);
 			
