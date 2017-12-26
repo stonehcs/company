@@ -11,7 +11,7 @@ import lombok.Data;
  *
  */
 @Data
-@Table(name = "t_netload")
+@Table(name = "t_netloan")
 public class NetLoan {
 	
 	@Id
