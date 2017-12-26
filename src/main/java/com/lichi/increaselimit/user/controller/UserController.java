@@ -83,7 +83,7 @@ public class UserController {
 	@ApiOperation("获取当前用户名次")
 	public ResultVo<UserRank> getCurrentUserRank(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
 		
-		log.info("获取当前用户名次,用户id:{}" + id);
+		log.info("获取当前用户名次,用户id:{}",id);
 		UserRank userRank = userService.getUserRank(id);
 		return ResultVoUtil.success(userRank);
 	}
