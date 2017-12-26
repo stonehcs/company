@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
-import com.lichi.increaselimit.netloan.entity.NetLoad;
-import com.lichi.increaselimit.netloan.service.NetLoadService;
+import com.lichi.increaselimit.netloan.entity.NetLoan;
+import com.lichi.increaselimit.netloan.service.NetLoanService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,20 +22,20 @@ import lombok.extern.slf4j.Slf4j;
  *
  */	
 @RestController
-@RequestMapping("/netload")
+@RequestMapping("/netloan")
 @Api(description = "网贷")
 @Slf4j
-public class NetLoadController{
+public class NetLoanController{
 
 	@Autowired
-	private NetLoadService netLoadService;
+	private NetLoanService netLoadService;
 	
 	@ApiOperation("查看网贷信息")
 	@GetMapping
-	public ResultVo<List<NetLoad>> getAll(){
+	public ResultVo<List<NetLoan>> getAll(){
 		
 		log.info("查询所有网贷信息");
-		List<NetLoad> list = netLoadService.selectAll();
+		List<NetLoan> list = netLoadService.selectAll();
 		return ResultVoUtil.success(list);
 		
 	}

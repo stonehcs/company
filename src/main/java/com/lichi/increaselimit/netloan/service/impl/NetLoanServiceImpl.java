@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lichi.increaselimit.netloan.dao.NetLoadDao;
-import com.lichi.increaselimit.netloan.entity.NetLoad;
-import com.lichi.increaselimit.netloan.service.NetLoadService;
+import com.lichi.increaselimit.netloan.entity.NetLoan;
+import com.lichi.increaselimit.netloan.service.NetLoanService;
 
 /**
  * 网贷
@@ -15,12 +15,12 @@ import com.lichi.increaselimit.netloan.service.NetLoadService;
  *
  */	
 @Service
-public class NetLoadServiceImpl implements NetLoadService{
+public class NetLoanServiceImpl implements NetLoanService{
 
 	@Autowired
 	private NetLoadDao netLoadDao;
 	
-	public List<NetLoad> selectAll() {
+	public List<NetLoan> selectAll() {
 		return netLoadDao.selectAll();
 	}
 

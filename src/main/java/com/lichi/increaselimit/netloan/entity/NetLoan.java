@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @Table(name = "t_netload")
-public class NetLoad {
+public class NetLoan {
 	
 	@Id
 	private Integer id;
