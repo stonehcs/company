@@ -1,7 +1,7 @@
 package com.lichi.increaselimit.user.service;
 
 import com.github.pagehelper.PageInfo;
-import com.lichi.increaselimit.course.entity.Course;
+import com.lichi.increaselimit.course.entity.CourseVo;
 import com.lichi.increaselimit.user.entity.CourseCount;
 import com.lichi.increaselimit.user.entity.SocialUserInfo;
 import com.lichi.increaselimit.user.entity.User;
@@ -71,7 +71,7 @@ public interface UserService {
 	 * @param status 
 	 * @return
 	 */
-	PageInfo<Course> selectCourse(Integer page, Integer size, String id, Integer status);
+	PageInfo<CourseVo> selectCourse(Integer page, Integer size, String id, Integer status);
 	
 	/**
 	 * 更新用户信息

@@ -15,7 +15,7 @@ import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.HuanXinUtils;
 import com.lichi.increaselimit.common.utils.IdUtils;
-import com.lichi.increaselimit.course.entity.Course;
+import com.lichi.increaselimit.course.entity.CourseVo;
 import com.lichi.increaselimit.course.service.CourseService;
 import com.lichi.increaselimit.user.dao.SocialUserDao;
 import com.lichi.increaselimit.user.dao.UserDao;
@@ -130,10 +130,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public PageInfo<Course> selectCourse(Integer page, Integer size, String id, Integer status) {
+	public PageInfo<CourseVo> selectCourse(Integer page, Integer size, String id, Integer status) {
 		PageHelper.startPage(page,size);
-		List<Course> list = userMapper.selectUserCourse(id,status);
-		PageInfo<Course> pageInfo = new PageInfo<Course>(list);
+		List<CourseVo> list = userMapper.selectUserCourse(id,status);
+		PageInfo<CourseVo> pageInfo = new PageInfo<CourseVo>(list);
 		return pageInfo;
 	}
 	

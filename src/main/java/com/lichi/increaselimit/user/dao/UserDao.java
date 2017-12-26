@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import com.lichi.increaselimit.common.mapper.BaseMapper;
-import com.lichi.increaselimit.course.entity.Course;
+import com.lichi.increaselimit.course.entity.CourseVo;
 import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.entity.UserRank;
 import com.lichi.increaselimit.user.entity.VipLevel;
@@ -30,8 +30,12 @@ public interface UserDao extends BaseMapper<User> {
 	@Select("select * from t_user where mobile=#{mobile}")
 	User loadUserInfoByMobile(String mobile);
 
-	@Select("select b.* from t_user a,t_course b,t_user_course c where a.id=c.user_id and b.id = c.course_id and c.user_id = #{id} and c.status = #{status}")
-	List<Course> selectUserCourse(@Param(value = "id") String id, @Param(value = "status") Integer status);
+	@Select("select b.*,d.teachername,d.img_url from t_user a,t_course b,t_user_course c,t_teacher d "
+			+ "where a.id=c.user_id "
+			+ "and b.id = c.course_id "
+			+ "and d.id = b.teacher_id "
+			+ "and c.user_id = #{id} and c.status = #{status}")
+	List<CourseVo> selectUserCourse(@Param(value = "id") String id, @Param(value = "status") Integer status);
 
 	/**
 	 * 获取积分排名

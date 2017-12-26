@@ -23,7 +23,7 @@ import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.utils.StringUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
-import com.lichi.increaselimit.course.entity.Course;
+import com.lichi.increaselimit.course.entity.CourseVo;
 import com.lichi.increaselimit.netloan.entity.CardTaskCount;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
 import com.lichi.increaselimit.netloan.service.DiagnosisResultService;
@@ -101,13 +101,13 @@ public class UserController {
 
 	@GetMapping("/course")
 	@ApiOperation("获取用户课程")
-	public ResultVo<PageInfo<Course>> getUserCourse(
+	public ResultVo<PageInfo<CourseVo>> getUserCourse(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
 			@ApiParam(value = "状态 0报名  1 付费", required = true) @RequestParam Integer status,
 			@ApiParam(value = "用户id", required = true) @RequestParam String id) {
 		log.info("获取用户课程,用户id:{},课程状态:{}",id,status);
-		PageInfo<Course> userCourse = userService.selectCourse(page, size, id, status);
+		PageInfo<CourseVo> userCourse = userService.selectCourse(page, size, id, status);
 		return ResultVoUtil.success(userCourse);
 	}
 
