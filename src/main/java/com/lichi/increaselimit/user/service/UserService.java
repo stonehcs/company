@@ -99,4 +99,11 @@ public interface UserService {
 	 * @return
 	 */
 	VipLevel getLevel(Integer level);
+	
+	/**
+	 * 注册环信并更新pid用户的邀请次数
+	 * @param pid
+	 * @param userId 
+	 */
+	void registerHuanxinAndUpdatePid(String pid, String userId);
 }

@@ -22,7 +22,7 @@ public interface SocialUserDao extends BaseMapper<SocialUserInfo>{
 	 * @return
 	 */
 	@Select("select * from t_UserConnection where providerId=#{providerId} and providerUserId = #{openid}")
-	String getUserIdByProviderIdAndOpenid(@Param(value = "providerId") String providerId,@Param(value = "openid")String openid);
+	SocialUserInfo getUserIdByProviderIdAndOpenid(@Param(value = "providerId") String providerId,@Param(value = "openid")String openid);
 	
 	@Insert("insert into t_UserConnection ( userId,providerId,providerUserId,rank,displayName,profileUrl,"
 			+ "imageUrl,accessToken,secret,refreshToken,expireTime) "

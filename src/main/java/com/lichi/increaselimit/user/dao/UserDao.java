@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.lichi.increaselimit.common.mapper.BaseMapper;
 import com.lichi.increaselimit.course.entity.CourseVo;
@@ -58,4 +59,11 @@ public interface UserDao extends BaseMapper<User> {
 	@Select("select * from t_vip_level where level = #{level}")
 	VipLevel selectLevelInfo(Integer level);
 
+	
+	/**
+	 * 更新上级用户邀请人数
+	 * @param pid
+	 */
+	@Update("update t_user set invitation = invitation + 1 where id = #{pid}")
+	void updatePidInvitaion(String pid);
 }

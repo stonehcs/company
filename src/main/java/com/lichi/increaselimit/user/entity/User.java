@@ -59,6 +59,9 @@ public class User implements UserDetails,SocialUserDetails{
 	private Date updateTime;
 	private Date createTime;
 	
+	private String pid;
+	
+	private Integer invitation;
 	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

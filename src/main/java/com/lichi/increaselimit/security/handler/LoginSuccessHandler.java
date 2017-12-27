@@ -1,6 +1,7 @@
 package com.lichi.increaselimit.security.handler;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.user.entity.User;
+import com.lichi.increaselimit.user.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,6 +38,9 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 	
 	@Autowired
 	private RedisUtils redisUtils;
+	
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -43,6 +48,12 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
 		User user = (User)authentication.getPrincipal();
 		log.info("登录成功,用户id:{}",user.getId());
+		
+		//判断是不是第一次登陆,如果是要去注册环信,并更新pid的转换人数
+		Date updateTime = user.getUpdateTime();
+		if(updateTime == null) {
+			userService.registerHuanxinAndUpdatePid(user.getId(),user.getPid());
+		}
 		
 		String token = IdUtils.getUUID();
 		

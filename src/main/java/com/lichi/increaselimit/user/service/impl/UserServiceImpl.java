@@ -188,5 +188,22 @@ public class UserServiceImpl implements UserService {
 		return userMapper.selectLevelInfo(level);
 	}
 
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void registerHuanxinAndUpdatePid(String pid,String userId) {
+		User user = new User();
+		user.setUpdateTime(new Date());
+		user.setId(userId);
+		userMapper.updateByPrimaryKeySelective(user);
+		
+		userMapper.updatePidInvitaion(pid);
+		try {
+			HuanXinUtils.registerUser(userId, restTemplate);
+		} catch (Exception e) {
+			throw new BusinessException(ResultEnum.REGISTER_ERROR);
+		}
+		
+	}
+
 
 }
