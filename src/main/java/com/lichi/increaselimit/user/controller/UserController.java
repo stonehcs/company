@@ -140,7 +140,7 @@ public class UserController {
 
 	@PostMapping
 	@ApiOperation("修改用户信息,如果是修改手机要先发验证码")
-	public ResultVo<Object> updateUserInfo(@Valid UserUpdateDto dto, BindingResult result) {
+	public ResultVo<Object> updateUserInfo(@Valid UserUpdateDto dto, BindingResult result,@RequestHeader("token") String token) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
 			log.error("修改用户信息参数错误:{}",errors);
@@ -166,6 +166,12 @@ public class UserController {
 		User user = new User();
 		BeanUtils.copyProperties(dto, user);
 		userService.updateUserInfo(user);
+		
+		/**
+		 * 更新缓存
+		 */
+		redisUtils.del(Constants.LOGIN_USER + token);
+		redisUtils.set(Constants.LOGIN_USER + token, JSONObject.toJSONString(user));
 		return ResultVoUtil.success();
 	}
 	
