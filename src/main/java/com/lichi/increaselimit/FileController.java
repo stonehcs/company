@@ -24,7 +24,7 @@ public class FileController {
 	public static final String SHUIYIN = "?imageView2/1/w/600/h/400/q/75|watermark/2/text/6YeN5bqG6aqK6amw5paH5YyW/font/5b6u6L2v6ZuF6buR/fontsize/480/fill/I0ZGRkZGRg==/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim";
 
 	@ApiOperation(value = "文件上传")
-	@RequestMapping(value = "upload",method=RequestMethod.POST)
+	@RequestMapping(value = "/upload",method=RequestMethod.POST)
 	public ResultVo<Object> upload(@RequestParam("file") MultipartFile file) {
 		if (file.isEmpty()) {
 			return ResultVoUtil.error(1, "文件内容为空");

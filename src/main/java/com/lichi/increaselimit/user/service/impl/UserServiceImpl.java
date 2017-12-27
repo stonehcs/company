@@ -152,9 +152,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateUserInfo(User user) {
+	public User updateUserInfo(User user) {
 		user.setUpdateTime(new Date());
 		userMapper.updateByPrimaryKeySelective(user);
+		
+		return userMapper.selectByPrimaryKey(user.getId());
 	}
 
 	@Override

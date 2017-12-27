@@ -165,13 +165,13 @@ public class UserController {
 		log.info("修改用户信息,用户id:{}",dto.getId());
 		User user = new User();
 		BeanUtils.copyProperties(dto, user);
-		userService.updateUserInfo(user);
+		User user2 = userService.updateUserInfo(user);
 		
 		/**
 		 * 更新缓存
 		 */
 		redisUtils.del(Constants.LOGIN_USER + token);
-		redisUtils.set(Constants.LOGIN_USER + token, JSONObject.toJSONString(user));
+		redisUtils.set(Constants.LOGIN_USER + token, JSONObject.toJSONString(user2));
 		return ResultVoUtil.success();
 	}
 	
