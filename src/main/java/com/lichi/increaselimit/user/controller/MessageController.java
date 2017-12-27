@@ -29,21 +29,22 @@ public class MessageController {
 	@Autowired
 	private SysMessageService messageService;
 
-	@GetMapping
+	@GetMapping("/page/{userId}")
 	@ApiOperation("分页查询所有消息")
 	public ResultVo<PageInfo<SysMessage>> getAll(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
-			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
+			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
+			@PathVariable String userId) {
 		log.info("分页查询所有消息");
-		PageInfo<SysMessage> list = messageService.selectAll(page, size);
+		PageInfo<SysMessage> list = messageService.selectAll(page, size,userId);
 		return ResultVoUtil.success(list);
 	}
 	
-	@GetMapping("/list")
+	@GetMapping("/list/{userId}")
 	@ApiOperation("查询所有消息")
-	public ResultVo<List<SysMessage>> getAll() {
+	public ResultVo<List<SysMessage>> getAll(@PathVariable String userId) {
 		log.info("查询所有消息");
-		List<SysMessage> list = messageService.selectList();
+		List<SysMessage> list = messageService.selectList(userId);
 		return ResultVoUtil.success(list);
 	}
 

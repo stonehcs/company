@@ -11,9 +11,10 @@ public interface SysMessageService {
 	 * 分页查询所有系统消息
 	 * @param page
 	 * @param size
+	 * @param userId 
 	 * @return
 	 */
-	PageInfo<SysMessage> selectAll(Integer page, Integer size);
+	PageInfo<SysMessage> selectAll(Integer page, Integer size, String userId);
 
 	/**
 	 * 根据id查询系统消息
@@ -24,8 +25,9 @@ public interface SysMessageService {
 
 	/**
 	 * 查询所有
+	 * @param userId 
 	 * @return
 	 */
-	List<SysMessage> selectList();
+	List<SysMessage> selectList(String userId);
 
 }

@@ -23,4 +23,6 @@ public class SysMessage {
 	private Date createTime;
 	
 	private Date updateTime;
+	
+	private String userId;
 }

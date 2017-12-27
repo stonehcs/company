@@ -8,19 +8,31 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.user.dao.SysMessageDao;
+import com.lichi.increaselimit.user.dao.UserDao;
 import com.lichi.increaselimit.user.entity.SysMessage;
+import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.service.SysMessageService;
 
 @Service
 public class SysMessageServiceImpl implements SysMessageService{
 	@Autowired
 	private SysMessageDao messageDao;
+	@Autowired
+	private UserDao userDao;
 
 	@Override
-	public PageInfo<SysMessage> selectAll(Integer page, Integer size) {
-		PageHelper.startPage(page, size);
+	public PageInfo<SysMessage> selectAll(Integer page, Integer size ,String userId) {
+		
+//		Integer countAll = sysUserMapper.countAll();
+//		page = page <= 0 ? 1 : page;
+//		page = page > countAll/size + 1 ? countAll/size + 1 : page;
+//		
+//		int start = (page-1)*size;
+//		int end = page*size - (page-1)*size ;
+		User key = userDao.selectByPrimaryKey(userId);
 		PageHelper.orderBy("create_time desc");
-		List<SysMessage> list = messageDao.selectAll();
+		PageHelper.startPage(page, size);
+		List<SysMessage> list = messageDao.selectAllMessage(userId, key.getVipLevel());
 		PageInfo<SysMessage> info = new PageInfo<>(list);
 		return info;
 	}
@@ -31,9 +43,10 @@ public class SysMessageServiceImpl implements SysMessageService{
 	}
 
 	@Override
-	public List<SysMessage> selectList() {
+	public List<SysMessage> selectList(String userId) {
+		User key = userDao.selectByPrimaryKey(userId);
 		PageHelper.orderBy("create_time desc");
-		List<SysMessage> list = messageDao.selectAll();
+		List<SysMessage> list = messageDao.selectAllMessage(userId, key.getVipLevel());
 		return list;
 	}
 
