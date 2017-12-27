@@ -56,7 +56,7 @@ public interface UserDao extends BaseMapper<User> {
 			+ "order by a.rank desc ) t where t.rownum = #{rownum}")
 	UserRank getRankByRow(Integer rownum);
 
-	@Select("select * from t_vip_level where level = #{level}")
+	@Select("select * from t_vip_level where id = #{level}")
 	VipLevel selectLevelInfo(Integer level);
 
 	

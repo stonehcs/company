@@ -95,7 +95,7 @@ public interface UserService {
 	CourseCount getMyCourse(String id);
 	
 	/**
-	 * 通过level等级获取level信息
+	 * 通过levelId等级获取level信息
 	 * @param level
 	 * @return
 	 */
