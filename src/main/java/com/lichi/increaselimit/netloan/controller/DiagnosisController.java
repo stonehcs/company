@@ -1,7 +1,5 @@
 package com.lichi.increaselimit.netloan.controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -79,15 +77,8 @@ public class DiagnosisController {
 		DiagnosisResultList result = diagnosisDicService.getResult(creditBill.getIssueBank(), money,
 				creditBill.getLast4digit(), creditBill.getUserId(),creditBill.getHolderName());
 
-		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM");
-		LocalDate time1 = LocalDate.now().minusMonths(1);
-		LocalDate time2 = LocalDate.now().minusMonths(2);
-		LocalDate time3 = LocalDate.now().minusMonths(3);
-		String format = String.format(TEXT, creditBill.getIssueBank(), creditBill.getHolderName(), creditAmt, "15000",
-				df.format(time1), df.format(time1), df.format(time2), df.format(time2), df.format(time3),
-				df.format(time3), creditBill.getIssueBank(), creditBill.getIssueBank(), creditBill.getIssueBank());
-		String[] strings = format.split("\\r\\n");
-		result.setResult(strings);
+		String format = String.format(TEXT, creditBill.getHolderName(),creditBill.getLast4digit(),"500%",money * 5);
+		result.setResult(format);
 
 		return ResultVoUtil.success(result);
 	}
@@ -120,13 +111,10 @@ public class DiagnosisController {
 	}
 	
 
-	private final static String TEXT = "%s银行, 户主：%s，固定额度：%s，临时额度：%s，系统确认中......\r\n" + "银行基本信息确认完成。\r\n"
-			+ "最近3个月消费账单分析中......\r\n" + "%s账单分析中......\r\n" + "%s月账单分析完成。\r\n" + "%s月账单分析中......\r\n"
-			+ "%s月账单分析完成。\r\n" + "%s月账单分析中......\r\n" + "%s月账单分析完成。\r\n" + "刷卡消费类型分析中......\r\n"
-			+ "刷卡消费类型分析完成。\r\n" + "%s银行诊断模型启动中...\r\n" + "%s银行诊断模型分析中.........\r\n" + "%s银行诊断模型分析完成。\r\n"
-			+ "一键诊断完成。";
+	private final static String TEXT = "尊敬的%s，尾号%s客户，根据您的资料完善情况与信用卡历史账单分析，可在三个月"
+			+ "内提升信用卡额度%s，预计可达到金额:%s,具体规则如下:";
 	
-	private final static String RADAR = "数据准备中...\r\n" + 
+	private final static String RADAR = "一键诊断程序启动中...\r\n" + 
 			"银行卡基本信息确认完成。\r\n" + 
 			"最近3个月消费账单分析完成。\r\n" + 
 			"刷卡消费类型分析完成。\r\n" + 
@@ -134,4 +122,8 @@ public class DiagnosisController {
 			"一键诊断完成。";
 	
 	
+	public static void main(String[] args) {
+		String format = String.format(TEXT, "xx","xx","500%",0.5 * 5);
+		System.out.println(format);
+	}
 }
