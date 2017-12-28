@@ -11,6 +11,6 @@ import com.lichi.increaselimit.netloan.entity.NetLoan;
  */	
 public interface NetLoanService{
 
-	List<NetLoan> selectAll();
+	List<NetLoan> selectAll(Integer type);
 
 }

@@ -11,6 +11,6 @@ import com.lichi.increaselimit.netloan.entity.QuickCard;
  */	
 public interface QuickCardService{
 
-	List<QuickCard> selectAll();
+	List<QuickCard> selectAll(Integer type);
 
 }

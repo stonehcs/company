@@ -25,4 +25,5 @@ public class NetLoan {
 	
 	private String description;
 	
+	private Integer type;
 }

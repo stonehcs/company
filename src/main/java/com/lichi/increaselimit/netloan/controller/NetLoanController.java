@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
@@ -32,10 +33,10 @@ public class NetLoanController{
 	
 	@ApiOperation("查看网贷信息")
 	@GetMapping
-	public ResultVo<List<NetLoan>> getAll(){
+	public ResultVo<List<NetLoan>> getAll(@RequestParam(required=false) Integer type){
 		
 		log.info("查询所有网贷信息");
-		List<NetLoan> list = netLoadService.selectAll();
+		List<NetLoan> list = netLoadService.selectAll(type);
 		return ResultVoUtil.success(list);
 		
 	}

@@ -25,4 +25,6 @@ public class QuickCard {
 	
 	private String description;
 	
+	private Integer type;
+	
 }
