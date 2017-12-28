@@ -14,11 +14,13 @@ public class SysMessage {
 	@Id
 	private Integer id;
 	
-	private String description;
+	private String type;
 	
 	private Integer level;
 	
 	private String content;
+	
+	private String title;
 	
 	private Date createTime;
 	
