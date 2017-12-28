@@ -12,6 +12,7 @@ spring:
 #    host: localhost
     port: 6379
     password: 
+#    password: MTIzNHF3ZXI=
     pool:
       max-active: 8
       max-wait: -1
@@ -23,7 +24,7 @@ spring:
       enabled: true
       file-size-threshold: 0
       location: 
-      max-file-size: 1MB
+      max-file-size: 10MB
       max-request-size: 10Mb
 mybatis:
   mapper-locations:
