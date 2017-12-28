@@ -31,7 +31,7 @@ public interface UserDao extends BaseMapper<User> {
 	@Select("select * from t_user where mobile=#{mobile}")
 	User loadUserInfoByMobile(String mobile);
 
-	@Select("select b.*,d.teachername,d.img_url from t_user a,t_course b,t_user_course c,t_teacher d "
+	@Select("select b.*,d.teachername,d.img_url,c.status from t_user a,t_course b,t_user_course c,t_teacher d "
 			+ "where a.id=c.user_id "
 			+ "and b.id = c.course_id "
 			+ "and d.id = b.teacher_id "
