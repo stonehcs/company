@@ -92,4 +92,13 @@ public interface CourseService {
 	 */
 	CourseCount getMyCourse(String id);
 
+	/**
+	 * 获取登录的
+	 * @param page
+	 * @param size
+	 * @param id
+	 * @return
+	 */
+	PageInfo<CourseVo> getLoginCourse(Integer page, Integer size, String id);
+
 }

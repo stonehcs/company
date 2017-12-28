@@ -1,5 +1,6 @@
 package com.lichi.increaselimit.course.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.common.Constants;
 import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
+import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.utils.StringUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
@@ -29,8 +32,11 @@ import com.lichi.increaselimit.course.controller.dto.SignUpDto;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.entity.CourseVo;
 import com.lichi.increaselimit.course.service.CourseService;
+import com.lichi.increaselimit.user.entity.User;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +55,9 @@ public class CourseController {
 
 	@Autowired
 	private CourseService courseService;
+	
+	@Autowired
+	private RedisUtils redisUtils;
 
 	@GetMapping("/list")
 	@ApiOperation(value = "查看课程列表")
@@ -64,11 +73,21 @@ public class CourseController {
 
 	@GetMapping("/index-course")
 	@ApiOperation(value = "首页课程显示")
+	@ApiImplicitParams(@ApiImplicitParam(paramType="header",dataType = "string",name = "token"))
 	public ResultVo<PageInfo<CourseVo>> getCourseList(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
-			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
+			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,HttpServletRequest request) {
 		log.info("首页课程显示");
-		PageInfo<CourseVo> list = courseService.getCourseList(page, size);
+		String token = request.getHeader("token");
+		PageInfo<CourseVo> list = null;
+		if(StringUtils.isBlank(token)) {
+			list = courseService.getCourseList(page, size);
+		}else {
+			String strJson = redisUtils.get(Constants.LOGIN_USER + token);
+			User user = JSONObject.parseObject(strJson, User.class);
+			String id = user.getId();
+			list = courseService.getLoginCourse(page, size,id);
+		}
 		return ResultVoUtil.success(list);
 	}
 

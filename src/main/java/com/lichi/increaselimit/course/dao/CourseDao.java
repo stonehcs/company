@@ -112,4 +112,9 @@ public interface CourseDao extends BaseMapper<Course> {
 	 */
 	@Select("select status from t_user_course where user_id = #{userId} and course_id = #{id}")
 	Integer selectStatus(@Param(value = "id") Integer id, @Param(value = "userId") String userId);
+
+	@Select("select a.*,IFNULL(b.`status`,-1) as status,c.teachername,c.img_url "
+			+ "from t_course a left join t_user_course b on a.id = b.course_id and b.user_id = #{userId}"
+			+ "LEFT JOIN t_teacher c on a.teacher_id = c.id where end_time > NOW()")
+	List<CourseVo> selectLoginCourse(String id);
 }
