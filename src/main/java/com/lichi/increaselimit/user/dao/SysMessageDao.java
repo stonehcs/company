@@ -17,7 +17,7 @@ import com.lichi.increaselimit.user.entity.SysMessage;
 @Mapper
 public interface SysMessageDao extends BaseMapper<SysMessage>{
 
-	@Select("SELECT * from t_sys_message where level = #{level} UNION SELECT * from t_sys_message where user_id = #{userId}")
+	@Select("SELECT * from t_sys_message where level <= #{level} UNION SELECT * from t_sys_message where user_id = #{userId}")
 	List<SysMessage> selectAllMessage(@Param(value = "userId") String userId,@Param(value = "level") Integer level);
 	
 }
