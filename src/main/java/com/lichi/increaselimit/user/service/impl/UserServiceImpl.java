@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 		socialUserMapper.insertUserConnection(socialUserInfo);
 		user.setId(userId);
 		if(StringUtils.isBlank(socialUserInfo.getImageUrl())) {
-			user.setHeadImg("ozlfwi1zj.bkt.clouddn.com/默认头像.jpg");
+			user.setHeadImg("http://ozlfwi1zj.bkt.clouddn.com/%E9%BB%98%E8%AE%A4%E5%A4%B4%E5%83%8F.jpg?imageView2/1/w/600/h/400/q/75|watermark/2/text/6YeN5bqG6aqK6amw5paH5YyW/font/5b6u6L2v6ZuF6buR/fontsize/480/fill/I0ZGRkZGRg==/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim");
 		}else {
 			user.setHeadImg(socialUserInfo.getImageUrl());
 		}

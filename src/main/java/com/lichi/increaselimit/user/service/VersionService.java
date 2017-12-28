@@ -1,7 +1,5 @@
 package com.lichi.increaselimit.user.service;
 
-import java.util.List;
-
 import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.user.entity.Version;
 
@@ -44,6 +42,6 @@ public interface VersionService {
 	 * 查询所有
 	 * @return
 	 */
-	List<Version> selectList();
+	Version selectNew();
 
 }

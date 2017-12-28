@@ -1,7 +1,5 @@
 package com.lichi.increaselimit.user.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -46,11 +44,11 @@ public class VersionController {
 		PageInfo<Version> list = versionService.selectAll(page, size);
 		return ResultVoUtil.success(list);
 	}
-	@GetMapping("/list")
-	@ApiOperation("查询所有版本")
-	public ResultVo<List<Version>> getAll() {
+	@GetMapping("/new")
+	@ApiOperation("获得最新版本")
+	public ResultVo<Version> getAll() {
 		log.info("查询所有版本");
-		List<Version> list = versionService.selectList();
+		Version list = versionService.selectNew();
 		return ResultVoUtil.success(list);
 	}
 
