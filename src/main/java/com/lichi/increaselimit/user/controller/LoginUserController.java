@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lichi.increaselimit.common.Constants;
 import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
@@ -43,7 +44,7 @@ public class LoginUserController {
 	 */
 	@GetMapping
 	@ApiOperation("随机获取一个客服")
-	public ResultVo<String> getAllLoginUser() {
+	public ResultVo<JSONObject> getAllLoginUser() {
 		
 		log.info("随机获取一个客服");
 		
@@ -55,7 +56,10 @@ public class LoginUserController {
 		List<String> list = keys.stream().collect(Collectors.toList());
 		Collections.shuffle(list);
 		String substringAfter = StringUtils.substringAfter(list.get(0),Constants.LOGIN_KEFU);
-		return ResultVoUtil.success(substringAfter);
+		
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("userId", substringAfter);
+		return ResultVoUtil.success(jsonObject);
 	}
 
 }
