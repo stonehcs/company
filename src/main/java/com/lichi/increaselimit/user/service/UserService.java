@@ -78,7 +78,7 @@ public interface UserService {
 	 * @param user
 	 * @return 
 	 */
-	User updateUserInfo(User user);
+	void updateUserInfo(User user);
 	
 	/**
 	 * 获取当前用户排名

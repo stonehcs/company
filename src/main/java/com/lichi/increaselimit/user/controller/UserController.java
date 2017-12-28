@@ -71,8 +71,10 @@ public class UserController {
 		if(StringUtils.isBlank(string)) {
 			throw new BusinessException(ResultEnum.LOGIN_TIME_OUT);
 		}
-		UserVo vo = JSONObject.parseObject(string, UserVo.class);
-		VipLevel level = userService.getLevel(vo.getVipLevel());
+		User user = userService.loadUserInfoByUserId(token);
+		VipLevel level = userService.getLevel(user.getVipLevel());
+		UserVo vo = new UserVo();
+		BeanUtils.copyProperties(user, vo);
 		vo.setLevelName(level.getLevelName());
 		return ResultVoUtil.success(vo);
 
@@ -165,13 +167,7 @@ public class UserController {
 		log.info("修改用户信息,用户id:{}",dto.getId());
 		User user = new User();
 		BeanUtils.copyProperties(dto, user);
-		User user2 = userService.updateUserInfo(user);
-		
-		/**
-		 * 更新缓存
-		 */
-		redisUtils.del(Constants.LOGIN_USER + token);
-		redisUtils.set(Constants.LOGIN_USER + token, JSONObject.toJSONString(user2));
+		userService.updateUserInfo(user);
 		return ResultVoUtil.success();
 	}
 	

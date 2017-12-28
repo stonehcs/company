@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lichi.increaselimit.common.Constants;
-import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.user.entity.User;
@@ -55,10 +54,10 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			userService.registerHuanxinAndUpdatePid(user.getId(),user.getPid());
 		}
 		
-		String token = IdUtils.getUUID();
+		String token = user.getId();
 		
 		//将生成的token放入redis,token设置为永久
-		redisUtils.set(Constants.LOGIN_USER + token, JSONObject.toJSONString(user));
+		redisUtils.set(Constants.LOGIN_USER + token, token);
 		
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("token", token);
