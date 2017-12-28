@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,7 +54,8 @@ public class LoginUserController {
 		}
 		List<String> list = keys.stream().collect(Collectors.toList());
 		Collections.shuffle(list);
-		return ResultVoUtil.success(list.get(0));
+		String substringAfter = StringUtils.substringAfter(list.get(0),Constants.LOGIN_KEFU);
+		return ResultVoUtil.success(substringAfter);
 	}
 
 }
