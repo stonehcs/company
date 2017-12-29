@@ -1,6 +1,7 @@
 package com.lichi.increaselimit.user.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.course.entity.CourseVo;
 import com.lichi.increaselimit.user.entity.CourseCount;
 import com.lichi.increaselimit.user.entity.SocialUserInfo;
@@ -40,14 +41,14 @@ public interface UserService {
 	 * @param socialUserInfo
 	 * @return 
 	 */
-	User insertSocialUser(SocialUserInfo socialUserInfo);
+	User insertSocialUser(SocialUserInfo socialUserInfo) throws BusinessException;
 	
 	/**
 	 * 插入手机用户
 	 * @param socialUserInfo
 	 * @return 
 	 */
-	User insertMobileUser(String mobile);
+	User insertMobileUser(String mobile) throws BusinessException;
 	/**
 	 * 插入用户
 	 * @param socialUserInfo

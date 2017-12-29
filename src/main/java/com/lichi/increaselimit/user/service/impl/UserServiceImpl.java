@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public User insertSocialUser(SocialUserInfo socialUserInfo) {
+	public User insertSocialUser(SocialUserInfo socialUserInfo) throws BusinessException{
 		User user = new User();
 		String userId = IdUtils.getId();
 		socialUserInfo.setUserId(userId);
@@ -79,11 +79,11 @@ public class UserServiceImpl implements UserService {
 		user.setUpdateTime(new Date());
 		userMapper.insertSelective(user);
 		//注册环信用户
-		try {
+//		try {
 			HuanXinUtils.registerUser(userId, restTemplate);
-		} catch (Exception e) {
-			throw new BusinessException(ResultEnum.REGISTER_ERROR);
-		}
+//		} catch (Exception e) {
+//			throw new BusinessException(ResultEnum.REGISTER_ERROR);
+//		}
 		return user;
 	}
 
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public User insertMobileUser(String mobile) {
+	public User insertMobileUser(String mobile) throws BusinessException{
 		String userId = IdUtils.getId();
 		User user = new User();
 		user.setId(userId);
@@ -120,11 +120,11 @@ public class UserServiceImpl implements UserService {
 		user.setVipLevel(1);
 		user.setHeadImg("http://ozlfwi1zj.bkt.clouddn.com/%E9%BB%98%E8%AE%A4%E5%A4%B4%E5%83%8F.jpg?imageView2/1/w/600/h/400/q/75|watermark/2/text/6YeN5bqG6aqK6amw5paH5YyW/font/5b6u6L2v6ZuF6buR/fontsize/480/fill/I0ZGRkZGRg==/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim");
 		userMapper.insertSelective(user);
-		try {
+//		try {
 			HuanXinUtils.registerUser(userId, restTemplate);
-		} catch (Exception e) {
-			throw new BusinessException(ResultEnum.REGISTER_ERROR);
-		}
+//		} catch (Exception e) {
+//			throw new BusinessException(ResultEnum.REGISTER_ERROR);
+//		}
 		return user;
 	}
 
