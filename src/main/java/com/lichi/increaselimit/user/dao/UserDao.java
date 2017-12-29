@@ -43,8 +43,8 @@ public interface UserDao extends BaseMapper<User> {
 	 * @param id
 	 * @return
 	 */
-	@Select("select * from (select @rownum:=@rownum+1  rownum , a.id , a.rank,a.points from t_user a,(SELECT @rownum:=0) r  "
-			+ "order by a.rank desc ) t where t.id = #{id}")
+	@Select("select * from (select @rownum:=@rownum+1  rownum , a.id , a.invitation,a.points from t_user a,(SELECT @rownum:=0) r  "
+			+ "order by a.invitation desc ) t where t.id = #{id}")
 	UserRank getRank(String id);
 	
 	/**
@@ -52,8 +52,8 @@ public interface UserDao extends BaseMapper<User> {
 	 * @param id
 	 * @return
 	 */
-	@Select("select * from (select @rownum:=@rownum+1  rownum , a.id , a.rank,a.points from t_user a,(SELECT @rownum:=0) r  "
-			+ "order by a.rank desc ) t where t.rownum = #{rownum}")
+	@Select("select * from (select @rownum:=@rownum+1  rownum , a.id , a.invitation,a.points from t_user a,(SELECT @rownum:=0) r  "
+			+ "order by a.invitation desc ) t where t.rownum = #{rownum}")
 	UserRank getRankByRow(Integer rownum);
 
 	@Select("select * from t_vip_level where id = #{level}")

@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public PageInfo<User> selectBank(Integer page, Integer size) {
 		PageHelper.startPage(page,size);
-		PageHelper.orderBy("rank desc");
+		PageHelper.orderBy("invitation desc");
 		List<User> list = userMapper.selectAll();
 		PageInfo<User> pageInfo = new PageInfo<User>(list);
 		return pageInfo;
@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
 		UserRank userRank = userMapper.getRank(id);
 		if(userRank.getRownum() != 1) {
 			UserRank rankByRow = userMapper.getRankByRow(userRank.getRownum() + 1);
-			userRank.setDiff(userRank.getRank() - rankByRow.getRank());
+			userRank.setDiff(userRank.getInvitation() - rankByRow.getInvitation());
 		}else {
 			userRank.setDiff(0);
 		}

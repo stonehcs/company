@@ -11,7 +11,7 @@ public class UserRank {
 	
 	private Integer points;
 
-	private Integer rank;
+	private Integer invitation;
 	
 	private Integer diff;
 }

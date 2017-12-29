@@ -49,6 +49,9 @@ public class DiagnosisController {
 	public ResultVo<List<CreditBill>> diagnosis(@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
 		// List<DiagnosisResultList> resultlist = new ArrayList<DiagnosisResultList>();
 		log.info("获取当前用户所用信用卡,用户id:{}",userId);
+		if(StringUtils.isBlank(userId)) {
+			return ResultVoUtil.success();
+		}
 		List<CreditBill> list = creditBillService.selectByUserId(userId);
 		// list.forEach(e -> {
 		// String creditAmt = e.getCreditAmt();
