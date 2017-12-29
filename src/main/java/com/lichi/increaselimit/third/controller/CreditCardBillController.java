@@ -127,10 +127,11 @@ public class CreditCardBillController {
 	@GetMapping("/email")
 	public Object getEmailList(@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
 		log.info("获取当前用户邮箱列表,用户id:{}",userId);
+		List<UserEmail> list = new ArrayList<>();
 		if(StringUtils.isBlank(userId)) {
-			return ResultVoUtil.success();
+			return ResultVoUtil.success(list);
 		}
-		List<UserEmail> list = userEmailService.getList(userId);
+		list = userEmailService.getList(userId);
 		return ResultVoUtil.success(list);
 	}
 
@@ -141,10 +142,11 @@ public class CreditCardBillController {
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
 			@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
 		log.info("获取用户未还款信息,用户id:{}",userId);
+		PageInfo<CreditBill> info = new PageInfo<>();
 		if(StringUtils.isBlank(userId)) {
-			return ResultVoUtil.success();
+			return ResultVoUtil.success(info);
 		}
-		PageInfo<CreditBill> info = creditBillService.selectByUserId(userId, page, size);
+		info = creditBillService.selectByUserId(userId, page, size);
 		return ResultVoUtil.success(info);
 	}
 

@@ -57,7 +57,7 @@ public class VersionController {
 	public ResultVo<Version> add(@Valid @RequestBody VersionDto deptDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
-			log.error("添加版本信息参数错误:{}" + errors);
+			log.warn("添加版本信息参数错误:{}" + errors);
 			return ResultVoUtil.error(1, errors);
 		}
 		log.info("添加版本,版本号:{}",deptDto.getVersion());

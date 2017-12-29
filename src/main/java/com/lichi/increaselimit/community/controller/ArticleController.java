@@ -46,7 +46,7 @@ public class ArticleController {
     public ResultVo<Article> postArticle(@Valid @RequestBody ArticleDto articledto, BindingResult result){
         if(result.hasErrors()){
             String errors = result.getFieldError().getDefaultMessage();
-            log.error("发帖参数错误：" + errors);
+            log.warn("发帖参数错误：" + errors);
             return ResultVoUtil.error(1,errors);
         }
         log.info("发帖,帖子标题:{}",articledto.getTitle());
@@ -62,7 +62,7 @@ public class ArticleController {
 	public ResultVo<Article> update(@Valid @RequestBody ArticleUpdateDto articledto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
-			log.error("修改帖子参数错误：" + errors);
+			log.warn("修改帖子参数错误：" + errors);
 			return ResultVoUtil.error(1, errors);
 		}
 		log.info("更新帖子,帖子id:{}",articledto.getId());

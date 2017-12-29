@@ -65,7 +65,7 @@ public class RedisValidateCodeRepository<T> implements ValidateCodeRepository {
 			try {
 				code = ServletRequestUtils.getRequiredStringParameter(request.getRequest(), paramName);
 			} catch (ServletRequestBindingException e) {
-				log.error("获取手机号码{}的验证码失败", code);
+				log.warn("获取手机号码{}的验证码失败", code);
 			}
 		} else {
 			code = request.getHeader("deviceId");

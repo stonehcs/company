@@ -60,7 +60,7 @@ public class VideoController {
 	public ResultVo<Video> addVideo(@Valid @RequestBody VideoDto VideoDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
-			log.error("添加视频参数错误:{}" + errors);
+			log.warn("添加视频参数错误:{}" + errors);
 			return ResultVoUtil.error(1, errors);
 		}
 		log.info("添加视频,视频描述:{}",VideoDto.getDescription());
@@ -83,7 +83,7 @@ public class VideoController {
 	public ResultVo<Video> updateVideo(@Valid @RequestBody VideoUpdateDto VideoDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
-			log.error("修改视频参数错误:{}" + errors);
+			log.warn("修改视频参数错误:{}" + errors);
 			return ResultVoUtil.error(1, errors);
 		}
 		log.info("修改视频,视频id:{}",VideoDto.getId());

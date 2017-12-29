@@ -49,7 +49,7 @@ public class CircleController {
     	log.info("新建圈子,圈子名字：{}" , circledto.getName());
         if(result.hasErrors()){
             String errors = result.getFieldError().getDefaultMessage();
-            log.error("新建圈子参数错误：" + errors);
+            log.warn("新建圈子参数错误：" + errors);
             return ResultVoUtil.error(1,errors);
         }
         Circle circle = new Circle();
@@ -64,7 +64,7 @@ public class CircleController {
     	log.info("更新圈子信息,圈子id：{}" , circledto.getId());
         if(result.hasErrors()){
             String errors = result.getFieldError().getDefaultMessage();
-            log.error("新建圈子参数错误：" + errors);
+            log.warn("新建圈子参数错误：" + errors);
             return ResultVoUtil.error(1,errors);
         }
     	Circle circle = new Circle();

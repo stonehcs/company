@@ -1,5 +1,6 @@
 package com.lichi.increaselimit.netloan.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -49,10 +50,11 @@ public class DiagnosisController {
 	public ResultVo<List<CreditBill>> diagnosis(@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
 		// List<DiagnosisResultList> resultlist = new ArrayList<DiagnosisResultList>();
 		log.info("获取当前用户所用信用卡,用户id:{}",userId);
+		List<CreditBill> list = new ArrayList<>();
 		if(StringUtils.isBlank(userId)) {
-			return ResultVoUtil.success();
+			return ResultVoUtil.success(list);
 		}
-		List<CreditBill> list = creditBillService.selectByUserId(userId);
+		list = creditBillService.selectByUserId(userId);
 		// list.forEach(e -> {
 		// String creditAmt = e.getCreditAmt();
 		// creditAmt = StringUtils.isBlank(creditAmt) ? "10000" : creditAmt;

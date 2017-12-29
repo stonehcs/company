@@ -145,7 +145,7 @@ public class UserController {
 	public ResultVo<Object> updateUserInfo(@Valid UserUpdateDto dto, BindingResult result,@RequestHeader("token") String token) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
-			log.error("修改用户信息参数错误:{}",errors);
+			log.warn("修改用户信息参数错误:{}",errors);
 			return ResultVoUtil.error(1, errors);
 		}
 		if (!StringUtils.isBlank(dto.getMobile())) {

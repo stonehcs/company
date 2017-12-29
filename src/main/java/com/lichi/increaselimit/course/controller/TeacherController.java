@@ -66,7 +66,7 @@ public class TeacherController {
 	public ResultVo<Teacher> addTeacher(@Valid @RequestBody TeacherDto teacherDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
-			log.error("添加讲师参数错误:{}" + errors);
+			log.warn("添加讲师参数错误:{}" + errors);
 			return ResultVoUtil.error(1, errors);
 		}
 		log.info("添加讲师,讲师姓名:{}",teacherDto.getTeachername());
@@ -89,7 +89,7 @@ public class TeacherController {
 	public ResultVo<Teacher> updateTeacher(@Valid @RequestBody TeacherUpdateDto teacherDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
-			log.error("修改讲师参数错误:{}" + errors);
+			log.warn("修改讲师参数错误:{}" + errors);
 			return ResultVoUtil.error(1, errors);
 		}
 		log.info("删除讲师,讲师id:{}",teacherDto.getId());

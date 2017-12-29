@@ -1,7 +1,6 @@
 package com.lichi.increaselimit.common.utils;
 
-import java.util.ArrayList;
-
+import com.alibaba.fastjson.JSONObject;
 import com.lichi.increaselimit.common.vo.ResultVo;
 
 /**
@@ -30,7 +29,7 @@ public class ResultVoUtil {
 	 */
     @SuppressWarnings("unchecked")
 	public static <T> ResultVo<T> success() {
-        return (ResultVo<T>) success(new ArrayList<>());
+        return (ResultVo<T>) success(new JSONObject());
     }
     
     /**
@@ -57,7 +56,7 @@ public class ResultVoUtil {
     	ResultVo<T> resultvo = new ResultVo<T>();
     	resultvo.setCode(code);
     	resultvo.setMsg(msg);
-    	resultvo.setData((T)new ArrayList<>());
+    	resultvo.setData((T)new JSONObject());
     	return resultvo;
     }
 }

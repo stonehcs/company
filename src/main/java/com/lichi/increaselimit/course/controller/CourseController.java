@@ -92,10 +92,10 @@ public class CourseController {
 
 	@PostMapping
 	@ApiOperation(value = "添加课程")
-	public ResultVo<CourseVo> addCourse(@Valid @RequestBody CourseDto courseDto, BindingResult result) {
+	public ResultVo<Object> addCourse(@Valid @RequestBody CourseDto courseDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
-			log.error("添加课程参数错误:{}" + errors);
+			log.warn("添加课程参数错误:{}" , errors);
 			return ResultVoUtil.error(1, errors);
 		}
 		log.info("添加课程,课程标题:{}", courseDto.getTitle());
@@ -118,7 +118,7 @@ public class CourseController {
 	public ResultVo<CourseVo> updateCourse(@Valid @RequestBody CourseUpdateDto courseDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
-			log.error("修改课程信息参数错误：{}" + errors);
+			log.warn("修改课程信息参数错误：{}" + errors);
 			return ResultVoUtil.error(1, errors);
 		}
 		log.info("修改课程信息,课程id:{}", courseDto.getId());
@@ -141,7 +141,7 @@ public class CourseController {
 	public ResultVo<JSONObject> signUp(@Valid SignUpDto signUpDto, BindingResult result) {
 		if (result.hasErrors()) {
 			String errors = result.getFieldError().getDefaultMessage();
-			log.error("课程报名信息参数错误:{}" + errors);
+			log.warn("课程报名信息参数错误:{}" + errors);
 			return ResultVoUtil.error(1, errors);
 		}
 		log.info("课程报名,手机号:{}", signUpDto.getMobile());
