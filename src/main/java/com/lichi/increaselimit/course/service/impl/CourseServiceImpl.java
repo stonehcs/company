@@ -144,7 +144,7 @@ public class CourseServiceImpl implements CourseService {
 			User user2 = new User();
 			user2.setId(userId);
 			user2.setMobile(mobile);
-			user2.setNickname(signUpDto.getUsername());
+			user2.setNickname(signUpDto.getNickname());
 			userService.updateUserInfo(user2);
 		}
 		// 注册用户,注册完成以后并登陆
@@ -159,7 +159,7 @@ public class CourseServiceImpl implements CourseService {
 			user2.setId(userId);
 			user2.setMobile(mobile);
 			user2.setUsername(mobile);
-			user2.setNickname(signUpDto.getUsername());
+			user2.setNickname(signUpDto.getNickname());
 			User insert = userService.insert(user2);
 			token = IdUtils.getUUID();
 			// 给用户登陆
@@ -169,7 +169,7 @@ public class CourseServiceImpl implements CourseService {
 		else if (StringUtils.isBlank(signUpDto.getCode()) && !StringUtils.isBlank(userId)) {
 			User user2 = new User();
 			user2.setId(userId);
-			user2.setNickname(signUpDto.getUsername());
+			user2.setNickname(signUpDto.getNickname());
 			userService.updateUserInfo(user2);
 		}else {
 			throw new BusinessException(ResultEnum.PARAM_ERROR);

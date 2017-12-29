@@ -27,7 +27,7 @@ public class SignUpDto {
 	
 	@ApiModelProperty("姓名")
 	@NotBlank(message = "姓名不能为空")
-	private String username;
+	private String nickname;
 	
 	@ApiModelProperty("手机号")
 	@NotBlank(message = "手机号不能为空")
