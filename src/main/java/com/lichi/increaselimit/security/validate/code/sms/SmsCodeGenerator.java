@@ -48,7 +48,7 @@ public class SmsCodeGenerator implements ValidateCodeGenerator {
 			}
 		}
 		String code = RandomStringUtils.randomNumeric(securityProperties.getCode().getSms().getLength());
-//		code="123456";
+		code="123456";
 		return new ValidateCode(code, securityProperties.getCode().getSms().getExpireIn());
 	}
 
