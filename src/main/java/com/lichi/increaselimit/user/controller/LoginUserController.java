@@ -48,7 +48,7 @@ public class LoginUserController {
 	public ResultVo<JSONObject> getAllLoginUser(@RequestParam(required = false) Integer type) {
 		
 		//为空就是客服,为1是意见返回
-		String substringAfter =  null;
+		String substringAfter =  "";
 		if(null == type) {
 			
 			log.info("随机获取一个客服");
