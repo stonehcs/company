@@ -11,7 +11,7 @@ spring:
 #    host: 192.168.100.109
     host: localhost
     port: 6379
-    password: 
+    password: 123456
 #    password: MTIzNHF3ZXI=
     pool:
       max-active: 8
