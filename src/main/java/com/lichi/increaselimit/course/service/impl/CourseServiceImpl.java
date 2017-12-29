@@ -162,7 +162,8 @@ public class CourseServiceImpl implements CourseService {
 			user2.setNickname(signUpDto.getNickname());
 			User insert = userService.insert(user2);
 			// 给用户登陆
-			redisUtils.set(Constants.LOGIN_USER + token, insert.getId());
+			token = insert.getId();
+			redisUtils.set(Constants.LOGIN_USER + token, token);
 		}
 		//如果验证码不存在，但是用户名存在，说明已经登陆了,更新下用户名
 		else if (StringUtils.isBlank(signUpDto.getCode()) && !StringUtils.isBlank(userId)) {
