@@ -124,18 +124,19 @@ public class CreditCardBillController {
 	}
 
 	@ApiOperation("获取邮箱列表")
-	@GetMapping("/email/{userId}")
-	public Object getEmailList(@PathVariable String userId) {
+	@GetMapping("/email")
+	public Object getEmailList(@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
 		log.info("获取当前用户邮箱列表,用户id:{}",userId);
 		List<UserEmail> list = userEmailService.getList(userId);
 		return ResultVoUtil.success(list);
 	}
 
 	@ApiOperation("通过用户id获取未还款信息")
-	@GetMapping("/{userId}")
-	public Object getCreditCardBill(@PathVariable String userId,
+	@GetMapping("/getUnpay")
+	public Object getCreditCardBill(
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
-			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
+			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
+			@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
 		log.info("获取用户未还款信息,用户id:{}",userId);
 		PageInfo<CreditBill> info = creditBillService.selectByUserId(userId, page, size);
 		return ResultVoUtil.success(info);

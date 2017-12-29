@@ -137,6 +137,7 @@ public class CreditBillServiceImpl implements CreditBillService {
 				LocalDate parse = LocalDate.parse(creditBill.getPaymentDueDate());
 				long until = LocalDate.now().until(parse, ChronoUnit.DAYS);
 				creditBill.setPayDay((int) until);
+				
 				LocalDate parse2 = LocalDate.parse(creditBill.getStatementDate());
 				long until2 = parse2.until(LocalDate.now(), ChronoUnit.DAYS);
 				creditBill.setBillDay((int) until2);

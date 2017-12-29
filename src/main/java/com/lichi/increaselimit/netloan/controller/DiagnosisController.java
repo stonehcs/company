@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,8 +45,8 @@ public class DiagnosisController {
 	private CreditBillService creditBillService;
 
 	@ApiOperation("获取当前用户所用信用卡")
-	@GetMapping("/bill/{userId}")
-	public ResultVo<List<CreditBill>> diagnosis(@PathVariable String userId) {
+	@GetMapping("/bill")
+	public ResultVo<List<CreditBill>> diagnosis(@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
 		// List<DiagnosisResultList> resultlist = new ArrayList<DiagnosisResultList>();
 		log.info("获取当前用户所用信用卡,用户id:{}",userId);
 		List<CreditBill> list = creditBillService.selectByUserId(userId);
