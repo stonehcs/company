@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
@@ -43,19 +44,26 @@ public class LoginUserController {
 	 * @return
 	 */
 	@GetMapping
-	@ApiOperation("随机获取一个客服")
-	public ResultVo<JSONObject> getAllLoginUser() {
+	@ApiOperation("随机获取一个客服或者意见反馈  1表示反馈")
+	public ResultVo<JSONObject> getAllLoginUser(@RequestParam(required = false) Integer type) {
 		
-		log.info("随机获取一个客服");
-		
-		Set<String> keys = redisUtils.getKeys(Constants.LOGIN_KEFU + "*");
-		
-		if(null == keys || keys.size() == 0) {
-			throw new BusinessException(ResultEnum.NO_ONLINE_USER);
+		//为空就是客服,为1是意见返回
+		String substringAfter =  null;
+		if(null == type) {
+			
+			log.info("随机获取一个客服");
+			
+			Set<String> keys = redisUtils.getKeys(Constants.LOGIN_KEFU + "*");
+			
+			if(null == keys || keys.size() == 0) {
+				throw new BusinessException(ResultEnum.NO_ONLINE_USER);
+			}
+			List<String> list = keys.stream().collect(Collectors.toList());
+			Collections.shuffle(list);
+			substringAfter = StringUtils.substringAfter(list.get(0),Constants.LOGIN_KEFU);
+		}else {
+			
 		}
-		List<String> list = keys.stream().collect(Collectors.toList());
-		Collections.shuffle(list);
-		String substringAfter = StringUtils.substringAfter(list.get(0),Constants.LOGIN_KEFU);
 		
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("userId", substringAfter);

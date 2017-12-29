@@ -133,7 +133,14 @@ public class CreditBillServiceImpl implements CreditBillService {
 			value1.entrySet().stream().forEach(c -> {
 				List<CreditBill> value2 = c.getValue();
 				Optional<CreditBill> findFirst = value2.stream().findFirst();
-				resultlist.add(findFirst.get());
+				CreditBill creditBill = findFirst.get();
+				LocalDate parse = LocalDate.parse(creditBill.getPaymentDueDate());
+				long until = LocalDate.now().until(parse, ChronoUnit.DAYS);
+				creditBill.setPayDay((int) until);
+				LocalDate parse2 = LocalDate.parse(creditBill.getStatementDate());
+				long until2 = parse2.until(LocalDate.now(), ChronoUnit.DAYS);
+				creditBill.setBillDay((int) until2);
+				resultlist.add(creditBill);
 			});
 		});
 		return resultlist;
