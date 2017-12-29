@@ -49,18 +49,20 @@ public class LoginUserController {
 		
 		//为空就是客服,为1是意见返回
 		String substringAfter =  "";
+			
+		log.info("随机获取一个客服");
+		
+		Set<String> keys = redisUtils.getKeys(Constants.LOGIN_KEFU + "*");
+		
+		if(null == keys || keys.size() == 0) {
+			throw new BusinessException(ResultEnum.NO_ONLINE_USER);
+		}
+		List<String> list = keys.stream().collect(Collectors.toList());
+		Collections.shuffle(list);
+		substringAfter = StringUtils.substringAfter(list.get(0),Constants.LOGIN_KEFU);
+		
 		if(null == type) {
 			
-			log.info("随机获取一个客服");
-			
-			Set<String> keys = redisUtils.getKeys(Constants.LOGIN_KEFU + "*");
-			
-			if(null == keys || keys.size() == 0) {
-				throw new BusinessException(ResultEnum.NO_ONLINE_USER);
-			}
-			List<String> list = keys.stream().collect(Collectors.toList());
-			Collections.shuffle(list);
-			substringAfter = StringUtils.substringAfter(list.get(0),Constants.LOGIN_KEFU);
 		}else {
 			
 		}
