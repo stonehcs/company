@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public PageInfo<User> selectBank(Integer page, Integer size) {
 		PageHelper.startPage(page,size);
-		PageHelper.orderBy("invitation desc");
+		PageHelper.orderBy("invitation desc,create_time desc");
 		List<User> list = userMapper.selectAll();
 		PageInfo<User> pageInfo = new PageInfo<User>(list);
 		return pageInfo;
