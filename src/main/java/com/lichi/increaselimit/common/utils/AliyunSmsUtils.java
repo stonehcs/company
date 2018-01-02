@@ -39,7 +39,7 @@ public class AliyunSmsUtils {
 		// 必填:短信模板-可在短信控制台中找到
 		request.setTemplateCode("SMS_116560230");
 		// 验证码${code}，您正在登录，若非本人操作，请勿泄露。
-		request.setTemplateParam("{\"code\": " + code + "}");
+		request.setTemplateParam("{\"code\": " + "\"" + code + "\"" + "}");
 
 		// 选填-上行短信扩展码(无特殊需求用户请忽略此字段)
 		// request.setSmsUpExtendCode("90997");
@@ -53,6 +53,6 @@ public class AliyunSmsUtils {
 	}
 	
 	public static void main(String[] args) throws ClientException {
-		sendSms("17749974977", "123456");
+		sendSms("17749974977", "023456");
 	}
 }

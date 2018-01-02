@@ -14,12 +14,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 环信
  * @author majie
  *
  */
 @Component
+@Slf4j
 public class HuanXinUtils {
 
 	private static final String ORGNAME	= "1105171201115139";
@@ -55,7 +58,8 @@ public class HuanXinUtils {
         parm.put("password", "123456");
         HttpEntity<JSONObject> entity = new HttpEntity<JSONObject>(parm, headers);
         HttpEntity<JSONObject> response = restTemplate.exchange(HX_REGISTER_URL, HttpMethod.POST, entity, JSONObject.class);
-
+        
+        log.info("环信注册返回信息:" + response.getBody().toJSONString());
         //没有注册成功抛出异常回滚
         if(null != response.getBody().getString("error")) {
 			throw new BusinessException(ResultEnum.REGISTER_ERROR);
