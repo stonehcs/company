@@ -176,7 +176,11 @@ public class UserServiceImpl implements UserService {
 		UserRank userRank = userMapper.getRank(id);
 		if(userRank.getRownum() != 1) {
 			UserRank rankByRow = userMapper.getRankByRow(userRank.getRownum() + 1);
-			userRank.setDiff(userRank.getInvitation() - rankByRow.getInvitation());
+			if(rankByRow != null) {
+				userRank.setDiff(userRank.getInvitation() - rankByRow.getInvitation());
+			}else {
+				userRank.setDiff(0);
+			}
 		}else {
 			userRank.setDiff(0);
 		}
