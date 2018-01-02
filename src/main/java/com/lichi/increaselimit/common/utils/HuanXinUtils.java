@@ -38,6 +38,7 @@ public class HuanXinUtils {
 	 * 注册环信用户
 	 */
 	public static void registerUser(String userId,RestTemplate restTemplate) {
+		log.info("注册环信用户,用户id:{}",userId);
 		//拼装获取token数据
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("grant_type", "client_credentials");
@@ -57,12 +58,16 @@ public class HuanXinUtils {
         parm.put("username", userId);
         parm.put("password", "123456");
         HttpEntity<JSONObject> entity = new HttpEntity<JSONObject>(parm, headers);
-        HttpEntity<JSONObject> response = restTemplate.exchange(HX_REGISTER_URL, HttpMethod.POST, entity, JSONObject.class);
-        
-        log.info("环信注册返回信息:" + response.getBody().toJSONString());
-        //没有注册成功抛出异常回滚
-        if(null != response.getBody().getString("error")) {
-			throw new BusinessException(ResultEnum.REGISTER_ERROR);
+        try {
+        	HttpEntity<JSONObject> response = restTemplate.exchange(HX_REGISTER_URL, HttpMethod.POST, entity, JSONObject.class);
+        	log.info("环信注册返回信息:" + response.getBody().toJSONString());
+        	//没有注册成功抛出异常回滚
+        	if(null != response.getBody().getString("error")) {
+        		throw new BusinessException(ResultEnum.REGISTER_ERROR); 
+        	}
+		} catch (Exception e) {
+			throw new BusinessException(ResultEnum.REGISTER_ERROR); 
 		}
+        
 	}
 }

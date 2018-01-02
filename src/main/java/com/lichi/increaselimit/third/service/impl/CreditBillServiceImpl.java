@@ -135,12 +135,26 @@ public class CreditBillServiceImpl implements CreditBillService {
 				Optional<CreditBill> findFirst = value2.stream().findFirst();
 				CreditBill creditBill = findFirst.get();
 				LocalDate parse = LocalDate.parse(creditBill.getPaymentDueDate());
-				long until = LocalDate.now().until(parse, ChronoUnit.DAYS);
-				creditBill.setPayDay((int) until);
+				int dayOfMonth = parse.getDayOfMonth();
+				int now = LocalDate.now().getDayOfMonth();
+//				long until = LocalDate.now().until(parse, ChronoUnit.DAYS);
+				int until = dayOfMonth - now;
+				creditBill.setPayDay(until);
 				
 				LocalDate parse2 = LocalDate.parse(creditBill.getStatementDate());
-				long until2 = parse2.until(LocalDate.now(), ChronoUnit.DAYS);
-				creditBill.setBillDay((int) until2);
+				int dayOfMonth2 = parse2.getDayOfMonth();
+//				long until2 = parse2.until(LocalDate.now(), ChronoUnit.DAYS);
+				int until2 = dayOfMonth2 - now;
+				creditBill.setBillDay(until2);
+				
+				if(until < 0 && until2 < 0) {
+					int dayOfMonth3 = parse2.plusMonths(1).getDayOfMonth();
+					int until3 = dayOfMonth3 - now;
+					creditBill.setBillDay(until3);
+				}
+				if(until2 > 0) {
+					creditBill.setPayDay(-until);
+				}
 				resultlist.add(creditBill);
 			});
 		});
