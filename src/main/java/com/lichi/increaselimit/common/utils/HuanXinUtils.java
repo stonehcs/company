@@ -7,12 +7,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lichi.increaselimit.common.enums.ResultEnum;
-import com.lichi.increaselimit.common.exception.BusinessException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,10 +62,10 @@ public class HuanXinUtils {
         	log.info("环信注册返回信息:" + response.getBody().toJSONString());
         	//没有注册成功抛出异常回滚
         	if(null != response.getBody().getString("error")) {
-        		throw new BusinessException(ResultEnum.REGISTER_ERROR); 
+        		throw new InternalAuthenticationServiceException("注册失败"); 
         	}
 		} catch (Exception e) {
-			throw new BusinessException(ResultEnum.REGISTER_ERROR); 
+			throw new InternalAuthenticationServiceException("注册失败"); 
 		}
         
 	}

@@ -27,9 +27,11 @@ import com.lichi.increaselimit.user.entity.UserRank;
 import com.lichi.increaselimit.user.entity.VipLevel;
 import com.lichi.increaselimit.user.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
 import tk.mybatis.mapper.entity.Example;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -62,6 +64,7 @@ public class UserServiceImpl implements UserService {
 	public User insertSocialUser(SocialUserInfo socialUserInfo) throws BusinessException{
 		User user = new User();
 		String userId = IdUtils.getId();
+		log.info("生成的用户id:{}",userId);
 		socialUserInfo.setUserId(userId);
 		// 第三方表
 		socialUserMapper.insertUserConnection(socialUserInfo);
@@ -110,6 +113,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional(rollbackFor = Exception.class)
 	public User insertMobileUser(String mobile) throws BusinessException{
 		String userId = IdUtils.getId();
+		log.info("生成的用户id:{}",userId);
 		User user = new User();
 		user.setId(userId);
 		user.setUsername(mobile);
@@ -194,7 +198,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void registerHuanxinAndUpdatePid(String pid,String userId) {
+	public void registerHuanxinAndUpdatePid(String userId,String pid) {
 		User user = new User();
 		user.setUpdateTime(new Date());
 		user.setId(userId);
