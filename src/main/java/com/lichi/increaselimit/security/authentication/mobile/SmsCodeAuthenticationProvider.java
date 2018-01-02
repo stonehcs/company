@@ -33,8 +33,7 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 		
 		String mobile = (String) authenticationToken.getPrincipal();
 		
-
-		User user = userService.loadUserInfoByUsername(mobile);
+		User user = userService.loadUserInfoByMobile(mobile);
 
 		if (user == null) {
 			user = userService.insertMobileUser(mobile);
