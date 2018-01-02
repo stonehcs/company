@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -31,10 +32,14 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler{
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
+		if(exception instanceof InternalAuthenticationServiceException) {
+			response.setContentType("application/json;charset=UTF-8");
+			response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage())));
+			return;
+		}
 		log.info("登录认证失败,手机号为:{}",request.getParameter("mobile"));
 		response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		response.setContentType("application/json;charset=UTF-8");
-		exception.printStackTrace();
 		response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage())));
 	}
 
