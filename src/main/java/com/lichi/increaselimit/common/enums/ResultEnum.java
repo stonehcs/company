@@ -65,6 +65,8 @@ public enum ResultEnum {
     COURSE_HAS_SIGNUP(26, "该课程已报名"),
     COURSE_HAS_PAY(26, "该课程已付费"),
     SEND_SMS_ERROR(25, "短信系统异常"),
+    
+    BILL_NOT_EXIST(25, "账单不存在"),
     ;
 
     private Integer code;

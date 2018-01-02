@@ -4,9 +4,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.100.109:3306/test?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
-#    url: jdbc:mysql://localhost:3306/test?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
     username: root
-#    password: MTIzNHF3ZXI=
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -17,7 +15,22 @@ spring:
       transaction-query-timeout: 6000
       remove-abandoned-timeout: 180
       filters: stat
+      
+  redis:
+    database: 0
+    host: 192.168.100.109
+    port: 6379
+    password: 
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+    timeout: 3000
 security:
   basic:
     enabled: false
 
+logging:
+  level:
+   root: debug

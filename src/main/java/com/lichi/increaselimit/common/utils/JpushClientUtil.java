@@ -380,7 +380,7 @@ public class JpushClientUtil {
 	}
 
 	public static void main(String[] args) {
-		if (JpushClientUtil.sendToAllIos("testIos", "testIos", "this is a ios Dev test", "") == 1) {
+		if (JpushClientUtil.sendToAllAndroid("testIos", "testIos", "this is a ios Dev test", "") == 1) {
 			System.out.println("success");
 		}
 	}

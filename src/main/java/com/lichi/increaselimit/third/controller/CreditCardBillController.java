@@ -72,10 +72,12 @@ public class CreditCardBillController {
 			@ApiParam(value = "邮箱", required = true) @RequestParam(required = true) String username,
 			@ApiParam(value = "密码", required = true) @RequestParam(required = true) String password) {
 
-		log.info("查询信用卡账单,用户邮箱:{}",username);
+		log.info("查询信用卡账单,用户邮箱:{},用户id:{}",username,userId);
 		
 		UserEmail userEmail = userEmailService.selectByUsernameAndId(username,userId);
 			
+		log.info("查询到的邮箱:{}",userEmail);
+		
 		if(userEmail != null) {
 			throw new BusinessException(ResultEnum.EMAIL_EXSIT);
 		}
@@ -97,14 +99,28 @@ public class CreditCardBillController {
 			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map,
 					headers);
 			JSONObject jsonObject = restTemplate.postForObject(URL, request, JSONObject.class);
-
+			
+			log.info("查询返回数据:{}",jsonObject);
+			
 			if ("10000".equals(jsonObject.getString("code"))) {
 				HashMap<String, Object> hashmap = (LinkedHashMap) jsonObject.get("result");
 				String code = hashmap.get("code").toString();
+				
+				log.info("查询返回code:{}",code);
+				
 				if ("1002".equals(code)) {
 					return jsonObject;
 				}
+				if ("20399".equals(code)) {
+					return jsonObject;
+				}
 				List list = (ArrayList) hashmap.get("result");
+				
+				if(null == list || list.size() == 0) {
+					throw new BusinessException(ResultEnum.BILL_NOT_EXIST);
+				}
+				log.info("查询返回的结果:{}",list);
+				
 				List<CreditBillVo> listvo = new ArrayList<>();
 				list.stream().forEach(e -> {
 					CreditBillVo vo = new CreditBillVo();

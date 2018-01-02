@@ -6,7 +6,7 @@
 	<!-- test文件路径 -->
 	<property name="TEST_FILE_PATH" value="./logs" />
 	<!-- pro文件路径 -->
-	<property name="PRO_FILE_PATH" value="./logs" />
+	<property name="PRO_FILE_PATH" value="/usr/local/logs/app" />
 
 	<!-- 开发环境 -->
 	<springProfile name="dev">
