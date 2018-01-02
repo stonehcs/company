@@ -108,4 +108,8 @@ public interface UserService {
 	 * @param userId 
 	 */
 	void registerHuanxinAndUpdatePid(String pid, String userId);
+	
+	void deleteByMobile(String mobile);
+	
+	void deleteByPrimary(String id);
 }

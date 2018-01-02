@@ -205,5 +205,17 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+	@Override
+	public void deleteByMobile(String mobile) {
+		Example example = new Example(User.class);
+		example.createCriteria().andEqualTo("mobile",mobile);
+		userMapper.deleteByExample(example);
+	}
+
+	@Override
+	public void deleteByPrimary(String id) {
+		userMapper.deleteByPrimaryKey(id);
+	}
+
 
 }

@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lichi.increaselimit.common.Constants;
 import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
+import com.lichi.increaselimit.common.utils.HuanXinUtils;
 import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.utils.StringUtil;
@@ -59,6 +61,9 @@ public class UserController {
 
 	@Autowired
 	private RedisUtils redisUtils;
+	
+	@Autowired
+	RestTemplate restTemplate;
 
 	@GetMapping
 	@ApiOperation("获取当前用户信息")
@@ -177,5 +182,11 @@ public class UserController {
 		log.info("退出登录,用户token:{}",token);
 		redisUtils.del(Constants.LOGIN_USER + token);
 		return ResultVoUtil.success();
+	}
+	
+	@GetMapping("regist")
+	public void regist() {
+		
+		HuanXinUtils.registerUser("qqqq", restTemplate);
 	}
 }

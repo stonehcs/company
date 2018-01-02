@@ -106,13 +106,17 @@ public class CreditCardBillController {
 				HashMap<String, Object> hashmap = (LinkedHashMap) jsonObject.get("result");
 				String code = hashmap.get("code").toString();
 				
+				JSONObject resultObject = new JSONObject();
+				resultObject.put("code", code);
+				resultObject.put("msg", hashmap.get("msg"));
+				resultObject.put("data", new JSONObject());
 				log.info("查询返回code:{}",code);
 				
 				if ("1002".equals(code)) {
-					return jsonObject;
+					return resultObject;
 				}
 				if ("20399".equals(code)) {
-					return jsonObject;
+					return resultObject;
 				}
 				List list = (ArrayList) hashmap.get("result");
 				

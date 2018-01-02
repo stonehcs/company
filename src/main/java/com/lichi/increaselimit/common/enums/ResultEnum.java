@@ -67,6 +67,8 @@ public enum ResultEnum {
     SEND_SMS_ERROR(25, "短信系统异常"),
     
     BILL_NOT_EXIST(25, "账单不存在"),
+    
+    NOT_ALLOWED_METHOD(25, "内测阶段不允许第三方登录"),
     ;
 
     private Integer code;
