@@ -72,72 +72,72 @@ public class CreditCardBillController {
 			@ApiParam(value = "邮箱", required = true) @RequestParam(required = true) String username,
 			@ApiParam(value = "密码", required = true) @RequestParam(required = true) String password) {
 
-		log.info("查询信用卡账单,用户邮箱:{},用户id:{}",username,userId);
-		
-		UserEmail userEmail = userEmailService.selectByUsernameAndId(username.trim(),userId);
-			
-		log.info("查询到的邮箱:{}",userEmail);
-		
-		if(userEmail != null) {
+		log.info("查询信用卡账单,用户邮箱:{},用户id:{}", username, userId);
+
+		UserEmail userEmail = userEmailService.selectByUsernameAndId(username.trim(), userId);
+
+		log.info("查询到的邮箱:{}", userEmail);
+
+		if (userEmail != null) {
 			throw new BusinessException(ResultEnum.EMAIL_EXSIT);
 		}
-			
-		try {
-			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-			map.add("email", username);
-			map.add("password", password);
-			map.add("appkey", APPKEY);
 
-			UserEmail email = new UserEmail();
-			email.setEmail(username);
-			email.setPassword(password);
-			email.setUserId(userId);
-			
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+		map.add("email", username);
+		map.add("password", password);
+		map.add("appkey", APPKEY);
+
+		UserEmail email = new UserEmail();
+		email.setEmail(username);
+		email.setPassword(password);
+		email.setUserId(userId);
+
+		JSONObject jsonObject = null;
+		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
 			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map,
 					headers);
-			JSONObject jsonObject = restTemplate.postForObject(URL, request, JSONObject.class);
-			
-			log.info("查询返回数据:{}",jsonObject);
-			
-			if ("10000".equals(jsonObject.getString("code"))) {
-				HashMap<String, Object> hashmap = (LinkedHashMap) jsonObject.get("result");
-				String code = hashmap.get("code").toString();
-				
-				JSONObject resultObject = new JSONObject();
-				resultObject.put("code", code);
-				resultObject.put("msg", hashmap.get("msg"));
-				resultObject.put("data", new JSONObject());
-				log.info("查询返回code:{}",code);
-				
-				if ("1002".equals(code)) {
-					return resultObject;
-				}
-				if ("20399".equals(code)) {
-					return resultObject;
-				}
-				List list = (ArrayList) hashmap.get("result");
-				
-				if(null == list || list.size() == 0) {
-					throw new BusinessException(ResultEnum.BILL_NOT_EXIST);
-				}
-				log.info("查询返回的结果:{}",list);
-				
-				List<CreditBillVo> listvo = new ArrayList<>();
-				list.stream().forEach(e -> {
-					CreditBillVo vo = new CreditBillVo();
-					MapToBean(e, vo, userId);
-					listvo.add(vo);
-				});
-				creditBillService.insert(listvo, email);
-			} else {
-				return jsonObject;
-			}
+			jsonObject = restTemplate.postForObject(URL, request, JSONObject.class);
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new BusinessException(ResultEnum.NO_RESPONSE);
+		}
+
+		log.info("查询返回数据:{}", jsonObject);
+
+		if ("10000".equals(jsonObject.getString("code"))) {
+			HashMap<String, Object> hashmap = (LinkedHashMap) jsonObject.get("result");
+			String code = hashmap.get("code").toString();
+
+			JSONObject resultObject = new JSONObject();
+			resultObject.put("code", code);
+			resultObject.put("msg", hashmap.get("msg"));
+			resultObject.put("data", new JSONObject());
+			log.info("查询返回code:{}", code);
+
+			if ("1002".equals(code)) {
+				return resultObject;
+			}
+			if ("20399".equals(code)) {
+				return resultObject;
+			}
+			List list = (ArrayList) hashmap.get("result");
+
+			if (null == list || list.size() == 0) {
+				throw new BusinessException(ResultEnum.BILL_NOT_EXIST);
+			}
+			log.info("查询返回的结果:{}", list);
+
+			List<CreditBillVo> listvo = new ArrayList<>();
+			list.stream().forEach(e -> {
+				CreditBillVo vo = new CreditBillVo();
+				MapToBean(e, vo, userId);
+				listvo.add(vo);
+			});
+			creditBillService.insert(listvo, email);
+		} else {
+			return jsonObject;
 		}
 
 		return ResultVoUtil.success();
@@ -145,10 +145,11 @@ public class CreditCardBillController {
 
 	@ApiOperation("获取邮箱列表")
 	@GetMapping("/email")
-	public Object getEmailList(@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
-		log.info("获取当前用户邮箱列表,用户id:{}",userId);
+	public Object getEmailList(
+			@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
+		log.info("获取当前用户邮箱列表,用户id:{}", userId);
 		List<UserEmail> list = new ArrayList<>();
-		if(StringUtils.isBlank(userId)) {
+		if (StringUtils.isBlank(userId)) {
 			return ResultVoUtil.success(list);
 		}
 		list = userEmailService.getList(userId);
@@ -161,9 +162,9 @@ public class CreditCardBillController {
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
 			@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
-		log.info("获取用户未还款信息,用户id:{}",userId);
+		log.info("获取用户未还款信息,用户id:{}", userId);
 		PageInfo<CreditBill> info = new PageInfo<>();
-		if(StringUtils.isBlank(userId)) {
+		if (StringUtils.isBlank(userId)) {
 			return ResultVoUtil.success(info);
 		}
 		info = creditBillService.selectByUserId(userId, page, size);
@@ -178,7 +179,7 @@ public class CreditCardBillController {
 			@ApiParam(value = "银行卡后四位", required = true) @RequestParam(required = true) String last4digit,
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
-		log.info("通过银行名字和后四位查询信用卡信息,用户id:{},银行名字:{},持卡人名字:{},银行卡后四位:{}",userId,issueBank,holderName,last4digit);
+		log.info("通过银行名字和后四位查询信用卡信息,用户id:{},银行名字:{},持卡人名字:{},银行卡后四位:{}", userId, issueBank, holderName, last4digit);
 		PageInfo<CreditBill> info = creditBillService.selectBank(userId, issueBank, holderName, last4digit, page, size);
 		return ResultVoUtil.success(info);
 	}
@@ -188,12 +189,11 @@ public class CreditCardBillController {
 	public Object get(@PathVariable String billId,
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size) {
-		log.info("通过账单主键获取账单详情,账单id:{}",billId);
-		PageInfo<CreditBillDetail> info = creditBillService.selectBillDetail(billId,page,size);
+		log.info("通过账单主键获取账单详情,账单id:{}", billId);
+		PageInfo<CreditBillDetail> info = creditBillService.selectBillDetail(billId, page, size);
 		return ResultVoUtil.success(info);
 	}
-	
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void MapToBean(Object e, CreditBillVo vo, String userId) {
 		Map<String, Object> objMap = (LinkedHashMap) e;
