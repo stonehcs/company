@@ -176,7 +176,7 @@ public class UserController {
 				throw new BusinessException(ResultEnum.MOBILE_ERROR);
 			}
 			if (StringUtils.isBlank(dto.getCode())) {
-				throw new BusinessException(ResultEnum.VALIDATECODE_ERROR);
+				throw new BusinessException(ResultEnum.CODE_NOT_CHOICE);
 			}
 			String json = redisUtils.get(Constants.MOBILE_REDIS_KEY + dto.getMobile());
 			if (StringUtils.isBlank(json)) {
@@ -191,6 +191,7 @@ public class UserController {
 		User user = new User();
 		BeanUtils.copyProperties(dto, user);
 		userService.updateUserInfo(user);
+		redisUtils.del(Constants.MOBILE_REDIS_KEY + dto.getMobile());
 		return ResultVoUtil.success();
 	}
 	

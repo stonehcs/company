@@ -158,7 +158,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateUserInfo(User user) {
 		user.setUpdateTime(new Date());
-		userMapper.updateByPrimaryKeySelective(user);
+		User user2 = userMapper.loadUserInfoByMobile(user.getMobile());
+		if(user2 != null && !user2.getId().equals(user.getId())) {
+			throw new BusinessException(ResultEnum.MOBILE_EXIST);
+		}else {
+			userMapper.updateByPrimaryKeySelective(user);
+		}
 	}
 
 	@Override
