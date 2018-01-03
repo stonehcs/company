@@ -33,7 +33,7 @@ public class QuickCardController{
 	
 	@ApiOperation("查看快卡信息")
 	@GetMapping
-	public ResultVo<List<QuickCard>> getAll(@RequestParam(required=false) Integer type){
+	public ResultVo<List<QuickCard>> getAll(@RequestParam(required=false,defaultValue="0") Integer type){
 		
 		log.info("查询快卡网贷信息");
 		List<QuickCard> list = quickCardService.selectAll(type);

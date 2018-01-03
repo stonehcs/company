@@ -74,7 +74,7 @@ public class CreditCardBillController {
 
 		log.info("查询信用卡账单,用户邮箱:{},用户id:{}",username,userId);
 		
-		UserEmail userEmail = userEmailService.selectByUsernameAndId(username,userId);
+		UserEmail userEmail = userEmailService.selectByUsernameAndId(username.trim(),userId);
 			
 		log.info("查询到的邮箱:{}",userEmail);
 		

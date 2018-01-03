@@ -33,7 +33,7 @@ public class NetLoanController{
 	
 	@ApiOperation("查看网贷信息")
 	@GetMapping
-	public ResultVo<List<NetLoan>> getAll(@RequestParam(required=false) Integer type){
+	public ResultVo<List<NetLoan>> getAll(@RequestParam(required=false,defaultValue="0") Integer type){
 		
 		log.info("查询所有网贷信息");
 		List<NetLoan> list = netLoadService.selectAll(type);
