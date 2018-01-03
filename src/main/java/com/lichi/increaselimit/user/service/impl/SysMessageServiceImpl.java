@@ -30,8 +30,8 @@ public class SysMessageServiceImpl implements SysMessageService{
 //		int start = (page-1)*size;
 //		int end = page*size - (page-1)*size ;
 		User key = userDao.selectByPrimaryKey(userId);
-		PageHelper.orderBy("create_time desc");
 		PageHelper.startPage(page, size);
+		PageHelper.orderBy("create_time desc");
 		List<SysMessage> list = messageDao.selectAllMessage(userId, key.getVipLevel());
 		PageInfo<SysMessage> info = new PageInfo<>(list);
 		return info;

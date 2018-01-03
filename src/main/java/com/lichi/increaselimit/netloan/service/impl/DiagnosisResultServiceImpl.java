@@ -56,12 +56,14 @@ public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 
 	@Override
 	public PageInfo<DiagnosisResult> getCardTask(Integer page, Integer size, String id,Integer status) {
-		PageHelper.startPage(page, size);
-		PageHelper.orderBy("time desc");
 		Example example = new Example(DiagnosisResult.class);
 		if(status != null) {
+			PageHelper.startPage(page, size);
+			PageHelper.orderBy("time desc");
 			example.createCriteria().andEqualTo("userId", id).andEqualTo("status", status);
 		}else {
+			PageHelper.startPage(page, size);
+			PageHelper.orderBy("time desc");
 			example.createCriteria().andEqualTo("userId", id);
 		}
 		List<DiagnosisResult> list = diagnosisResultMapper.selectByExample(example);

@@ -15,7 +15,7 @@ import com.lichi.increaselimit.common.exception.BusinessException;
  */
 public class StringUtil {
 
-	public static final String MOBILE_PATTERN = "^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\\d{8}$";
+	public static final String MOBILE_PATTERN = "^((1[3,5,8][0-9])|(14[5,7])|(17[0,3,6,7,8])|(19[7]))\\d{8}$";
 	
 	/**
 	 * 手机号码的验证
@@ -44,7 +44,7 @@ public class StringUtil {
 	}
 	
 	public static void main(String[] args) {
-		boolean validateMobile = ValidateMobile(null);
+		boolean validateMobile = ValidateMobile("17382273148");
 		System.out.println(validateMobile);
 	}
 }
