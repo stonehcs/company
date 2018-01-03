@@ -90,6 +90,9 @@ public class UserController {
 	public ResultVo<UserRank> getCurrentUserRank(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
 		
 		log.info("获取当前用户名次,用户id:{}",id);
+    	if(id == null) {
+    		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
+    	}
 		UserRank userRank = userService.getUserRank(id);
 		return ResultVoUtil.success(userRank);
 	}
@@ -113,6 +116,12 @@ public class UserController {
 			@ApiParam(value = "状态 0报名  1 付费", required = true) @RequestParam Integer status,
 			@ApiParam(value = "用户id", required = true) @RequestParam String id) {
 		log.info("获取用户课程,用户id:{},课程状态:{}",id,status);
+    	if(id == null) {
+    		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
+    	}
+    	if(status == null) {
+    		throw new BusinessException(ResultEnum.STATUS_NOT_CHOICE);
+    	}
 		PageInfo<CourseVo> userCourse = userService.selectCourse(page, size, id, status);
 		return ResultVoUtil.success(userCourse);
 	}
@@ -121,6 +130,9 @@ public class UserController {
 	@ApiOperation("我的课程")
 	public ResultVo<CourseCount> getMyCourse(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
 		log.info("我的课程,用户id:{}",id);
+    	if(id == null) {
+    		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
+    	}
 		CourseCount userCourse = userService.getMyCourse(id);
 		return ResultVoUtil.success(userCourse);
 	}
@@ -133,6 +145,9 @@ public class UserController {
 			@ApiParam(value = "状态id", required = false) @RequestParam(required = false) Integer status,
 			@ApiParam(value = "用户id", required = true) @RequestParam String id) {
 		log.info("我的刷卡任务,用户id:{}",id);
+    	if(id == null) {
+    		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
+    	}
 		PageInfo<DiagnosisResult> result = diagnosisResultService.getCardTask(page, size, id, status);
 		return ResultVoUtil.success(result);
 	}
@@ -141,6 +156,9 @@ public class UserController {
 	@ApiOperation("刷卡任务条数")
 	public ResultVo<CardTaskCount> getCardTask(@ApiParam(value = "用户id", required = true) @RequestParam String id) {
 		log.info("刷卡任务条数,用户id:{}",id);
+    	if(id == null) {
+    		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
+    	}
 		CardTaskCount result = diagnosisResultService.getCardTaskCount(id);
 		return ResultVoUtil.success(result);
 	}

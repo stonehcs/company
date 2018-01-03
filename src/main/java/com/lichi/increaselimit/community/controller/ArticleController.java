@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.common.enums.ResultEnum;
+import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.community.controller.dto.ArticleDto;
@@ -78,6 +80,9 @@ public class ArticleController {
     public ResultVo<PageInfo<ArticleVo>> getArticle(@ApiParam(value = "页码",required = false) @RequestParam(defaultValue = "1",required = false) Integer page,
                                               @ApiParam(value = "条数",required = false) @RequestParam(defaultValue = "20",required = false) Integer size,
                                               @ApiParam(value = "圈子id",required = true) @RequestParam Integer circleId){
+    	if(circleId == null) {
+    		throw new BusinessException(ResultEnum.CIRCLE_ID_NOT_EXIST);
+    	}
     	log.info("分页查询对应圈子下帖子列表,圈子id:{}",circleId);
     	PageInfo<ArticleVo> articles = articleService.getByPage(page,size,circleId);
         return ResultVoUtil.success(articles);

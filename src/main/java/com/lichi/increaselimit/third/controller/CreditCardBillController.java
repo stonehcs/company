@@ -74,6 +74,16 @@ public class CreditCardBillController {
 
 		log.info("查询信用卡账单,用户邮箱:{},用户id:{}", username, userId);
 
+    	if(userId == null) {
+    		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
+    	}
+    	if(username == null) {
+    		throw new BusinessException(ResultEnum.EMAIL_NOT_CHOICE);
+    	}
+    	if(password == null) {
+    		throw new BusinessException(ResultEnum.EMAIL_PASSWORD_NOT_CHOICE);
+    	}
+    	
 		UserEmail userEmail = userEmailService.selectByUsernameAndId(username.trim(), userId);
 
 		log.info("查询到的邮箱:{}", userEmail);

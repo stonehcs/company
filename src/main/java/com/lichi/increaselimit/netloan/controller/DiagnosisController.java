@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lichi.increaselimit.common.enums.ResultEnum;
+import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResultList;
@@ -94,6 +96,16 @@ public class DiagnosisController {
 			@ApiParam(value = "银行卡名字", required = true) @RequestParam(required = true) String bankname,
 			@ApiParam(value = "卡号后四位", required = true) @RequestParam(required = true) String last4digit) {
 		log.info("查询诊断结果,用户id:{}",userId);
+		
+    	if(userId == null) {
+    		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
+    	}
+    	if(bankname == null) {
+    		throw new BusinessException(ResultEnum.BANKNAME_NOT_CHOICE);
+    	}
+    	if(last4digit == null) {
+    		throw new BusinessException(ResultEnum.LAST4_NOT_CHOICE);
+    	}
 		DiagnosisResultList result = diagnosisResultService.getResult(userId, bankname, last4digit);
 		return ResultVoUtil.success(result);
 	}

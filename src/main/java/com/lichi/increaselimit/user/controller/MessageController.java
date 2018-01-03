@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.common.enums.ResultEnum;
+import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.user.entity.SysMessage;
@@ -35,7 +37,10 @@ public class MessageController {
 			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(required = true) String userId) {
-		log.info("分页查询所有消息");
+		log.info("分页查询所有消息,用户id:{}",userId);
+    	if(userId == null) {
+    		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
+    	}
 		PageInfo<SysMessage> list = messageService.selectAll(page, size,userId);
 		return ResultVoUtil.success(list);
 	}
@@ -43,7 +48,10 @@ public class MessageController {
 	@GetMapping("/list")
 	@ApiOperation("查询所有消息")
 	public ResultVo<List<SysMessage>> getAll(@RequestParam(required = true) String userId) {
-		log.info("查询所有消息");
+		log.info("查询所有消息,用户id:{}",userId);
+    	if(userId == null) {
+    		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
+    	}
 		List<SysMessage> list = messageService.selectList(userId);
 		return ResultVoUtil.success(list);
 	}

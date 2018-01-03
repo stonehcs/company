@@ -18,6 +18,9 @@ public enum ResultEnum {
 
     CIRCLE_NO_EXIST(3, "圈子不存在"),
     
+    CIRCLE_ID_NOT_EXIST(3, "请选择圈子"),
+    LOCATION_ID_NOT_EXIST(3, "请选择区域"),
+    
     CIRCLE_HAS_EXIST(4, "圈子已存在"),
     
     COURSE_NOT_EMPTY(4, "该讲师有对应课程，不能删除"),
@@ -68,7 +71,21 @@ public enum ResultEnum {
     
     BILL_NOT_EXIST(25, "该邮箱内没有可用账单"),
     
-    NOT_ALLOWED_METHOD(25, "内测阶段不允许第三方登录"),
+    NOT_ALLOWED_METHOD(25, "内测阶段不允许第三方登录"), 
+    
+    USERID_NOT_CHOICE(25, "请传入用户id"),
+    
+    BANKNAME_NOT_CHOICE(25, "请传入银行名称"), 
+    
+    LAST4_NOT_CHOICE(25, "请传入银行卡后四位"),
+    
+    EMAIL_NOT_CHOICE(25, "请输入邮箱"),
+    EMAIL_PASSWORD_NOT_CHOICE(25, "请输入邮箱密码"), 
+    
+    STATUS_NOT_CHOICE(25, "请选择状态"),
+    
+    
+    
     ;
 
     private Integer code;
