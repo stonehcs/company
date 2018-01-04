@@ -26,8 +26,11 @@ import com.lichi.increaselimit.user.entity.CourseCount;
 import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
 @Transactional(rollbackFor = Exception.class)
+@Slf4j
 public class CourseServiceImpl implements CourseService {
 
 	@Autowired
@@ -136,6 +139,7 @@ public class CourseServiceImpl implements CourseService {
 		
 		// 有验证码和用户id,说明手机号不存在，需要给用户绑定手机号
 		if (!StringUtils.isBlank(signUpDto.getCode()) && !StringUtils.isBlank(userId)) {
+			log.info("课程报名绑定手机号");
 			validateRedisCode(mobile, signUpDto.getCode());
 			User user = userService.loadUserInfoByMobile(mobile);
 			if(user != null) {
@@ -149,6 +153,7 @@ public class CourseServiceImpl implements CourseService {
 		}
 		// 注册用户,注册完成以后并登陆
 		else if (!StringUtils.isBlank(signUpDto.getCode()) && StringUtils.isBlank(userId)) {
+			log.info("注册用户");
 			validateRedisCode(mobile, signUpDto.getCode());
 			User user = userService.loadUserInfoByMobile(mobile);
 			if(user != null) {
@@ -166,6 +171,7 @@ public class CourseServiceImpl implements CourseService {
 		}
 		//如果验证码不存在，但是用户名存在，说明已经登陆了,更新下用户名
 		else if (StringUtils.isBlank(signUpDto.getCode()) && !StringUtils.isBlank(userId)) {
+			log.info("更新下用户名");
 			User user2 = new User();
 			user2.setId(userId);
 			user2.setNickname(signUpDto.getNickname());

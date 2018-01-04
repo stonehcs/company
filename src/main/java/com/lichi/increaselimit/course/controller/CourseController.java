@@ -153,7 +153,7 @@ public class CourseController {
 			log.warn("课程报名信息参数错误:{}" + errors);
 			return ResultVoUtil.error(1, errors);
 		}
-		log.info("课程报名,手机号:{}", signUpDto.getMobile());
+		log.info("课程报名,手机号:{},用户id:{}", signUpDto.getMobile(),signUpDto.getUserId());
 		String mobile = signUpDto.getMobile();
 		if (!StringUtil.ValidateMobile(mobile)) {
 			throw new BusinessException(ResultEnum.MOBILE_ERROR);
