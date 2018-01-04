@@ -153,7 +153,7 @@ public class CourseServiceImpl implements CourseService {
 		}
 		// 注册用户,注册完成以后并登陆
 		else if (!StringUtils.isBlank(signUpDto.getCode()) && StringUtils.isBlank(userId)) {
-			log.info("注册用户");
+			log.info("注册用户或者给用户报名");
 			validateRedisCode(mobile, signUpDto.getCode());
 			User user = userService.loadUserInfoByMobile(mobile);
 			if(user == null) {
