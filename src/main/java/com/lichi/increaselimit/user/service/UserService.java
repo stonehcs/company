@@ -22,12 +22,12 @@ public interface UserService {
 	 * @return
 	 */
 	User loadUserInfoByMobile(String mobile);
-	/**
-	 * 通过手机号获取用户信息
-	 * @param username
-	 * @return
-	 */
-	User loadUserInfoByUsername(String username);
+//	/**
+//	 * 通过手机号获取用户信息
+//	 * @param username
+//	 * @return
+//	 */
+//	User loadUserInfoByUsername(String username);
 
 	/**
 	 * 通过用户id获取用户信息

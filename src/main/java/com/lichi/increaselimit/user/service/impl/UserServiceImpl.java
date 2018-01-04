@@ -89,11 +89,11 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
-	@Override
-	public User loadUserInfoByUsername(String username) {
-		List<User> list = selectByUsername(username);
-		return CollectionUtils.isEmpty(list) ? null : list.get(0);
-	}
+//	@Override
+//	public User loadUserInfoByUsername(String username) {
+//		List<User> list = selectByUsername(username);
+//		return CollectionUtils.isEmpty(list) ? null : list.get(0);
+//	}
 
 	/**
 	 * 通过用户名查找用户信息
