@@ -42,9 +42,6 @@ public class User implements UserDetails,SocialUserDetails{
 	 */
 	private Double money;
 	
-	@JsonIgnore
-	private String username;
-	
 	private String nickname;
 
 	/**
@@ -94,6 +91,12 @@ public class User implements UserDetails,SocialUserDetails{
 	public String getUserId() {
 		// TODO Auto-generated method stub
 		return id;
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return mobile;
 	}
 	
 }

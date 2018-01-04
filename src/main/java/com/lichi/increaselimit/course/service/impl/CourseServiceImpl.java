@@ -158,7 +158,6 @@ public class CourseServiceImpl implements CourseService {
 			userId = IdUtils.getId();
 			user2.setId(userId);
 			user2.setMobile(mobile);
-			user2.setUsername(mobile);
 			user2.setNickname(signUpDto.getNickname());
 			User insert = userService.insert(user2);
 			// 给用户登陆

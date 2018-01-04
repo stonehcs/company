@@ -74,7 +74,6 @@ public class UserServiceImpl implements UserService {
 		}else {
 			user.setHeadImg(socialUserInfo.getImageUrl());
 		}
-		user.setUsername(socialUserInfo.getProviderUserId());
 		user.setNickname(socialUserInfo.getDisplayName());
 		user.setVipLevel(1);
 		// 用户表
@@ -116,7 +115,6 @@ public class UserServiceImpl implements UserService {
 		log.info("生成的用户id:{}",userId);
 		User user = new User();
 		user.setId(userId);
-		user.setUsername(mobile);
 		user.setNickname(mobile);
 		user.setMobile(mobile);
 		user.setCreateTime(new Date());
