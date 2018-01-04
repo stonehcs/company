@@ -165,6 +165,7 @@ public class CourseServiceImpl implements CourseService {
 				User insert = userService.insert(user2);
 				token = insert.getId();
 			}else {
+				userId = user.getId();
 				token = user.getId();
 			}
 			// 给用户登陆
