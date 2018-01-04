@@ -156,17 +156,16 @@ public class CourseServiceImpl implements CourseService {
 			log.info("注册用户");
 			validateRedisCode(mobile, signUpDto.getCode());
 			User user = userService.loadUserInfoByMobile(mobile);
-			if(user != null) {
-				throw new BusinessException(ResultEnum.MOBILE_EXIST);
+			if(user == null) {
+				User user2 = new User();
+				userId = IdUtils.getId();
+				user2.setId(userId);
+				user2.setMobile(mobile);
+				user2.setNickname(signUpDto.getNickname());
+				User insert = userService.insert(user2);
+				token = insert.getId();
 			}
-			User user2 = new User();
-			userId = IdUtils.getId();
-			user2.setId(userId);
-			user2.setMobile(mobile);
-			user2.setNickname(signUpDto.getNickname());
-			User insert = userService.insert(user2);
 			// 给用户登陆
-			token = insert.getId();
 			redisUtils.set(Constants.LOGIN_USER + token, token);
 		}
 		//如果验证码不存在，但是用户名存在，说明已经登陆了,更新下用户名
