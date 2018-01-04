@@ -164,6 +164,8 @@ public class CourseServiceImpl implements CourseService {
 				user2.setNickname(signUpDto.getNickname());
 				User insert = userService.insert(user2);
 				token = insert.getId();
+			}else {
+				token = user.getId();
 			}
 			// 给用户登陆
 			redisUtils.set(Constants.LOGIN_USER + token, token);
@@ -178,6 +180,8 @@ public class CourseServiceImpl implements CourseService {
 		}else {
 			throw new BusinessException(ResultEnum.PARAM_ERROR);
 		}
+		System.out.println(signUpDto.getId());
+		System.out.println(userId);
 		Integer status = courseMapper.selectStatus(signUpDto.getId(), userId);
 		if(null == status) {
 			courseMapper.courseSignUp(signUpDto.getId(), userId);
