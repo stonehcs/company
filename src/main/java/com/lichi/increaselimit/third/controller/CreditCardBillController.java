@@ -8,16 +8,21 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +34,8 @@ import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
+import com.lichi.increaselimit.third.controller.dto.CreditAddDto;
+import com.lichi.increaselimit.third.entity.Credit;
 import com.lichi.increaselimit.third.entity.CreditBill;
 import com.lichi.increaselimit.third.entity.CreditBillDetail;
 import com.lichi.increaselimit.third.entity.CreditBillVo;
@@ -61,9 +68,27 @@ public class CreditCardBillController {
 	@Autowired
 	private UserEmailService userEmailService;
 
+	
 	private static final String URL = "https://way.jd.com/creditsaas/get_creditcard_statements";
-
+	
 	private static final String APPKEY = "c78285411a06e4a7196df56144a89bb8";
+	
+	@ApiOperation("手动添加账单")
+	@PostMapping("/add")
+	public Object addBill(@Valid CreditAddDto billAddDto,BindingResult result,@RequestHeader("token") String token) {
+        if(result.hasErrors()){
+            String errors = result.getFieldError().getDefaultMessage();
+            log.warn("手动添加账单参数错误：" + errors);
+            return ResultVoUtil.error(1,errors);
+        }
+		log.info("手动添加账单", billAddDto);
+		Credit bill = new Credit();
+		BeanUtils.copyProperties(billAddDto, bill);
+		bill.setUserId(token);
+		bill.setType(0);
+		creditBillService.addBill(bill);
+		return ResultVoUtil.success();
+	}
 
 	@ApiOperation("第一次输入email时候调用")
 	@PostMapping

@@ -3,6 +3,7 @@ package com.lichi.increaselimit.third.service;
 import java.util.List;
 
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.third.entity.Credit;
 import com.lichi.increaselimit.third.entity.CreditBill;
 import com.lichi.increaselimit.third.entity.CreditBillDetail;
 import com.lichi.increaselimit.third.entity.CreditBillVo;
@@ -32,7 +33,7 @@ public interface CreditBillService {
 	 * @param page 
 	 * @return
 	 */
-	List<CreditBill> selectByUserId(String userId);
+	List<Credit> selectByUserId(String userId);
 
 	/**
 	 * 查询对应卡详情
@@ -54,4 +55,10 @@ public interface CreditBillService {
 	 * @return
 	 */
 	PageInfo<CreditBillDetail> selectBillDetail(String billId, Integer page, Integer size);
+
+	/**
+	 * 手动添加账单 
+	 * @param bill
+	 */
+	void addBill(Credit bill);
 }

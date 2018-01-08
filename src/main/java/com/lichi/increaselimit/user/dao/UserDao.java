@@ -66,4 +66,8 @@ public interface UserDao extends BaseMapper<User> {
 	 */
 	@Update("update t_user set invitation = invitation + 1 where id = #{pid}")
 	void updatePidInvitaion(String pid);
+
+	@Select("select * from (select @rownum:=@rownum+1  rownum , a.* from t_user a,(SELECT @rownum:=0) r  "
+			+ "order by a.invitation desc,create_time desc ) t")
+	List<User> selectAllRank();
 }

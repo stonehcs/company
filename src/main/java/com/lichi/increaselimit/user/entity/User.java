@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,6 +61,10 @@ public class User implements UserDetails,SocialUserDetails{
 	private String pid;
 	
 	private Integer invitation;
+	
+	@Transient
+	private Integer rownum;
+	
 	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

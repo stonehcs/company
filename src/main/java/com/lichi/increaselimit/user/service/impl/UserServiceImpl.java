@@ -3,7 +3,6 @@ package com.lichi.increaselimit.user.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,32 +80,10 @@ public class UserServiceImpl implements UserService {
 		user.setUpdateTime(new Date());
 		userMapper.insertSelective(user);
 		//注册环信用户
-//		try {
-			HuanXinUtils.registerUser(userId, restTemplate);
-//		} catch (Exception e) {
-//			throw new BusinessException(ResultEnum.REGISTER_ERROR);
-//		}
+		HuanXinUtils.registerUser(userId, restTemplate);
 		return user;
 	}
 
-//	@Override
-//	public User loadUserInfoByUsername(String username) {
-//		List<User> list = selectByUsername(username);
-//		return CollectionUtils.isEmpty(list) ? null : list.get(0);
-//	}
-
-	/**
-	 * 通过用户名查找用户信息
-	 * 
-	 * @param username
-	 * @return
-	 */
-	private List<User> selectByUsername(String username) {
-		Example example = new Example(User.class);
-		example.createCriteria().andEqualTo("username", username);
-		List<User> list = userMapper.selectByExample(example);
-		return list;
-	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -122,19 +99,14 @@ public class UserServiceImpl implements UserService {
 		user.setVipLevel(1);
 		user.setHeadImg("http://ozlfwi1zj.bkt.clouddn.com/%E9%BB%98%E8%AE%A4%E5%A4%B4%E5%83%8F.jpg?imageView2/1/w/600/h/400/q/75|watermark/2/text/6YeN5bqG6aqK6amw5paH5YyW/font/5b6u6L2v6ZuF6buR/fontsize/480/fill/I0ZGRkZGRg==/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim");
 		userMapper.insertSelective(user);
-//		try {
-			HuanXinUtils.registerUser(userId, restTemplate);
-//		} catch (Exception e) {
-//			throw new BusinessException(ResultEnum.REGISTER_ERROR);
-//		}
+		HuanXinUtils.registerUser(userId, restTemplate);
 		return user;
 	}
 
 	@Override
 	public PageInfo<User> selectBank(Integer page, Integer size) {
 		PageHelper.startPage(page,size);
-		PageHelper.orderBy("invitation desc,create_time desc");
-		List<User> list = userMapper.selectAll();
+		List<User> list = userMapper.selectAllRank();
 		PageInfo<User> pageInfo = new PageInfo<User>(list);
 		return pageInfo;
 	}

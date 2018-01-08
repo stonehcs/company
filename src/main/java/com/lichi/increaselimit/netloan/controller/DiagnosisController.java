@@ -18,6 +18,7 @@ import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResultList;
 import com.lichi.increaselimit.netloan.service.DiagnosisDicService;
 import com.lichi.increaselimit.netloan.service.DiagnosisResultService;
+import com.lichi.increaselimit.third.entity.Credit;
 import com.lichi.increaselimit.third.entity.CreditBill;
 import com.lichi.increaselimit.third.service.CreditBillService;
 
@@ -49,23 +50,14 @@ public class DiagnosisController {
 
 	@ApiOperation("获取当前用户所用信用卡")
 	@GetMapping("/bill")
-	public ResultVo<List<CreditBill>> diagnosis(@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
+	public ResultVo<List<Credit>> diagnosis(@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
 		// List<DiagnosisResultList> resultlist = new ArrayList<DiagnosisResultList>();
 		log.info("获取当前用户所用信用卡,用户id:{}",userId);
-		List<CreditBill> list = new ArrayList<>();
+		List<Credit> list = new ArrayList<>();
 		if(StringUtils.isBlank(userId)) {
 			return ResultVoUtil.success(list);
 		}
 		list = creditBillService.selectByUserId(userId);
-		// list.forEach(e -> {
-		// String creditAmt = e.getCreditAmt();
-		// creditAmt = StringUtils.isBlank(creditAmt) ? "10000" : creditAmt;
-		// creditAmt = creditAmt.replaceAll(",", "");
-		// double money = Double.parseDouble(creditAmt);
-		// DiagnosisResultList result = diagnosisDicService.getResult(e.getIssueBank(),
-		// money,e.getLast4digit(),userId);
-		// resultlist.add(result);
-		// });
 		return ResultVoUtil.success(list);
 	}
 

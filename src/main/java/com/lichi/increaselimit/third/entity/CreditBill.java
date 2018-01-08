@@ -85,6 +85,8 @@ public class CreditBill {
 	 */
 	private String cashLimitAmt;
 	
+	private String email;
+	
 	@Transient
 	private Integer payDay = 0;
 	
