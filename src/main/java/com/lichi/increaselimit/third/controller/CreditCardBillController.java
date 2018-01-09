@@ -132,18 +132,19 @@ public class CreditCardBillController {
 		Integer stateday = Integer.parseInt(credit.getStatementDate().split("-")[2]);
 		bill.setUserId(token);
 		bill.setBalanceRmb(billAddDto.getMoney());
-		int year = LocalDate.now().getYear();
+		int year = Integer.parseInt(billAddDto.getDate().split("-")[0]);
+		int month = Integer.parseInt(billAddDto.getDate().split("-")[1]);
 		
-		bill.setPaymentDueDate(LocalDate.of(year, billAddDto.getMonth(), payday).toString());
-		bill.setStatementDate(LocalDate.of(year, billAddDto.getMonth(), stateday).toString());
-		bill.setStatementEndDate(LocalDate.of(year, billAddDto.getMonth(), stateday).plusMonths(1).toString());
-		bill.setStatementStartDate(LocalDate.of(year, billAddDto.getMonth(), stateday).plusDays(1).toString());
+		bill.setPaymentDueDate(LocalDate.of(year,month , payday).toString());
+		bill.setStatementDate(LocalDate.of(year,month, stateday).toString());
+		bill.setStatementEndDate(LocalDate.of(year,month, stateday).plusMonths(1).toString());
+		bill.setStatementStartDate(LocalDate.of(year,month, stateday).plusDays(1).toString());
 		Integer freeDay = null;
-		if(LocalDate.of(year, billAddDto.getMonth(), stateday).until(LocalDate.of(year, billAddDto.getMonth(), payday)).getDays() > 0 ) {
-			freeDay =  LocalDate.of(year, billAddDto.getMonth(), stateday).until(LocalDate.of(year, billAddDto.getMonth(), payday)).getDays();
+		if(LocalDate.of(year, month, stateday).until(LocalDate.of(year, month, payday)).getDays() > 0 ) {
+			freeDay =  LocalDate.of(year, month, stateday).until(LocalDate.of(year, month, payday)).getDays();
 		}else {
-		    freeDay = LocalDate.of(year, billAddDto.getMonth(), stateday).until(LocalDate.of(year, billAddDto.getMonth(), payday).plusMonths(1)).getDays();
-			bill.setPaymentDueDate(LocalDate.of(year, billAddDto.getMonth(), payday).plusMonths(1).toString());
+		    freeDay = LocalDate.of(year, month, stateday).until(LocalDate.of(year, month, payday).plusMonths(1)).getDays();
+			bill.setPaymentDueDate(LocalDate.of(year, month, payday).plusMonths(1).toString());
 		}
 		bill.setFreeDay(freeDay);
 		bill.setId(IdUtils.getId());

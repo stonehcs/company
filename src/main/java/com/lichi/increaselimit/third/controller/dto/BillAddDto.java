@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 public class BillAddDto {
 
-	@NotNull(message = "账单月不能为空")
-	private Integer month;
+	@NotBlank(message = "账单月不能为空")
+	private String date;
 	
 	@NotBlank(message = "账单金额不能为空")
 	private String money;
