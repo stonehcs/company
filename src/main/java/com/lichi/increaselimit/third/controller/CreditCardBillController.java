@@ -34,6 +34,10 @@ import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
+import com.lichi.increaselimit.common.vo.ResultVo;
+import com.lichi.increaselimit.netloan.entity.Bank;
+import com.lichi.increaselimit.netloan.service.DiagnosisResultService;
+import com.lichi.increaselimit.third.controller.dto.BillAddDto;
 import com.lichi.increaselimit.third.controller.dto.CreditAddDto;
 import com.lichi.increaselimit.third.entity.Credit;
 import com.lichi.increaselimit.third.entity.CreditBill;
@@ -67,13 +71,36 @@ public class CreditCardBillController {
 	private CreditBillService creditBillService;
 	@Autowired
 	private UserEmailService userEmailService;
+	
+	@Autowired
+	private DiagnosisResultService diagnosisResultService;
 
 	
 	private static final String URL = "https://way.jd.com/creditsaas/get_creditcard_statements";
 	
 	private static final String APPKEY = "c78285411a06e4a7196df56144a89bb8";
 	
-	@ApiOperation("手动添加账单")
+	@ApiOperation("获取所有银行")
+	@GetMapping("/bank")
+	public ResultVo<List<Bank>> getRank() {
+		log.info("获取所有银行");
+		List<Bank> list = diagnosisResultService.getBank();
+		return ResultVoUtil.success(list);
+	}
+	
+	@ApiOperation("获取当前用户所用信用卡")
+	@GetMapping("/bill")
+	public ResultVo<List<Credit>> getBill(@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
+		log.info("获取当前用户所用信用卡,用户id:{}",userId);
+		List<Credit> list = new ArrayList<>();
+		if(StringUtils.isBlank(userId)) {
+			return ResultVoUtil.success(list);
+		}
+		list = creditBillService.selectByUserId(userId);
+		return ResultVoUtil.success(list);
+	}
+	
+	@ApiOperation("手动添加信用卡")
 	@PostMapping("/add")
 	public Object addBill(@Valid CreditAddDto billAddDto,BindingResult result,@RequestHeader("token") String token) {
         if(result.hasErrors()){
@@ -85,8 +112,42 @@ public class CreditCardBillController {
 		Credit bill = new Credit();
 		BeanUtils.copyProperties(billAddDto, bill);
 		bill.setUserId(token);
-		bill.setType(0);
 		creditBillService.addBill(bill);
+		return ResultVoUtil.success();
+	}
+	
+	@ApiOperation("手动添加该信用卡账单")
+	@PostMapping("/addBill")
+	public Object addCardBill(@Valid BillAddDto billAddDto,BindingResult result,@RequestHeader("token") String token) {
+		if(result.hasErrors()){
+			String errors = result.getFieldError().getDefaultMessage();
+			log.warn("手动添加账单参数错误：" + errors);
+			return ResultVoUtil.error(1,errors);
+		}
+		log.info("手动添加信用卡账单,信用卡id:{}", billAddDto.getId());
+		Credit credit = creditBillService.getCredit(billAddDto.getId());
+		CreditBill bill = new CreditBill();
+		BeanUtils.copyProperties(credit, bill);
+		Integer payday = Integer.parseInt(credit.getPaymentDueDate().split("-")[2]);
+		Integer stateday = Integer.parseInt(credit.getStatementDate().split("-")[2]);
+		bill.setUserId(token);
+		bill.setBalanceRmb(billAddDto.getMoney());
+		int year = LocalDate.now().getYear();
+		
+		bill.setPaymentDueDate(LocalDate.of(year, billAddDto.getMonth(), payday).toString());
+		bill.setStatementDate(LocalDate.of(year, billAddDto.getMonth(), stateday).toString());
+		bill.setStatementEndDate(LocalDate.of(year, billAddDto.getMonth(), stateday).plusMonths(1).toString());
+		bill.setStatementStartDate(LocalDate.of(year, billAddDto.getMonth(), stateday).plusDays(1).toString());
+		Integer freeDay = null;
+		if(LocalDate.of(year, billAddDto.getMonth(), stateday).until(LocalDate.of(year, billAddDto.getMonth(), payday)).getDays() > 0 ) {
+			freeDay =  LocalDate.of(year, billAddDto.getMonth(), stateday).until(LocalDate.of(year, billAddDto.getMonth(), payday)).getDays();
+		}else {
+		    freeDay = LocalDate.of(year, billAddDto.getMonth(), stateday).until(LocalDate.of(year, billAddDto.getMonth(), payday).plusMonths(1)).getDays();
+			bill.setPaymentDueDate(LocalDate.of(year, billAddDto.getMonth(), payday).plusMonths(1).toString());
+		}
+		bill.setFreeDay(freeDay);
+		bill.setId(IdUtils.getId());
+		creditBillService.addCardBill(bill);
 		return ResultVoUtil.success();
 	}
 
@@ -191,20 +252,20 @@ public class CreditCardBillController {
 		return ResultVoUtil.success(list);
 	}
 
-	@ApiOperation("通过用户id获取未还款信息")
-	@GetMapping("/getUnpay")
-	public Object getCreditCardBill(
-			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
-			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
-			@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
-		log.info("获取用户未还款信息,用户id:{}", userId);
-		PageInfo<CreditBill> info = new PageInfo<>();
-		if (StringUtils.isBlank(userId)) {
-			return ResultVoUtil.success(info);
-		}
-		info = creditBillService.selectByUserId(userId, page, size);
-		return ResultVoUtil.success(info);
-	}
+//	@ApiOperation("通过用户id获取未还款信息")
+//	@GetMapping("/getUnpay")
+//	public Object getCreditCardBill(
+//			@ApiParam(value = "页码", required = false) @RequestParam(defaultValue = "1", required = false) Integer page,
+//			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
+//			@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
+//		log.info("获取用户未还款信息,用户id:{}", userId);
+//		PageInfo<CreditBill> info = new PageInfo<>();
+//		if (StringUtils.isBlank(userId)) {
+//			return ResultVoUtil.success(info);
+//		}
+//		info = creditBillService.selectByUserId(userId, page, size);
+//		return ResultVoUtil.success(info);
+//	}
 
 	@ApiOperation("通过银行名字和后四位查询信用卡信息")
 	@GetMapping

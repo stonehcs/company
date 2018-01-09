@@ -1,5 +1,6 @@
 package com.lichi.increaselimit.common.utils;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,16 @@ public class StringUtil {
 			throw new BusinessException(ResultEnum.CONTENT_ERRO);
 		}
 		return StringUtils.substring(collect, 0, 30) + "...";
+	}
+	
+	public static String dateFormat(String date) {
+		String[] split = date.split("-");
+		int year = Integer.parseInt(split[0]);
+		int month = Integer.parseInt(split[1]);
+		int day = Integer.parseInt(split[2]);
+		
+		date = LocalDate.of(year, month, day).toString();
+		return date;
 	}
 	
 	public static void main(String[] args) {

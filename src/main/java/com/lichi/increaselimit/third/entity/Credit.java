@@ -47,8 +47,6 @@ public class Credit {
 	
 	private Date updateTime;
 	
-	private Integer type;
-	
 	private String email;
 	
 	@Transient

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.common.utils.StringUtil;
 import com.lichi.increaselimit.third.dao.BillDao;
 import com.lichi.increaselimit.third.dao.CreditBillDao;
 import com.lichi.increaselimit.third.dao.CreditBillDetailDao;
@@ -79,7 +80,6 @@ public class CreditBillServiceImpl implements CreditBillService {
 				Credit credit = new Credit();
 				BeanUtils.copyProperties(creditBill, credit);
 				credit.setCreateTime(new Date());
-				credit.setType(1);
 				recordList.add(credit);
 			});
 		});
@@ -184,14 +184,21 @@ public class CreditBillServiceImpl implements CreditBillService {
 		
 		for (Credit credit : list) {
 			
-			LocalDate parse = LocalDate.parse(credit.getPaymentDueDate());
+			
+			String paymentDueDate = credit.getPaymentDueDate();
+			paymentDueDate = StringUtil.dateFormat(paymentDueDate);
+			credit.setPaymentDueDate(paymentDueDate);
+			String statementDate = credit.getStatementDate();
+			statementDate = StringUtil.dateFormat(statementDate);
+			credit.setStatementDate(statementDate);
+			LocalDate parse = LocalDate.parse(paymentDueDate);
 			int dayOfMonth = parse.getDayOfMonth();
 			int now = LocalDate.now().getDayOfMonth();
 			// long until = LocalDate.now().until(parse, ChronoUnit.DAYS);
 			int until = dayOfMonth - now;
 			credit.setPayDay(until);
 			
-			LocalDate parse2 = LocalDate.parse(credit.getStatementDate());
+			LocalDate parse2 = LocalDate.parse(statementDate);
 			int dayOfMonth2 = parse2.getDayOfMonth();
 			// long until2 = parse2.until(LocalDate.now(), ChronoUnit.DAYS);
 			int until2 = dayOfMonth2 - now;
@@ -213,5 +220,15 @@ public class CreditBillServiceImpl implements CreditBillService {
 	public void addBill(Credit bill) {
 		bill.setCreateTime(new Date());
 		billDao.insertSelective(bill);
+	}
+
+	@Override
+	public Credit getCredit(Integer id) {
+		return billDao.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public void addCardBill(CreditBill bill) {
+		creditBillDao.insertSelective(bill);
 	}
 }

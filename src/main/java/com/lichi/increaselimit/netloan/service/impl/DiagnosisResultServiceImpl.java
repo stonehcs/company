@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.netloan.dao.DiagnosisMoudleDao;
 import com.lichi.increaselimit.netloan.dao.DiagnosisResultDao;
+import com.lichi.increaselimit.netloan.entity.Bank;
 import com.lichi.increaselimit.netloan.entity.CardTaskCount;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResultList;
@@ -27,6 +29,8 @@ public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 
 	@Autowired
 	private DiagnosisResultDao diagnosisResultMapper;
+	@Autowired
+	private DiagnosisMoudleDao diagnosisMoudleDao;
 
 	public void insertList(List<DiagnosisResult> list) {
 		diagnosisResultMapper.insertList(list);
@@ -83,6 +87,11 @@ public class DiagnosisResultServiceImpl implements DiagnosisResultService {
 		cardTaskCount.setDone((int) done);
 		cardTaskCount.setUndone((int) undone);
 		return cardTaskCount;
+	}
+
+	@Override
+	public List<Bank> getBank() {
+		return diagnosisMoudleDao.getBank();
 	}
 
 }

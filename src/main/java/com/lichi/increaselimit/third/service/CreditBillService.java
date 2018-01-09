@@ -61,4 +61,15 @@ public interface CreditBillService {
 	 * @param bill
 	 */
 	void addBill(Credit bill);
+	
+	/**
+	 * 查询对应信用卡信息
+	 */
+	Credit getCredit(Integer id);
+
+	/**
+	 * 添加对应信用卡账单
+	 * @param bill
+	 */
+	void addCardBill(CreditBill bill);
 }

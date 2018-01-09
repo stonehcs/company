@@ -3,6 +3,7 @@ package com.lichi.increaselimit.netloan.service;
 import java.util.List;
 
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.netloan.entity.Bank;
 import com.lichi.increaselimit.netloan.entity.CardTaskCount;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResultList;
@@ -53,5 +54,7 @@ public interface DiagnosisResultService {
 	 * @return
 	 */
 	CardTaskCount getCardTaskCount(String id);
+
+	List<Bank> getBank();
 
 }

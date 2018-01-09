@@ -1,8 +1,5 @@
 package com.lichi.increaselimit.netloan.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +15,7 @@ import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResultList;
 import com.lichi.increaselimit.netloan.service.DiagnosisDicService;
 import com.lichi.increaselimit.netloan.service.DiagnosisResultService;
-import com.lichi.increaselimit.third.entity.Credit;
 import com.lichi.increaselimit.third.entity.CreditBill;
-import com.lichi.increaselimit.third.service.CreditBillService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,21 +40,6 @@ public class DiagnosisController {
 	@Autowired
 	private DiagnosisResultService diagnosisResultService;
 
-	@Autowired
-	private CreditBillService creditBillService;
-
-	@ApiOperation("获取当前用户所用信用卡")
-	@GetMapping("/bill")
-	public ResultVo<List<Credit>> diagnosis(@ApiParam(value = "用户id", required = false) @RequestParam(required = false) String userId) {
-		// List<DiagnosisResultList> resultlist = new ArrayList<DiagnosisResultList>();
-		log.info("获取当前用户所用信用卡,用户id:{}",userId);
-		List<Credit> list = new ArrayList<>();
-		if(StringUtils.isBlank(userId)) {
-			return ResultVoUtil.success(list);
-		}
-		list = creditBillService.selectByUserId(userId);
-		return ResultVoUtil.success(list);
-	}
 
 	@ApiOperation("一键提额")
 	@GetMapping
