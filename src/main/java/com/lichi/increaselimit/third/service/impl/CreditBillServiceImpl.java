@@ -86,7 +86,7 @@ public class CreditBillServiceImpl implements CreditBillService {
 
 		if (recordList != null && recordList.size() > 0) {
 			Example example = new Example(Credit.class);
-			example.createCriteria().andEqualTo("userId", recordList.get(0).getUserId()).andEqualTo("type", 1).andEqualTo("email",
+			example.createCriteria().andEqualTo("userId", recordList.get(0).getUserId()).andEqualTo("email",
 					recordList.get(0).getEmail());
 			billDao.deleteByExample(example);
 			billDao.insertList(recordList);
@@ -96,8 +96,6 @@ public class CreditBillServiceImpl implements CreditBillService {
 
 		if (listbill != null && listbill.size() > 0) {
 			Example example2 = new Example(CreditBill.class);
-			System.out.println(listbill.get(0).getUserId());
-			System.out.println(listbill.get(0).getEmail());
 			example2.createCriteria().andEqualTo("userId", listbill.get(0).getUserId()).andEqualTo("email",
 					listbill.get(0).getEmail());
 			
@@ -219,6 +217,13 @@ public class CreditBillServiceImpl implements CreditBillService {
 	@Override
 	public void addBill(Credit bill) {
 		bill.setCreateTime(new Date());
+		String statementDate = bill.getStatementDate();
+		String paymentDueDate = bill.getPaymentDueDate();
+		paymentDueDate = StringUtil.dateFormat(paymentDueDate);
+		statementDate = StringUtil.dateFormat(statementDate);
+	    LocalDate minusMonths = LocalDate.parse(statementDate).minusMonths(1);
+		int days = (int) minusMonths.until(LocalDate.parse(paymentDueDate),ChronoUnit.DAYS);
+		bill.setFreeDay(days);
 		billDao.insertSelective(bill);
 	}
 

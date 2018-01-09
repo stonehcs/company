@@ -49,6 +49,8 @@ public class Credit {
 	
 	private String email;
 	
+	private Integer freeDay;
+	
 	@Transient
 	private Integer payDay = 0;
 	
