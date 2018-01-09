@@ -54,13 +54,13 @@ public class CreditBillServiceImpl implements CreditBillService {
 		List<Credit> recordList = new ArrayList<>();
 		List<CreditBillDetail> details = new ArrayList<>();
 		List<String> detailDeleteList = new ArrayList<>();
+		
 		listvo.stream().forEach(e -> {
 			CreditBill creditBillVo = e.getCreditBill();
 			creditBillVo.setEmail(email.getEmail());
 			listbill.add(creditBillVo);
 			List<CreditBillDetail> detail = e.getCreditBillDetail();
 			detail.stream().forEach(a -> {
-				detailDeleteList.add(a.getCreditBillId());
 				details.add(a);
 			});
 		});
@@ -86,7 +86,8 @@ public class CreditBillServiceImpl implements CreditBillService {
 
 		if (recordList != null && recordList.size() > 0) {
 			Example example = new Example(Credit.class);
-			example.createCriteria().andEqualTo("userId", recordList.get(0).getUserId()).andEqualTo("type", 1);
+			example.createCriteria().andEqualTo("userId", recordList.get(0).getUserId()).andEqualTo("type", 1).andEqualTo("email",
+					recordList.get(0).getEmail());
 			billDao.deleteByExample(example);
 			billDao.insertList(recordList);
 		}
@@ -99,8 +100,14 @@ public class CreditBillServiceImpl implements CreditBillService {
 			System.out.println(listbill.get(0).getEmail());
 			example2.createCriteria().andEqualTo("userId", listbill.get(0).getUserId()).andEqualTo("email",
 					listbill.get(0).getEmail());
+			
+			List<CreditBill> existBills = creditBillDao.selectByExample(example2);
+			for (CreditBill creditBill : existBills) {
+				detailDeleteList.add(creditBill.getId());
+			}
 			creditBillDao.deleteByExample(example2);
 
+			
 			Example example1 = new Example(CreditBillDetail.class);
 			example1.createCriteria().andIn("creditBillId", detailDeleteList);
 			creditBillDetailDao.deleteByExample(example1);
