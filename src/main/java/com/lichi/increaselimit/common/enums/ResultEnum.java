@@ -86,6 +86,7 @@ public enum ResultEnum {
     
     STATUS_NOT_CHOICE(25, "请选择状态"),
     HAVE_NO_AUTH(25, "自动账单不能修改"),
+    TIME_NOT_CORRECT(25, "请选择正确的日期"),
     
     
     

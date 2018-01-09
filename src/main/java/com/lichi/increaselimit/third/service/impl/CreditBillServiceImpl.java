@@ -221,8 +221,18 @@ public class CreditBillServiceImpl implements CreditBillService {
 		String paymentDueDate = bill.getPaymentDueDate();
 		paymentDueDate = StringUtil.dateFormat(paymentDueDate);
 		statementDate = StringUtil.dateFormat(statementDate);
-	    LocalDate minusMonths = LocalDate.parse(statementDate).minusMonths(1);
+		LocalDate minusMonths = LocalDate.parse(statementDate).minusMonths(1);
 		int days = (int) minusMonths.until(LocalDate.parse(paymentDueDate),ChronoUnit.DAYS);
+		
+		if(LocalDate.now().getDayOfMonth() - LocalDate.parse(statementDate).getDayOfMonth() < 0) {
+			statementDate = LocalDate.parse(statementDate).plusMonths(1).toString();
+			bill.setStatementDate(statementDate);
+		}
+		if(LocalDate.now().getDayOfMonth() - LocalDate.parse(paymentDueDate).getDayOfMonth() < 0) {
+			paymentDueDate = LocalDate.parse(paymentDueDate).plusMonths(1).toString();
+			bill.setPaymentDueDate(paymentDueDate);
+		}
+		
 		bill.setFreeDay(days);
 		bill.setMinPaymentRmb(bill.getBalanceRmb());
 		billDao.insertSelective(bill);
