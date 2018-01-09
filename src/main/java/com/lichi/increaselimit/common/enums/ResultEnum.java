@@ -85,6 +85,7 @@ public enum ResultEnum {
     EMAIL_PASSWORD_NOT_CHOICE(25, "请输入邮箱密码"), 
     
     STATUS_NOT_CHOICE(25, "请选择状态"),
+    HAVE_NO_AUTH(25, "自动账单不能修改"),
     
     
     

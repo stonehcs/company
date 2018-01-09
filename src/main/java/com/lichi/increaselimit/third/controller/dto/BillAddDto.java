@@ -10,7 +10,7 @@ import lombok.Data;
 public class BillAddDto {
 
 	@NotBlank(message = "账单月不能为空")
-	private String date;
+	private String month;
 	
 	@NotBlank(message = "账单金额不能为空")
 	private String money;

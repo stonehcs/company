@@ -132,8 +132,8 @@ public class CreditCardBillController {
 		Integer stateday = Integer.parseInt(credit.getStatementDate().split("-")[2]);
 		bill.setUserId(token);
 		bill.setBalanceRmb(billAddDto.getMoney());
-		int year = Integer.parseInt(billAddDto.getDate().split("-")[0]);
-		int month = Integer.parseInt(billAddDto.getDate().split("-")[1]);
+		int year = Integer.parseInt(billAddDto.getMonth().split("-")[0]);
+		int month = Integer.parseInt(billAddDto.getMonth().split("-")[1]);
 		
 		bill.setPaymentDueDate(LocalDate.of(year,month , payday).toString());
 		bill.setStatementDate(LocalDate.of(year,month, stateday).toString());

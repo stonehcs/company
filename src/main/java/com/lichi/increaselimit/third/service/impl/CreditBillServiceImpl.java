@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lichi.increaselimit.common.enums.ResultEnum;
+import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.StringUtil;
 import com.lichi.increaselimit.third.dao.BillDao;
 import com.lichi.increaselimit.third.dao.CreditBillDao;
@@ -233,6 +235,20 @@ public class CreditBillServiceImpl implements CreditBillService {
 
 	@Override
 	public void addCardBill(CreditBill bill) {
-		creditBillDao.insertSelective(bill);
+		Example example = new Example(CreditBill.class);
+		example.createCriteria().andEqualTo("paymentDueDate",bill.getPaymentDueDate())
+				.andEqualTo("userId",bill.getUserId()).andEqualTo("email",bill.getEmail())
+				.andEqualTo("issueBank",bill.getIssueBank()).andEqualTo("last4digit",bill.getLast4digit());
+		List<CreditBill> list = creditBillDao.selectByExample(example);
+		if(list == null || list.size() == 0) {
+			creditBillDao.insertSelective(bill);
+		}else {
+			if(null == bill.getEmail()) {
+				bill.setId(list.get(0).getId());
+				creditBillDao.updateByPrimaryKeySelective(bill);
+			}else {
+				throw new BusinessException(ResultEnum.HAVE_NO_AUTH);
+			}
+		}
 	}
 }
