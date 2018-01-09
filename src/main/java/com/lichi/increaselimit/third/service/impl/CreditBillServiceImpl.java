@@ -181,8 +181,7 @@ public class CreditBillServiceImpl implements CreditBillService {
 		List<Credit> list = billDao.selectByExample(example);
 		
 		for (Credit credit : list) {
-			
-			
+
 			String paymentDueDate = credit.getPaymentDueDate();
 			paymentDueDate = StringUtil.dateFormat(paymentDueDate);
 			credit.setPaymentDueDate(paymentDueDate);
@@ -203,8 +202,7 @@ public class CreditBillServiceImpl implements CreditBillService {
 			credit.setBillDay(until2);
 			
 			if (until < 0 && until2 < 0) {
-				int dayOfMonth3 = parse2.plusMonths(1).getDayOfMonth();
-				int until3 = dayOfMonth3 - now;
+				int until3 = dayOfMonth2 + 30 - now;
 				credit.setBillDay(until3);
 			}
 			if (until2 > 0) {
@@ -224,6 +222,7 @@ public class CreditBillServiceImpl implements CreditBillService {
 	    LocalDate minusMonths = LocalDate.parse(statementDate).minusMonths(1);
 		int days = (int) minusMonths.until(LocalDate.parse(paymentDueDate),ChronoUnit.DAYS);
 		bill.setFreeDay(days);
+		bill.setMinPaymentRmb(bill.getBalanceRmb());
 		billDao.insertSelective(bill);
 	}
 

@@ -40,6 +40,11 @@ public class Credit {
 	 * 应还金额
 	 */
 	private String balanceRmb;
+	
+	/**
+	 * 最低应还金额
+	 */
+	private String minPaymentRmb;
 
 	private String userId;
 	
