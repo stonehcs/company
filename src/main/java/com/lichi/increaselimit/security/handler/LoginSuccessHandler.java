@@ -53,6 +53,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 		log.info("登录成功,用户id:{}", user.getId());
 
 		if(StringUtils.isBlank(user.getMobile())) {
+			log.info("内测阶段暂不支持第三方登录");
 			userService.deleteByPrimary(user.getId());
 			response.setContentType("application/json;charset=UTF-8");
 			response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.error(401, "内测阶段暂不支持第三方登录")));
@@ -60,6 +61,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 		}
 		
 		if (null == mobileDao.selectByMobile(user.getMobile())) {
+			log.info("目前只开放内测用户使用");
 			userService.deleteByMobile(user.getMobile());
 			response.setContentType("application/json;charset=UTF-8");
 			response.getWriter().write(objectMapper.writeValueAsString(ResultVoUtil.error(401, "目前只开放内测用户使用")));

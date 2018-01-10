@@ -107,10 +107,11 @@ public class CreditBillServiceImpl implements CreditBillService {
 			}
 			creditBillDao.deleteByExample(example2);
 
-			
-			Example example1 = new Example(CreditBillDetail.class);
-			example1.createCriteria().andIn("creditBillId", detailDeleteList);
-			creditBillDetailDao.deleteByExample(example1);
+			if (detailDeleteList != null && detailDeleteList.size() > 0) {
+				Example example1 = new Example(CreditBillDetail.class);
+				example1.createCriteria().andIn("creditBillId", detailDeleteList);
+				creditBillDetailDao.deleteByExample(example1);
+			}
 			creditBillDao.insertBatch(listbill);
 		}
 
@@ -184,7 +185,7 @@ public class CreditBillServiceImpl implements CreditBillService {
 		
 		for (Credit credit : list) {
 
-			String paymentDueDate = credit.getPaymentDueDate();
+ 			String paymentDueDate = credit.getPaymentDueDate();
 			paymentDueDate = StringUtil.dateFormat(paymentDueDate);
 			credit.setPaymentDueDate(paymentDueDate);
 			String statementDate = credit.getStatementDate();
@@ -204,11 +205,22 @@ public class CreditBillServiceImpl implements CreditBillService {
 			credit.setBillDay(until2);
 			
 			if (until < 0 && until2 < 0) {
-				int until3 = dayOfMonth2 + 30 - now;
-				credit.setBillDay(until3);
+				int until3 = dayOfMonth + 30 -now;
+				int until4 = dayOfMonth2 + 30 - now;
+				if(until4 - until3 > 0) {
+					credit.setBillDay(- until4);
+					credit.setPayDay(until3);
+				}else {
+					credit.setBillDay(until4);
+					credit.setPayDay(-until3);
+				}
 			}
-			if (until2 > 0) {
-				credit.setPayDay(-until);
+			else if (until2 > 0 && until>0) {
+				if(until2 - until > 0) {
+					credit.setBillDay(- until2);
+				}else {
+					credit.setPayDay(-until);
+				}
 			}
 		}
 		return list;
@@ -224,11 +236,11 @@ public class CreditBillServiceImpl implements CreditBillService {
 		LocalDate minusMonths = LocalDate.parse(statementDate).minusMonths(1);
 		int days = (int) minusMonths.until(LocalDate.parse(paymentDueDate),ChronoUnit.DAYS);
 		
-		if(LocalDate.now().getDayOfMonth() - LocalDate.parse(statementDate).getDayOfMonth() < 0) {
+		if(LocalDate.now().getDayOfMonth() - LocalDate.parse(statementDate).getDayOfMonth() > 0) {
 			statementDate = LocalDate.parse(statementDate).plusMonths(1).toString();
 			bill.setStatementDate(statementDate);
 		}
-		if(LocalDate.now().getDayOfMonth() - LocalDate.parse(paymentDueDate).getDayOfMonth() < 0) {
+		if(LocalDate.now().getDayOfMonth() - LocalDate.parse(paymentDueDate).getDayOfMonth() > 0) {
 			paymentDueDate = LocalDate.parse(paymentDueDate).plusMonths(1).toString();
 			bill.setPaymentDueDate(paymentDueDate);
 		}
