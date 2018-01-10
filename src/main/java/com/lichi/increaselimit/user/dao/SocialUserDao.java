@@ -18,7 +18,7 @@ public interface SocialUserDao extends BaseMapper<SocialUserInfo>{
 	
 	/**
 	 * 获取用户信息
-	 * @param username
+	 * @param 
 	 * @return
 	 */
 	@Select("select * from t_UserConnection where providerId=#{providerId} and providerUserId = #{openid}")

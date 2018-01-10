@@ -52,7 +52,6 @@ public class VersionServiceImpl implements VersionService{
 
 	@Override
 	public Version selectNew() {
-		PageHelper.orderBy("create_time desc");
 		List<Version> list = versionDao.selectAll();
 		if(null != list && list.size() > 0) {
 			return list.get(0);

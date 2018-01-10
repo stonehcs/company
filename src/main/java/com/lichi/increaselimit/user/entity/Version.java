@@ -3,6 +3,7 @@ package com.lichi.increaselimit.user.entity;
 import java.util.Date;
 
 import javax.persistence.Id;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -29,6 +30,7 @@ public class Version {
 	
 	private Integer status;
 	
+	@OrderBy("desc")
 	private Date createTime;
 	
 	private Date updateTime;

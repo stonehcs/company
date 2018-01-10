@@ -25,7 +25,7 @@ public interface UserDao extends BaseMapper<User> {
 	/**
 	 * 获取用户信息
 	 * 
-	 * @param username
+	 * @param mobile
 	 * @return
 	 */
 	@Select("select * from t_user where mobile=#{mobile}")
