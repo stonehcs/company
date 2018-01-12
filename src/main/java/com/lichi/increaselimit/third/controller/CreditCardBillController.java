@@ -154,8 +154,8 @@ public class CreditCardBillController {
 		}
 		bill.setPaymentDueDate(paymentdate.toString());
 		bill.setStatementDate(statementdate.toString());
-		bill.setStatementEndDate(statementdate.plusMonths(1).toString());
-		bill.setStatementStartDate(statementdate.plusDays(1).toString());
+		bill.setStatementEndDate(statementdate.toString());
+		bill.setStatementStartDate(statementdate.minusMonths(1).plusDays(1).toString());
 		Integer freeDay = null;
 		if(statementdate.until(paymentdate).getDays() > 0 ) {
 			freeDay =  statementdate.until(paymentdate).getDays();
