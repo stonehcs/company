@@ -24,6 +24,9 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResultVo<?> handler(Exception e) {
+		
+		//测试阶段方便追踪日志
+		e.printStackTrace();
 		if (e instanceof BusinessException) {
 			BusinessException validateException = (BusinessException) e;
 			return ResultVoUtil.error(validateException.getCode(), validateException.getMessage());

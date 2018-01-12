@@ -75,7 +75,7 @@ public enum ResultEnum {
     
     NOT_ALLOWED_METHOD(25, "内测阶段不允许第三方登录"), 
     
-    USERID_NOT_CHOICE(25, "请传入用户id"),
+    USERID_NOT_CHOICE(25, "请先登录..."),
     
     BANKNAME_NOT_CHOICE(25, "请传入银行名称"), 
     

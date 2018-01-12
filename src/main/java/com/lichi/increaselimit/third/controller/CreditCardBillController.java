@@ -2,6 +2,7 @@ package com.lichi.increaselimit.third.controller;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -34,6 +35,7 @@ import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
+import com.lichi.increaselimit.common.utils.StringUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
 import com.lichi.increaselimit.netloan.entity.Bank;
 import com.lichi.increaselimit.netloan.service.DiagnosisResultService;
@@ -134,17 +136,32 @@ public class CreditCardBillController {
 		bill.setBalanceRmb(billAddDto.getMoney());
 		int year = Integer.parseInt(billAddDto.getMonth().split("-")[0]);
 		int month = Integer.parseInt(billAddDto.getMonth().split("-")[1]);
+		//给出月份的最后一天
+		LocalDate lastdate = LocalDate.of(year,month,1).with(TemporalAdjusters.lastDayOfMonth());
 		
-		bill.setPaymentDueDate(LocalDate.of(year,month , payday).toString());
-		bill.setStatementDate(LocalDate.of(year,month, stateday).toString());
-		bill.setStatementEndDate(LocalDate.of(year,month, stateday).plusMonths(1).toString());
-		bill.setStatementStartDate(LocalDate.of(year,month, stateday).plusDays(1).toString());
+		LocalDate paymentdate = null;
+		LocalDate statementdate = null;
+		
+		try {
+			paymentdate = LocalDate.of(year,month , payday);
+		} catch (Exception e) {
+			paymentdate = lastdate;
+		}
+		try {
+			statementdate = LocalDate.of(year,month , stateday);
+		} catch (Exception e) {
+			statementdate = lastdate;
+		}
+		bill.setPaymentDueDate(paymentdate.toString());
+		bill.setStatementDate(statementdate.toString());
+		bill.setStatementEndDate(statementdate.plusMonths(1).toString());
+		bill.setStatementStartDate(statementdate.plusDays(1).toString());
 		Integer freeDay = null;
-		if(LocalDate.of(year, month, stateday).until(LocalDate.of(year, month, payday)).getDays() > 0 ) {
-			freeDay =  LocalDate.of(year, month, stateday).until(LocalDate.of(year, month, payday)).getDays();
+		if(statementdate.until(paymentdate).getDays() > 0 ) {
+			freeDay =  statementdate.until(paymentdate).getDays();
 		}else {
-		    freeDay = LocalDate.of(year, month, stateday).until(LocalDate.of(year, month, payday).plusMonths(1)).getDays();
-			bill.setPaymentDueDate(LocalDate.of(year, month, payday).plusMonths(1).toString());
+		    freeDay = statementdate.until(paymentdate.plusMonths(1)).getDays();
+			bill.setPaymentDueDate(paymentdate.plusMonths(1).toString());
 		}
 		bill.setFreeDay(freeDay);
 		bill.setId(IdUtils.getId());
@@ -161,13 +178,13 @@ public class CreditCardBillController {
 
 		log.info("查询信用卡账单,用户邮箱:{},用户id:{}", username, userId);
 
-    	if(userId == null) {
+    	if(StringUtils.isBlank(userId)) {
     		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
     	}
-    	if(username == null) {
+    	if(StringUtils.isBlank(username)) {
     		throw new BusinessException(ResultEnum.EMAIL_NOT_CHOICE);
     	}
-    	if(password == null) {
+    	if(StringUtils.isBlank(password)) {
     		throw new BusinessException(ResultEnum.EMAIL_PASSWORD_NOT_CHOICE);
     	}
     	
@@ -421,9 +438,24 @@ public class CreditCardBillController {
 		return creditBillDetail;
 	}
 
+	/**
+	 * 格式化时间
+	 * @param date
+	 * @return
+	 */
 	private String replace(String date) {
 		if (date.contains("/")) {
 			date = date.replace("/", "-");
+		}
+		if(!date.contains("-")) {
+			return null;
+		}
+		//有的时间没有年
+		if(StringUtils.isNotBlank(date)) {
+			if(date.split("-").length == 2) {
+				return date;
+			}
+			date = StringUtil.dateFormat(date);
 		}
 		return date;
 	}

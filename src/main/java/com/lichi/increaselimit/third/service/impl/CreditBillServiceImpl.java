@@ -58,15 +58,20 @@ public class CreditBillServiceImpl implements CreditBillService {
 		List<CreditBillDetail> details = new ArrayList<>();
 		List<String> detailDeleteList = new ArrayList<>();
 		
-		listvo.stream().forEach(e -> {
+		for (CreditBillVo e : listvo) {
 			CreditBill creditBillVo = e.getCreditBill();
+			String statementStartDate = creditBillVo.getStatementStartDate();
+			String statementEndDate = creditBillVo.getStatementEndDate();
+			if(StringUtils.isBlank(statementEndDate) && StringUtils.isBlank(statementStartDate)) {
+				continue;
+			}
 			creditBillVo.setEmail(email.getEmail());
 			listbill.add(creditBillVo);
 			List<CreditBillDetail> detail = e.getCreditBillDetail();
 			detail.stream().forEach(a -> {
 				details.add(a);
 			});
-		});
+		};
 
 		Map<String, Map<String, List<CreditBill>>> result = listbill.parallelStream()
 				.sorted((a, b) -> b.getStatementEndDate().compareTo(a.getStatementEndDate())).collect(Collectors
@@ -91,6 +96,7 @@ public class CreditBillServiceImpl implements CreditBillService {
 			example.createCriteria().andEqualTo("userId", recordList.get(0).getUserId()).andEqualTo("email",
 					recordList.get(0).getEmail());
 			billDao.deleteByExample(example);
+			
 			billDao.insertList(recordList);
 		}
 
@@ -186,9 +192,20 @@ public class CreditBillServiceImpl implements CreditBillService {
 		for (Credit credit : list) {
 
  			String paymentDueDate = credit.getPaymentDueDate();
+ 			String statementDate = credit.getStatementDate();
+ 			//如果两个都为空,就为简版,不查
+ 			if(StringUtils.isBlank(paymentDueDate) && StringUtils.isBlank(statementDate) ) {
+ 				continue;
+ 			}
+ 			if(StringUtils.isNotBlank(paymentDueDate) && StringUtils.isBlank(statementDate) ) {
+ 				statementDate = LocalDate.parse(paymentDueDate).minus(credit.getFreeDay(),ChronoUnit.DAYS).toString();
+ 			}
+ 			//无法算出的给默认20天
+ 			if(StringUtils.isBlank(paymentDueDate) && StringUtils.isNotBlank(statementDate) ) {
+ 				paymentDueDate = LocalDate.parse(statementDate).plus(20,ChronoUnit.DAYS).toString();
+ 			}
 			paymentDueDate = StringUtil.dateFormat(paymentDueDate);
 			credit.setPaymentDueDate(paymentDueDate);
-			String statementDate = credit.getStatementDate();
 			statementDate = StringUtil.dateFormat(statementDate);
 			credit.setStatementDate(statementDate);
 			LocalDate parse = LocalDate.parse(paymentDueDate);

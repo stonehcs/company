@@ -2,6 +2,7 @@ package com.lichi.increaselimit.user.controller;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +39,7 @@ public class MessageController {
 			@ApiParam(value = "条数", required = false) @RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(required = true) String userId) {
 		log.info("分页查询所有消息,用户id:{}",userId);
-    	if(userId == null) {
+    	if(StringUtils.isBlank(userId)) {
     		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
     	}
 		PageInfo<SysMessage> list = messageService.selectAll(page, size,userId);
@@ -49,7 +50,7 @@ public class MessageController {
 	@ApiOperation("查询所有消息")
 	public ResultVo<List<SysMessage>> getAll(@RequestParam(required = true) String userId) {
 		log.info("查询所有消息,用户id:{}",userId);
-    	if(userId == null) {
+    	if(StringUtils.isBlank(userId)) {
     		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
     	}
 		List<SysMessage> list = messageService.selectList(userId);

@@ -65,7 +65,7 @@ public class CourseController {
     		throw new BusinessException(ResultEnum.LOCATION_ID_NOT_EXIST);
     	}
     	
-    	if(userId == null) {
+    	if(StringUtils.isBlank(userId)) {
     		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
     	}
     	
@@ -172,7 +172,7 @@ public class CourseController {
 			@ApiParam(value = "地区id", required = true) @RequestParam String userId,
 			@ApiParam(value = "金额", required = true) @RequestParam Double money) {
 		
-    	if(userId == null) {
+    	if(StringUtils.isBlank(userId)) {
     		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
     	}
     	

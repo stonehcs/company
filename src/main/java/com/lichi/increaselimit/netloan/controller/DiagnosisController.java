@@ -55,7 +55,7 @@ public class DiagnosisController {
 		DiagnosisResultList result = diagnosisDicService.getResult(creditBill.getIssueBank(), money,
 				creditBill.getLast4digit(), creditBill.getUserId(),creditBill.getHolderName());
 
-		String format = String.format(TEXT, creditBill.getHolderName(),creditBill.getLast4digit(),"500%",money * 5);
+		String format = String.format(TEXT, creditBill.getHolderName(),creditBill.getLast4digit(),"100%","150%",money * 1,money*1.5);
 		result.setResult(format);
 
 		return ResultVoUtil.success(result);
@@ -69,7 +69,7 @@ public class DiagnosisController {
 			@ApiParam(value = "卡号后四位", required = true) @RequestParam(required = true) String last4digit) {
 		log.info("查询诊断结果,用户id:{}",userId);
 		
-    	if(userId == null) {
+    	if(StringUtils.isBlank(userId)) {
     		throw new BusinessException(ResultEnum.USERID_NOT_CHOICE);
     	}
     	if(bankname == null) {
@@ -99,8 +99,8 @@ public class DiagnosisController {
 	}
 	
 
-	private final static String TEXT = "尊敬的%s，尾号%s客户，根据您的资料完善情况与信用卡历史账单分析，可在三个月"
-			+ "内提升信用卡额度%s，预计可达到金额:%s,具体规则如下:";
+	private final static String TEXT = "尊敬的%s，尾号%s客户，根据您的资料完善情况与信用卡历史账单分析，可在1-3个月"
+			+ "内提升信用卡额度%s-%s，预计可达到金额:%s-%s,具体规则如下:";
 	
 	private final static String RADAR = "一键诊断程序启动中...\r\n" + 
 			"银行卡基本信息确认完成。\r\n" + 
@@ -111,7 +111,7 @@ public class DiagnosisController {
 	
 	
 	public static void main(String[] args) {
-		String format = String.format(TEXT, "xx","xx","500%",0.5 * 5);
+		String format = String.format(TEXT, "xx","xx","100%","150%",0.5 * 1,0.5*1.5);
 		System.out.println(format);
 	}
 }
