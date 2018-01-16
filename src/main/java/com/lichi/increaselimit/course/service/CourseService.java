@@ -65,8 +65,9 @@ public interface CourseService {
 	 * 课程付费
 	 * @param id
 	 * @param userId
+	 * @param money 
 	 */
-	void coursePay(Integer id, String userId);
+	void coursePay(Integer id, String userId, Double money);
 
 	/**
 	 * 课程报名

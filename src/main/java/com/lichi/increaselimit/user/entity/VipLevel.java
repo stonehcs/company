@@ -27,4 +27,5 @@ public class VipLevel implements Serializable{
 	
 	private Double levelMoney; 
 	
+	private Double percent;
 }

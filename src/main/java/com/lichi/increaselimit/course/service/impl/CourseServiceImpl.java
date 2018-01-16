@@ -18,13 +18,19 @@ import com.lichi.increaselimit.common.utils.IdUtils;
 import com.lichi.increaselimit.common.utils.RedisUtils;
 import com.lichi.increaselimit.course.controller.dto.SignUpDto;
 import com.lichi.increaselimit.course.dao.CourseDao;
+import com.lichi.increaselimit.course.entity.Commission;
 import com.lichi.increaselimit.course.entity.Course;
 import com.lichi.increaselimit.course.entity.CourseVo;
+import com.lichi.increaselimit.course.entity.Order;
+import com.lichi.increaselimit.course.service.CommissionService;
 import com.lichi.increaselimit.course.service.CourseService;
+import com.lichi.increaselimit.course.service.OrderService;
 import com.lichi.increaselimit.security.validate.code.ValidateCode;
 import com.lichi.increaselimit.user.entity.CourseCount;
 import com.lichi.increaselimit.user.entity.User;
+import com.lichi.increaselimit.user.entity.VipLevel;
 import com.lichi.increaselimit.user.service.UserService;
+import com.lichi.increaselimit.user.service.VipLevelService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,7 +43,16 @@ public class CourseServiceImpl implements CourseService {
 	private CourseDao courseMapper;
 
 	@Autowired
+	private OrderService orderService;
+	
+	@Autowired
+	private CommissionService commissionService;
+	
+	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private VipLevelService vipLevelService;
 
 	@Autowired
 	private RedisUtils redisUtils;
@@ -100,8 +115,40 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public void coursePay(Integer id, String userId) {
+	@Transactional(rollbackFor = Exception.class)
+	public void coursePay(Integer id, String userId,Double money) {
+		//课程付费
 		courseMapper.coursePay(id, userId);
+		
+		//订单表,这里可能改成更新,之前要插入一次
+		Order order = new Order();
+		order.setCreateTime(new Date());
+		order.setGoodsId(id);
+		order.setUserId(userId);
+		order.setType(0);
+		String orderId = IdUtils.getId();
+		order.setId(orderId);
+		order.setMoney(money);
+		order.setStatus(1);
+		orderService.insert(order);
+		
+		//分佣,当前用户的pid
+		User userInfoByUserId = userService.loadUserInfoByUserId(userId);
+		String pid = userInfoByUserId.getPid();
+		if(StringUtils.isNotBlank(pid)) {
+			
+			//获取等级对应的比例
+			VipLevel vipLevel = vipLevelService.getLevelPercent(userInfoByUserId.getVipLevel());
+			
+			Commission commission = new Commission();
+			commission.setUserId(pid);
+			commission.setOrderId(orderId);
+			commission.setMoney(money*vipLevel.getPercent());
+			commissionService.insert(commission);
+			
+			//然后更新用户的佣金表
+			userService.updateUserMoney(pid,money*vipLevel.getPercent());
+		}
 	}
 
 	@Override

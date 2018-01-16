@@ -25,7 +25,6 @@ import com.lichi.increaselimit.user.entity.User;
 import com.lichi.increaselimit.user.entity.UserRank;
 import com.lichi.increaselimit.user.entity.VipLevel;
 import com.lichi.increaselimit.user.service.UserService;
-
 import lombok.extern.slf4j.Slf4j;
 import tk.mybatis.mapper.entity.Example;
 
@@ -34,9 +33,9 @@ import tk.mybatis.mapper.entity.Example;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private UserDao userMapper;
+	private UserDao userDao;
 	@Autowired
-	private SocialUserDao socialUserMapper;
+	private SocialUserDao socialUserDao;
 	@Autowired
 	private CourseService courseService;
 	
@@ -45,13 +44,13 @@ public class UserServiceImpl implements UserService {
  
 	@Override
 	public User loadUserInfoByMobile(String mobile) {
-		User user = userMapper.loadUserInfoByMobile(mobile);
+		User user = userDao.loadUserInfoByMobile(mobile);
 		return user;
 	}
 
 	@Override
 	public User loadUserInfoByUserId(String userId) {
-		User user = userMapper.selectByPrimaryKey(userId);
+		User user = userDao.selectByPrimaryKey(userId);
 		return user;
 	}
 
@@ -66,7 +65,7 @@ public class UserServiceImpl implements UserService {
 		log.info("生成的用户id:{}",userId);
 		socialUserInfo.setUserId(userId);
 		// 第三方表
-		socialUserMapper.insertUserConnection(socialUserInfo);
+		socialUserDao.insertUserConnection(socialUserInfo);
 		user.setId(userId);
 		if(StringUtils.isBlank(socialUserInfo.getImageUrl())) {
 			user.setHeadImg("http://ozlfwi1zj.bkt.clouddn.com/%E9%BB%98%E8%AE%A4%E5%A4%B4%E5%83%8F.jpg?imageView2/1/w/600/h/400/q/75|watermark/2/text/6YeN5bqG6aqK6amw5paH5YyW/font/5b6u6L2v6ZuF6buR/fontsize/480/fill/I0ZGRkZGRg==/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim");
@@ -78,7 +77,7 @@ public class UserServiceImpl implements UserService {
 		// 用户表
 		user.setCreateTime(new Date());
 		user.setUpdateTime(new Date());
-		userMapper.insertSelective(user);
+		userDao.insertSelective(user);
 		//注册环信用户
 		HuanXinUtils.registerUser(userId, restTemplate);
 		return user;
@@ -98,7 +97,7 @@ public class UserServiceImpl implements UserService {
 		user.setUpdateTime(new Date());
 		user.setVipLevel(1);
 		user.setHeadImg("http://ozlfwi1zj.bkt.clouddn.com/%E9%BB%98%E8%AE%A4%E5%A4%B4%E5%83%8F.jpg?imageView2/1/w/600/h/400/q/75|watermark/2/text/6YeN5bqG6aqK6amw5paH5YyW/font/5b6u6L2v6ZuF6buR/fontsize/480/fill/I0ZGRkZGRg==/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim");
-		userMapper.insertSelective(user);
+		userDao.insertSelective(user);
 		HuanXinUtils.registerUser(userId, restTemplate);
 		return user;
 	}
@@ -106,7 +105,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public PageInfo<User> selectBank(Integer page, Integer size) {
 		PageHelper.startPage(page,size);
-		List<User> list = userMapper.selectAllRank();
+		List<User> list = userDao.selectAllRank();
 		PageInfo<User> pageInfo = new PageInfo<User>(list);
 		return pageInfo;
 	}
@@ -114,7 +113,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public PageInfo<CourseVo> selectCourse(Integer page, Integer size, String id, Integer status) {
 		PageHelper.startPage(page,size);
-		List<CourseVo> list = userMapper.selectUserCourse(id,status);
+		List<CourseVo> list = userDao.selectUserCourse(id,status);
 		PageInfo<CourseVo> pageInfo = new PageInfo<CourseVo>(list);
 		return pageInfo;
 	}
@@ -128,11 +127,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateUserInfo(User user) {
 		user.setUpdateTime(new Date());
-		User user2 = userMapper.loadUserInfoByMobile(user.getMobile());
+		User user2 = userDao.loadUserInfoByMobile(user.getMobile());
 		if(user2 != null && !user2.getId().equals(user.getId())) {
 			throw new BusinessException(ResultEnum.MOBILE_EXIST);
 		}else {
-			userMapper.updateByPrimaryKeySelective(user);
+			userDao.updateByPrimaryKeySelective(user);
 		}
 	}
 
@@ -141,7 +140,7 @@ public class UserServiceImpl implements UserService {
 	public User insert(User user) {
 		user.setCreateTime(new Date());
 		user.setUpdateTime(new Date());
-		userMapper.insertSelective(user);
+		userDao.insertSelective(user);
 		try {
 			HuanXinUtils.registerUser(user.getId(), restTemplate);
 		} catch (Exception e) {
@@ -152,9 +151,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserRank getUserRank(String id) {
-		UserRank userRank = userMapper.getRank(id);
+		UserRank userRank = userDao.getRank(id);
 		if(userRank.getRownum() != 1) {
-			UserRank rankByRow = userMapper.getRankByRow(userRank.getRownum() + 1);
+			UserRank rankByRow = userDao.getRankByRow(userRank.getRownum() + 1);
 			if(rankByRow != null) {
 				userRank.setDiff(userRank.getInvitation() - rankByRow.getInvitation());
 			}else {
@@ -168,7 +167,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public VipLevel getLevel(Integer level) {
-		return userMapper.selectLevelInfo(level);
+		return userDao.selectLevelInfo(level);
 	}
 
 	@Override
@@ -177,9 +176,9 @@ public class UserServiceImpl implements UserService {
 		User user = new User();
 		user.setUpdateTime(new Date());
 		user.setId(userId);
-		userMapper.updateByPrimaryKeySelective(user);
+		userDao.updateByPrimaryKeySelective(user);
 		
-		userMapper.updatePidInvitaion(pid);
+		userDao.updatePidInvitaion(pid);
 		try {
 			HuanXinUtils.registerUser(userId, restTemplate);
 		} catch (Exception e) {
@@ -192,12 +191,17 @@ public class UserServiceImpl implements UserService {
 	public void deleteByMobile(String mobile) {
 		Example example = new Example(User.class);
 		example.createCriteria().andEqualTo("mobile",mobile);
-		userMapper.deleteByExample(example);
+		userDao.deleteByExample(example);
 	}
 
 	@Override
 	public void deleteByPrimary(String id) {
-		userMapper.deleteByPrimaryKey(id);
+		userDao.deleteByPrimaryKey(id);
+	}
+
+	@Override
+	public void updateUserMoney(String pid, double money) {
+		userDao.updateUserMoney(pid,money);
 	}
 
 

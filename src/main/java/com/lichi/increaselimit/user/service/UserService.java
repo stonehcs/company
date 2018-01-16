@@ -106,4 +106,10 @@ public interface UserService {
 	void deleteByMobile(String mobile);
 	
 	void deleteByPrimary(String id);
+
+	/**
+	 * 更新用户佣金
+	 * @param user
+	 */
+	void updateUserMoney(String pid, double money);
 }

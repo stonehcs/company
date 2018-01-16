@@ -70,4 +70,11 @@ public interface UserDao extends BaseMapper<User> {
 	@Select("select * from (select @rownum:=@rownum+1  rownum , a.* from t_user a,(SELECT @rownum:=0) r  "
 			+ "order by a.invitation desc,create_time desc ) t")
 	List<User> selectAllRank();
+
+	/**
+	 * 跟新用户佣金
+	 * @param user
+	 */
+	@Update("update t_user set money = money + #{money} where id = #{pid}")
+	void updateUserMoney(@Param(value = "pid") String pid, @Param(value = "money") double money);
 }

@@ -48,8 +48,9 @@ public class DiagnosisController {
 		log.info("一键提额,用户id:{}",creditBill.getUserId());
 		
 		String creditAmt = creditBill.getCreditAmt();
-		creditAmt = StringUtils.isBlank(creditAmt) ? "10000" : creditAmt;
 		creditAmt = creditAmt.replaceAll(",", "");
+		creditAmt = creditAmt.replaceAll("-", "");
+		creditAmt = StringUtils.isBlank(creditAmt) ? "10000" : creditAmt;
 		double money = Double.parseDouble(creditAmt);
 
 		DiagnosisResultList result = diagnosisDicService.getResult(creditBill.getIssueBank(), money,

@@ -169,7 +169,7 @@ public class CourseController {
 	@GetMapping("/pay")
 	@ApiOperation(value = "课程付费")
 	public ResultVo<Course> pay(@ApiParam(value = "课程id", required = true) @RequestParam Integer id,
-			@ApiParam(value = "地区id", required = true) @RequestParam String userId,
+			@ApiParam(value = "用户id", required = true) @RequestParam String userId,
 			@ApiParam(value = "金额", required = true) @RequestParam Double money) {
 		
     	if(StringUtils.isBlank(userId)) {
@@ -178,7 +178,7 @@ public class CourseController {
     	
 		log.info("课程付费,用户id{}", userId);
 		// 这里有个金额的校验
-		courseService.coursePay(id, userId);
+		courseService.coursePay(id, userId,money);
 		return ResultVoUtil.success();
 	}
 
