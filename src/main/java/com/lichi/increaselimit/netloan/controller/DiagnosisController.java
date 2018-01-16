@@ -100,8 +100,8 @@ public class DiagnosisController {
 	}
 	
 
-	private final static String TEXT = "尊敬的%s，尾号%s客户，根据您的资料完善情况与信用卡历史账单分析，可在1-3个月"
-			+ "内提升信用卡额度%s-%s，预计可达到金额:%s-%s,具体规则如下:";
+	private final static String TEXT = "尊敬的%s，尾号%s客户，根据平台大数据与您自身的消费账单分析，请在“我的->消费任务”中，按照每日消费任务，提高诊断评分。可在1-3个月"
+			+ "内提升信用卡额度%s-%s，预计可达到金额:%s-%s。";
 	
 	private final static String RADAR = "一键诊断程序启动中...\r\n" + 
 			"银行卡基本信息确认完成。\r\n" + 

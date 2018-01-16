@@ -136,9 +136,9 @@ public class CourseServiceImpl implements CourseService {
 		User userInfoByUserId = userService.loadUserInfoByUserId(userId);
 		String pid = userInfoByUserId.getPid();
 		if(StringUtils.isNotBlank(pid)) {
-			
+			User user2 = userService.loadUserInfoByUserId(pid);
 			//获取等级对应的比例
-			VipLevel vipLevel = vipLevelService.getLevelPercent(userInfoByUserId.getVipLevel());
+			VipLevel vipLevel = vipLevelService.getLevelPercent(user2.getVipLevel());
 			
 			Commission commission = new Commission();
 			commission.setUserId(pid);
