@@ -398,7 +398,24 @@ public class CreditCardBillController {
 			long until = date2.until(date1, ChronoUnit.DAYS);
 			creditBill.setFreeDay((int) until);
 		}
-
+		
+		//初始化账单日
+		if(StringUtils.isNotBlank(statementStartDate) && StringUtils.isBlank(paymentDueDate)) {
+			paymentDueDate = LocalDate.parse(statementStartDate).minusDays(1).toString();
+			creditBill.setPaymentDueDate(paymentDueDate);
+		}
+		
+		//初始化账单周期
+		if(StringUtils.isNotBlank(paymentDueDate)) {
+			if(StringUtils.isBlank(statementStartDate)) {
+				statementStartDate = LocalDate.parse(paymentDueDate).plusDays(1).toString();
+				creditBill.setStatementStartDate(statementStartDate);
+			}
+			if(StringUtils.isBlank(statementEndDate)) {
+				statementEndDate = LocalDate.parse(statementStartDate).plusMonths(1).toString();
+				creditBill.setStatementEndDate(statementEndDate);
+			}
+		}
 		List<CreditBillDetail> detail = getDetail(map_detail, id);
 
 		vo.setCreditBill(creditBill);

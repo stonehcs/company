@@ -1,5 +1,8 @@
 package com.lichi.increaselimit.netloan.controller;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +15,13 @@ import com.lichi.increaselimit.common.enums.ResultEnum;
 import com.lichi.increaselimit.common.exception.BusinessException;
 import com.lichi.increaselimit.common.utils.ResultVoUtil;
 import com.lichi.increaselimit.common.vo.ResultVo;
+import com.lichi.increaselimit.netloan.entity.DiagnosisResult;
 import com.lichi.increaselimit.netloan.entity.DiagnosisResultList;
 import com.lichi.increaselimit.netloan.service.DiagnosisDicService;
 import com.lichi.increaselimit.netloan.service.DiagnosisResultService;
+import com.lichi.increaselimit.third.entity.Credit;
 import com.lichi.increaselimit.third.entity.CreditBill;
+import com.lichi.increaselimit.third.service.CreditBillService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +42,9 @@ public class DiagnosisController {
 
 	@Autowired
 	private DiagnosisDicService diagnosisDicService;
+	
+	@Autowired
+	private CreditBillService creditBillService;
 
 	@Autowired
 	private DiagnosisResultService diagnosisResultService;
@@ -47,7 +56,57 @@ public class DiagnosisController {
 
 		log.info("一键提额,用户id:{}",creditBill.getUserId());
 		
+//		Credit credit = creditBillService.getCredit(creditBill.getUserId(), creditBill.getIssueBank(), creditBill.getLast4digit(),creditBill.getHolderName());
+//		
+//		String statementDate = credit.getStatementDate();
+//		int day = Integer.parseInt(statementDate.split("-")[2]);
+//		
+//		int nowmonth = LocalDate.now().getMonth().getValue();
+//		int nowday = LocalDate.now().getDayOfMonth();
+		
+//		DiagnosisResultList resultList = diagnosisResultService.getResult(creditBill.getUserId(), creditBill.getIssueBank(), creditBill.getLast4digit());
+//		List<DiagnosisResult> fixed = resultList.getFixed();
+//		List<DiagnosisResult> percent = resultList.getPercent();
+//		for (DiagnosisResult diagnosisResult : fixed) {
+//			LocalDate time = diagnosisResult.getTime();
+//			int month = time.getMonth().getValue();
+//			if(nowmonth < month) {
+//				throw new BusinessException(ResultEnum.HAVE_DIC);
+//			}else if(nowmonth > month) {
+//				if(nowday < day) {
+//					throw new BusinessException(ResultEnum.HAVE_DIC);
+//				}
+//			}else {
+//				if(time.getDayOfMonth() > nowday) {
+//					throw new BusinessException(ResultEnum.HAVE_DIC);
+//				}else {
+//					if(time.getDayOfMonth() < day && nowday > day) {
+//						throw new BusinessException(ResultEnum.HAVE_DIC);
+//					}
+//				}
+//			}
+//		}
+//		for (DiagnosisResult diagnosisResult : percent) {
+//			LocalDate time = diagnosisResult.getTime();
+//			int month = time.getMonth().getValue();
+//			if(nowmonth < month) {
+//				throw new BusinessException(ResultEnum.HAVE_DIC);
+//			}else if(nowmonth > month) {
+//				if(nowday < day) {
+//					throw new BusinessException(ResultEnum.HAVE_DIC);
+//				}
+//			}else {
+//				if(time.getDayOfMonth() > nowday) {
+//					throw new BusinessException(ResultEnum.HAVE_DIC);
+//				}else {
+//					if(time.getDayOfMonth() < day && nowday < day) {
+//						throw new BusinessException(ResultEnum.HAVE_DIC);
+//					}
+//				}
+//			}
+//		}
 		String creditAmt = creditBill.getCreditAmt();
+		creditAmt = StringUtils.isBlank(creditAmt) ? "10000" : creditAmt;
 		creditAmt = creditAmt.replaceAll(",", "");
 		creditAmt = creditAmt.replaceAll("-", "");
 		creditAmt = StringUtils.isBlank(creditAmt) ? "10000" : creditAmt;
@@ -57,8 +116,9 @@ public class DiagnosisController {
 				creditBill.getLast4digit(), creditBill.getUserId(),creditBill.getHolderName());
 
 		String format = String.format(TEXT, creditBill.getHolderName(),creditBill.getLast4digit(),"100%","150%",money * 1,money*1.5);
+		String moneyresult = money * 1 + "-" + money*1.5;
 		result.setResult(format);
-
+		result.setMoney(moneyresult);
 		return ResultVoUtil.success(result);
 	}
 

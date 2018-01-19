@@ -84,10 +84,13 @@ public class CreditBillServiceImpl implements CreditBillService {
 				Optional<CreditBill> findFirst = value2.stream().findFirst();
 				CreditBill creditBill = findFirst.get();
 
-				Credit credit = new Credit();
-				BeanUtils.copyProperties(creditBill, credit);
-				credit.setCreateTime(new Date());
-				recordList.add(credit);
+				//插入statementdate不为空的数据
+				if(StringUtils.isNotBlank(creditBill.getStatementDate())) {
+					Credit credit = new Credit();
+					BeanUtils.copyProperties(creditBill, credit);
+					credit.setCreateTime(new Date());
+					recordList.add(credit);
+				}
 			});
 		});
 
@@ -289,5 +292,16 @@ public class CreditBillServiceImpl implements CreditBillService {
 				throw new BusinessException(ResultEnum.HAVE_NO_AUTH);
 			}
 		}
+	}
+
+	@Override
+	public Credit getCredit(String userId, String issueBank, String last4digit, String holderName) {
+		// 获得信用卡的账单日
+		Example example = new Example(Credit.class);
+		example.createCriteria().andEqualTo("last4digit", last4digit).andEqualTo("holderName", holderName)
+				.andEqualTo("issueBank", issueBank).andEqualTo("userId", userId);
+		List<Credit> list2 = billDao.selectByExample(example);
+		Credit creditBill = list2.get(0);
+		return creditBill;
 	}
 }

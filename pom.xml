@@ -208,6 +208,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+	                    <args>
+	                        <arg>-target:jvm-1.8</arg>
+	                    </args>
+	                    <jvmArgs>
+	                        <jvmArg>-Xss2048K</jvmArg>
+	                    </jvmArgs>
+	            </configuration>
 			</plugin>
 		</plugins>
 	</build>

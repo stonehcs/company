@@ -46,6 +46,11 @@ public interface CreditBillService {
 	 * @return
 	 */
 	PageInfo<CreditBill> selectBank(String userId, String issueBank, String last4digit, String holderName, Integer page, Integer size);
+	
+	/**
+	 * 查询信用卡信息
+	 */
+	Credit getCredit(String userId, String issueBank, String last4digit, String holderName);
 
 	/**
 	 * 获取订单详情

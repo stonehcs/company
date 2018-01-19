@@ -1,7 +1,7 @@
 package com.lichi.increaselimit.netloan.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -56,7 +56,7 @@ public class DiagnosisResult implements Serializable{
 	/**
 	 * 消费日期
 	 */
-	private Date time;
+	private String time;
 	
 	private String last4;
 	

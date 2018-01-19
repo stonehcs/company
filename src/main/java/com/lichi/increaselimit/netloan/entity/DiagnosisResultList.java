@@ -16,4 +16,6 @@ public class DiagnosisResultList {
 	private List<DiagnosisResult> percent;
 	
 	private String result;
+	
+	private String money;
 }

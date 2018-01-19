@@ -87,6 +87,7 @@ public enum ResultEnum {
     STATUS_NOT_CHOICE(25, "请选择状态"),
     HAVE_NO_AUTH(25, "自动账单不能修改"),
     TIME_NOT_CORRECT(25, "请选择正确的日期"),
+    HAVE_DIC(25, "该月已经诊断,请于下个账单月再来诊断"),
     
     
     

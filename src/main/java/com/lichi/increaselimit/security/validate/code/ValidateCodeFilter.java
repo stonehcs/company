@@ -88,19 +88,29 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
-
-		ValidateCodeType type = getValidateCodeType(request);
-		if (type != null) {
-			logger.info("校验请求(" + request.getRequestURI() + ")中的验证码,验证码类型" + type);
-			try {
-				validateCodeProcessorHolder.findValidateCodeProcessor(type)
-						.validate(new ServletWebRequest(request, response));
-				logger.info("验证码校验通过");
-			} catch (ValidateCodeException exception) {
+		
+		//如果手机号是18888888888的用户不校验验证码
+		if("18888888888".equals(request.getParameter("mobile"))) {
+			String parameter = request.getParameter("smsCode");
+			if(!"123456".equals(parameter)) {
 				response.setContentType("application/json;charset=UTF-8");
-				response.getWriter().write(JSONObject.toJSONString(ResultVoUtil.error(500, "SMS验证码不存在")));
+				response.getWriter().write(JSONObject.toJSONString(ResultVoUtil.error(500, "密码错误")));
 				return;
-//				authenticationFailureHandler.onAuthenticationFailure(request, response, exception);
+			}
+		}else {
+			ValidateCodeType type = getValidateCodeType(request);
+			if (type != null) {
+				logger.info("校验请求(" + request.getRequestURI() + ")中的验证码,验证码类型" + type);
+				try {
+					validateCodeProcessorHolder.findValidateCodeProcessor(type)
+					.validate(new ServletWebRequest(request, response));
+					logger.info("验证码校验通过");
+				} catch (ValidateCodeException exception) {
+					response.setContentType("application/json;charset=UTF-8");
+					response.getWriter().write(JSONObject.toJSONString(ResultVoUtil.error(500, "SMS验证码不存在")));
+					return;
+					//				authenticationFailureHandler.onAuthenticationFailure(request, response, exception);
+				}
 			}
 		}
 
