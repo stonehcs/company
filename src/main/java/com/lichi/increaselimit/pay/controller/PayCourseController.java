@@ -46,6 +46,7 @@ import com.squareup.okhttp.ResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -67,6 +68,9 @@ public class PayCourseController {
 
 	@Autowired
 	private UserCourseService userCourseService;
+	
+	@Autowired
+	private HttpServletRequest requset;
 	
 	@PostMapping("/{courseId}")
 	@ApiOperation("用户课程支付")
@@ -109,8 +113,10 @@ public class PayCourseController {
 		map.put("accNoType", "A");
 		map.put("transType", "008");
 		// http://mpecs.zillions.com.cn:10005/smp/users?page=1&row=100
+		String aurl=requset.getScheme()+"://"+requset.getServerName()+":"+requset.getServerPort()+"/"+requset.getContextPath();
+		System.out.println(aurl);
 		map.put("asynNotifyUrl",
-				"http://mpecs.zillions.com.cn:10005/smp/userGroup/add?username=" + System.currentTimeMillis());
+				aurl+"/payCourse/success/"+courseId+"?token="+token+"&money="+payMoney);
 		map.put("synNotifyUrl", "https%3A%2F%2F123.sogou.com%2F");
 		map.put("signType", "MD5");
 		// 商户编号
@@ -124,7 +130,7 @@ public class PayCourseController {
 		map.put("prdDisUrl", "http%3A%2F%2Fwww.icardpay.com");
 		map.put("prdName", user.getNickname() + course.getTitle() + "支付");
 		map.put("prdShortName", user.getNickname() + course.getTitle() + "支付");
-		map.put("prdDesc", user.getNickname() + course.getTitle() + "支付");
+		map.put("prdDesc", aurl+"payCourse/success?token="+token+"&courseId="+courseId+"&money="+payMoney+"P"+user.getNickname() + course.getTitle() + "支付");
 		map.put("pnum", "1");
 		map.put("merParam", "");
 		map.put("next", "下一步");
@@ -157,13 +163,13 @@ public class PayCourseController {
 		return ResultVoUtil.error(500, "错误");
 
 	}
-
-	@PostMapping("/success")
-	@ApiOperation("用户支付成功通知url")
-	public String paySuccess(@ApiParam(name="课程ID",required=true)@RequestParam Integer courseId,
-			@ApiParam(name="用户token",required=true)@RequestHeader String token,
+	@PostMapping("/success/{courseId}")
+	@ApiIgnore
+	public String paySuccess(
+			@ApiParam(name="用户token",required=true)@RequestParam String token,
+			@ApiParam(name="课程ID",required=true)@PathVariable Integer courseId,
 			@ApiParam(name="支付金额",required=true)@RequestParam Double money) {
-		courseService.coursePay(courseId, token, money);
+		courseService.coursePay(courseId, token, money/100);
 		return "SUCCESS";
 	}
 

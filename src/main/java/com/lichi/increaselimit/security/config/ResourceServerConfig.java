@@ -51,7 +51,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 	    		.and()
 	    	.authorizeRequests()
     			.antMatchers("/","/login.html", "/authentication/require", "/captcha-image","/v2/**","/swagger**", "/druid/**","/swagger-resources/**",
-                		"/oauth2/client","/social/signUp","/authentication/require","/code/sms").permitAll()
+                		"/oauth2/client","/social/signUp","/authentication/require","/code/sms","/payCourse/success/**").permitAll()
 	             .anyRequest().permitAll()
                 .and()
             .sessionManagement().disable()
