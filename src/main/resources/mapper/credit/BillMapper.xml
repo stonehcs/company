@@ -25,4 +25,9 @@
 			last4digit = ${item.last4digit}
 		</foreach>
 	</update>
+	
+	<select id="selectalluser">
+		select * from t_user
+	
+	</select>
 </mapper>
