@@ -26,7 +26,8 @@
 		</foreach>
 	</update>
 	
-	<select id ="thisimytest">
-		select * from t_mytest where name = #{thitestname}
+	<select id="selectalluser">
+		select * from t_user
+	
 	</select>
 </mapper>
