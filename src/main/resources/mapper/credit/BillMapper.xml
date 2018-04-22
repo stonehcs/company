@@ -32,6 +32,6 @@
 	</select>
 	
 	<select id ="helloworld">
-	
+		local change
 	</select>
 </mapper>
